@@ -1,5 +1,6 @@
 body{
-    background-color: #000000;
+    background-image: url("../imagenes/Fondo.png");
+    background-size: cover;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
