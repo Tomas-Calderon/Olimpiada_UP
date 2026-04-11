@@ -1,5 +1,5 @@
 body{
-    background-image: url("../imagenes/Fondo.png");
+    background-image: url("/imagenes/Fondo.png");
     background-size: cover;
     font-family: Arial, sans-serif;
     margin: 0;
