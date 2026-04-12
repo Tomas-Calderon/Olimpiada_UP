@@ -4,32 +4,6 @@
   <link rel="stylesheet" type="text/css" href="CSS/main.css">
   <title>Sport Port</title>
 
-  <title>Informacion sobre el Producto</title>
-  <script>
-    function guardarDatos(event) {
-      event.preventDefault(); // Evita recargar la página
-      // Obtener valores de los inputs
-      const nombre = document.getElementById('nombre').value;
-      const precio = parseFloat(document.getElementById('precio').value);
-      const breve_descripcion = document.getElementById('breve_descripcion').value;
-      const imagen = document.getElementById('imagen').value;
-      const archivo = imagen.files[0]
-
-      // Validar tipo de archivo 
-      if (archivo && !['image/png', 'image/jpeg'].includes(archivo.type)) {
-        alert('Solo se permiten archivos PNG o JPG.');
-        return;
-      }
-
-      // Crear objeto con los datos
-      const Procucto = {
-        nombre: nombre,
-        precio: precio,
-        breve_descripcion: breve_descripcion,
-        imagen: imagen
-      };
-    }
-  </script>
 </head>
 
 <body>
@@ -49,15 +23,6 @@
       <button>Carrito</button>
     </div>
   </header>
-
-  <form onsubmit="guardarDatos(event)">
-    <label>nombre: <input type="text" id="nombre" required></label><br>
-    <label>precio: <input type="number" id="precio" required></label><br>
-    <label>breve descripción: <input type="text" id="breve_descripcion" required></label><br>
-    <label>imagen: <input type="file" id="imagen" accept=".png,.jpg,.jpeg"></label><br>
-    <button type="submit">Guardar</button>
-  </form>
-  <pre id="resultado"></pre>
 
   <h2>Bienvenido a Sport Port</h2>
   <p>Tu tienda de insumos deportivos</p>
