@@ -1,16 +1,3 @@
-/* ==================== RESET Y ESTILOS BASE ==================== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background-color: #1a1a1a;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
 /* ==================== HEADER  ==================== */
 .header {
     background-color: #222;
@@ -18,36 +5,6 @@ body {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* ==================== HERO SECTION ==================== */
-.hero {
-    width: 100%;
-    height: 90vh;
-    background-image: url("imagenes/Fondo.png");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-}
-
-.hero-content {
-    z-index: 10;
-}
-
-.hero-content h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
-}
-
-.hero-content p {
-    font-size: 1.5rem;
-    color: #f6ee10;
 }
 
 .header-container {
@@ -98,6 +55,97 @@ body {
     color: #ccc;
 }
 
+/* ==================== HERO SECTION ==================== */
+.hero {
+    width: 100%;
+    height: 90vh;
+    background-image: url("imagenes/Fondo.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content {
+    z-index: 10;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    color: #ffc107;
+}
+
+/* CATEGORÍAS DROPDOWN */
+.categorias {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-right: auto;
+}
+
+.categorias-label {
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-family: Arial, sans-serif;
+}
+
+.categorias-label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.categorias-dropdown {
+    position: absolute;
+    margin-left: auto;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    border: 1px solid #555;
+    min-width: 180px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+.categorias:hover .categorias-dropdown {
+    max-height: 200px;
+}
+
+.categoria-item {
+    display: block;
+    padding: 0.8rem 1rem;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease, padding-left 0.2s ease;
+    border-bottom: 1px solid #555;
+}
+
+.categoria-item:last-child {
+    border-bottom: none;
+}
+
+.categoria-item:hover {
+    background-color: #444;
+    padding-left: 1.5rem;
+}
+
 /* MENÚ HAMBURGUESA (para movil) */
 .menu-toggle {
     display: none;
@@ -112,7 +160,7 @@ body {
 .menu-toggle span {
     width: 25px;
     height: 3px;
-    background-color: white;
+    background-color: rgb(0, 0, 0);
     border-radius: 3px;
     transition: all 0.3s ease;
 }
