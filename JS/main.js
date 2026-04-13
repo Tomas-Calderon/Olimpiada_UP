@@ -60,3 +60,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ==================== FUNCIONALIDAD DE INICIO DE SESIÓN ====================
+document.addEventListener('DOMContentLoaded', () => {
+    const btnSesion = document.querySelector('.btn-sesion');
+    const userModal = document.getElementById('userModal');
+    const btnAdmin = document.getElementById('btnAdmin');
+    const btnUser = document.getElementById('btnUser');
+    const adminBtn = document.getElementById('adminBtn');
+
+    // Verificar si ya hay un tipo de usuario guardado
+    const userType = localStorage.getItem('userType');
+    if (userType === 'admin') {
+        adminBtn.style.display = 'block';
+    }
+
+    // Mostrar modal al hacer clic en "Iniciar sesión"
+    btnSesion.addEventListener('click', () => {
+        userModal.style.display = 'flex';
+    });
+
+    // Seleccionar Administrador
+    btnAdmin.addEventListener('click', () => {
+        localStorage.setItem('userType', 'admin');
+        adminBtn.style.display = 'block';
+        userModal.style.display = 'none';
+        alert('Sesión iniciada como Administrador');
+    });
+
+    // Seleccionar Usuario
+    btnUser.addEventListener('click', () => {
+        localStorage.setItem('userType', 'user');
+        adminBtn.style.display = 'none';
+        userModal.style.display = 'none';
+        alert('Sesión iniciada como Usuario');
+    });
+
+    // Cerrar modal al hacer clic fuera
+    userModal.addEventListener('click', (e) => {
+        if (e.target === userModal) {
+            userModal.style.display = 'none';
+        }
+    });
+});
