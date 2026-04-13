@@ -23,7 +23,7 @@ body {
 /* ==================== HERO SECTION ==================== */
 .hero {
     width: 100%;
-    height: 100vh;
+    height: 80vh;
     background-image: url("imagenes/Fondo.png");
     background-size: cover;
     background-position: center;
@@ -135,12 +135,12 @@ body {
 
 .btn-cuenta:hover {
     background-color: white;
-    color: #ffffff;
+    color: #000000;
 }
 
 .btn-sesion {
     background-color: white;
-    color: #ffffff;
+    color: #000000;
 }
 
 .btn-sesion:hover {
