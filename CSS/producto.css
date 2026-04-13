@@ -234,6 +234,26 @@
     font-size: 0.95rem;
 }
 
+/* BOTÓN ELIMINAR PRODUCTO */
+.btn-eliminar-producto {
+    padding: 1rem;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.btn-eliminar-producto:hover {
+    background-color: #cc3333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
+}
+
 /* PRODUCTOS RELACIONADOS */
 .productos-relacionados {
     margin-top: 4rem;

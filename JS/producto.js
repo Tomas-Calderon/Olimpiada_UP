@@ -57,8 +57,17 @@ function cargarProducto() {
     document.querySelector('.btn-agregar-carrito').addEventListener('click', agregarAlCarrito);
     document.querySelector('.btn-comprar-ahora').addEventListener('click', comprarAhora);
 
+    // Agregar evento al botón eliminar
+    document.getElementById('eliminarProductoBtn').addEventListener('click', eliminarProducto);
+
     // Cargar productos relacionados
     cargarProductosRelacionados(productoId);
+
+    // Mostrar botón eliminar si es admin
+    const userType = localStorage.getItem('userType');
+    if (userType === 'admin') {
+        document.getElementById('eliminarProductoBtn').style.display = 'block';
+    }
 }
 
 // Cargar productos relacionados
@@ -133,6 +142,25 @@ function comprarAhora() {
     
     alert(`Iniciando compra de ${cantidad} unidad(es) de "${producto.nombre}"`);
     // Aquí se podría redirigir al checkout
+}
+
+// Función para eliminar producto
+function eliminarProducto() {
+    const productoId = obtenerProductoDelURL();
+    
+    if (confirm('¿Estás seguro de que quieres eliminar este producto permanentemente?')) {
+        // Obtener productos del localStorage
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        
+        // Filtrar para remover el producto
+        productos = productos.filter(producto => producto.id !== productoId);
+        
+        // Guardar de vuelta
+        localStorage.setItem('productos', JSON.stringify(productos));
+        
+        // Redirigir a main.html
+        window.location.href = 'main.html';
+    }
 }
 
 // ==================== FUNCIONALIDAD DE INICIO DE SESIÓN ====================
