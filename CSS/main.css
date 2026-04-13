@@ -106,12 +106,12 @@ body {
 
 .btn-cuenta:hover {
     background-color: white;
-    color: #222;
+    color: #ffffff;
 }
 
 .btn-sesion {
     background-color: white;
-    color: #222;
+    color: #ffffff;
 }
 
 .btn-sesion:hover {
@@ -220,20 +220,173 @@ main {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 2rem;
-    text-align: center;
     margin-top: 80px;
     margin-bottom: 120px;
 }
 
-main h2 {
-    font-size: 2rem;
+/* ==================== SECCIONES DE PRODUCTOS ==================== */
+.productos-section {
+    margin-bottom: 3rem;
+}
+
+.seccion-titulo {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    text-align: left;
+    border-bottom: 2px solid #fff;
+    padding-bottom: 0.5rem;
+}
+
+/* LISTA DE PRODUCTOS (HORIZONTAL) */
+.productos-lista {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+    scrollbar-color: #666 #333;
+}
+
+.productos-lista::-webkit-scrollbar {
+    height: 8px;
+}
+
+.productos-lista::-webkit-scrollbar-track {
+    background: #333;
+    border-radius: 4px;
+}
+
+.productos-lista::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.productos-lista::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+
+/* PRODUCTO INDIVIDUAL */
+.producto {
+    flex: 0 0 250px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.producto-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
     margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.producto-nombre {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
     color: white;
 }
 
-main p {
-    font-size: 1.1rem;
-    color: #ddd;
+.producto-precio {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ffc107;
+    margin: 0;
+}
+
+.precio-anterior {
+    text-decoration: line-through;
+    color: #ccc;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+/* ==================== RESPONSIVE PRODUCTOS ==================== */
+@media screen and (max-width: 768px) {
+    main {
+        padding: 1rem;
+        margin-top: 70px;
+        margin-bottom: 100px;
+    }
+
+    .productos-section {
+        margin-bottom: 2rem;
+    }
+
+    .seccion-titulo {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .productos-lista {
+        gap: 1rem;
+    }
+
+    .producto {
+        flex: 0 0 200px;
+        padding: 0.8rem;
+    }
+
+    .producto-img {
+        height: 120px;
+    }
+
+    .producto-nombre {
+        font-size: 1rem;
+    }
+
+    .producto-precio {
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    main {
+        padding: 0.5rem;
+        margin-top: 60px;
+        margin-bottom: 80px;
+    }
+
+    .productos-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .seccion-titulo {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .productos-lista {
+        gap: 0.8rem;
+    }
+
+    .producto {
+        flex: 0 0 160px;
+        padding: 0.6rem;
+    }
+
+    .producto-img {
+        height: 100px;
+    }
+
+    .producto-nombre {
+        font-size: 0.9rem;
+    }
+
+    .producto-precio {
+        font-size: 0.8rem;
+    }
 }
 
 /* ==================== FOOTER  ==================== */
