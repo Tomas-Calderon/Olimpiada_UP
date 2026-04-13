@@ -38,6 +38,7 @@ function cargarProducto() {
 
     // Actualizar HTML con datos del producto
     document.getElementById('productoNombre').textContent = producto.nombre;
+    document.getElementById('headerProductoNombre').textContent = producto.nombre;
     document.getElementById('productoImagen').src = producto.imagen;
     document.getElementById('productoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
     document.getElementById('productoDescripcion').textContent = producto.descripcion;

@@ -1,4 +1,18 @@
 // ==================== FUNCIONALIDAD DE AGREGAR PRODUCTO ====================
+
+// Función para mostrar notificaciones personalizadas
+function mostrarNotificacion(mensaje, tipo = 'error') {
+    const notification = document.getElementById('notification');
+    notification.textContent = mensaje;
+    notification.className = `notification ${tipo}`;
+    notification.classList.add('show');
+    
+    // Auto-ocultar después de 4 segundos
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 4000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('productoForm');
     const imagenInput = document.getElementById('imagen');
@@ -59,7 +73,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (errores.length > 0) {
-            alert('Errores:\n' + errores.join('\n'));
+            mostrarNotificacion(errores[0], 'error');
+            return;
+        }
+
+        // Verificar si el producto ya existe
+        let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const productoExiste = productos.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+        
+        if (productoExiste) {
+            mostrarNotificacion('Error: Ya existe un producto con ese nombre.', 'error');
             return;
         }
 
@@ -84,13 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             // Guardar en localStorage
-            let productos = JSON.parse(localStorage.getItem('productos')) || [];
-            productos.push(producto);
-            localStorage.setItem('productos', JSON.stringify(productos));
+            let productosActualizados = JSON.parse(localStorage.getItem('productos')) || [];
+            productosActualizados.push(producto);
+            localStorage.setItem('productos', JSON.stringify(productosActualizados));
 
-            // Redirigir a main.html
-            alert('Producto agregado exitosamente.');
-            window.location.href = 'main.html';
+            // Mostrar notificación de éxito
+            mostrarNotificacion('Producto agregado exitosamente.', 'success');
+
+            // Redirigir después de 1.5 segundos
+            setTimeout(() => {
+                window.location.href = 'main.html';
+            }, 1500);
         };
         reader.readAsDataURL(imagenFile);
     });

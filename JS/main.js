@@ -33,10 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function cargarProductos() {
     const productos = JSON.parse(localStorage.getItem('productos')) || [];
 
-    // Limpiar secciones
+    // Limpiar secciones (solo si existen en la página)
     const recomendadosLista = document.querySelector('.productos-section:nth-of-type(1) .productos-lista');
     const ofertasLista = document.querySelector('.productos-section:nth-of-type(2) .productos-lista');
     const novedadesLista = document.querySelector('.productos-section:nth-of-type(3) .productos-lista');
+
+    // Salir si no hay secciones de productos (como en agregar-producto.html)
+    if (!recomendadosLista || !ofertasLista || !novedadesLista) {
+        return;
+    }
 
     recomendadosLista.innerHTML = '';
     ofertasLista.innerHTML = '';
@@ -119,3 +124,34 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'agregar-producto.html';
     });
 });
+
+// ==================== AJUSTAR POSICIÓN DEL BOTÓN ADMIN CERCA DEL FOOTER ====================
+function ajustarPosicionBotonAdmin() {
+    const adminBtn = document.getElementById('adminBtn');
+    const footer = document.querySelector('.footer');
+    
+    if (!adminBtn || !footer) return;
+    
+    const footerRect = footer.getBoundingClientRect();
+    const buttonHeight = 60;
+    const buttonMargin = 20;
+    const viewportHeight = window.innerHeight;
+    
+    // Si el footer está visible en la ventana
+    if (footerRect.top < viewportHeight) {
+        // Calcular cuánto espacio hay para el botón
+        const espacioDisponible = footerRect.top - buttonMargin - buttonHeight;
+        
+        // Ajustar el position bottom del botón
+        const newBottom = viewportHeight - footerRect.top + buttonMargin;
+        adminBtn.style.bottom = newBottom + 'px';
+    } else {
+        // Si el footer no está visible, volver a la posición normal
+        adminBtn.style.bottom = '20px';
+    }
+}
+
+// Ejecutar al cargar y durante el scroll
+window.addEventListener('scroll', ajustarPosicionBotonAdmin);
+window.addEventListener('resize', ajustarPosicionBotonAdmin);
+window.addEventListener('load', ajustarPosicionBotonAdmin);
