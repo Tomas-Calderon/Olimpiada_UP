@@ -1,0 +1,131 @@
+/* ==================== AGREGAR PRODUCTO ==================== */
+.agregar-producto-main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    min-height: calc(100vh - 200px);
+}
+
+.form-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-container h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ffc107;
+}
+
+.imagen-preview {
+    margin-top: 1rem;
+    max-width: 200px;
+    max-height: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.imagen-preview img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.btn-agregar {
+    width: 100%;
+    padding: 1rem;
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar:hover {
+    background-color: #ffb300;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-agregar:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media screen and (max-width: 768px) {
+    .agregar-producto-main {
+        padding: 1rem;
+    }
+
+    .form-container {
+        padding: 1rem;
+    }
+
+    .form-container h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .agregar-producto-main {
+        padding: 0.5rem;
+    }
+
+    .form-container {
+        padding: 0.8rem;
+    }
+
+    .form-container h1 {
+        font-size: 1.3rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-agregar {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+}

@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
-  <title>Sport Port</title>
+  <link rel="stylesheet" href="CSS/agregar-producto.css">
+  <title>Agregar Producto - Sport Port</title>
 </head>
 
 <body>
@@ -12,22 +13,12 @@
   <header class="header">
     <div class="header-container">
       <!-- IZQUIERDA / LOGO -->
-      <div class="logo" onclick="window.scrollTo(0, 0); location.reload();">
+      <div class="logo" onclick="location.href='main.html'">
         <img src="CSS/imagenes/Logo.png" class="logo-img">
 
         <div class="texto-logo">
           <div class="logo-nombre">Sport Port</div>
           <div class="logo-slogan">Tu rendimiento empieza acá</div>
-        </div>
-      </div>
-
-      <!-- CATEGORÍAS -->
-      <div class="categorias">
-        <span class="categorias-label">Categorías</span>
-        <div class="categorias-dropdown">
-          <a href="#" class="categoria-item">Recomendados</a>
-          <a href="#" class="categoria-item">Ofertas</a>
-          <a href="#" class="categoria-item">Novedades</a>
         </div>
       </div>
 
@@ -47,48 +38,40 @@
   <script src="JS/main.js"></script>
   </header>
 
-  <!-- MODAL DE SELECCIÓN DE USUARIO -->
-  <div id="userModal" class="user-modal">
-    <div class="modal-content">
-      <h3>Seleccionar tipo de usuario</h3>
-      <button id="btnAdmin" class="modal-btn admin-btn">Administrador</button>
-      <button id="btnUser" class="modal-btn user-btn">Usuario</button>
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="agregar-producto-main">
+    <div class="form-container">
+      <h1>Agregar Nuevo Producto</h1>
+      <form id="productoForm">
+        <div class="form-group">
+          <label for="nombre">Nombre del Producto:</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="precio">Precio:</label>
+          <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Breve Descripción:</label>
+          <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Cantidad en Stock:</label>
+          <input type="number" id="stock" name="stock" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label for="imagen">Imagen del Producto (PNG o JPG):</label>
+          <input type="file" id="imagen" name="imagen" accept=".png,.jpg,.jpeg" required>
+          <div id="imagenPreview" class="imagen-preview"></div>
+        </div>
+
+        <button type="submit" class="btn-agregar">Agregar Producto</button>
+      </form>
     </div>
-  </div>
-
-  <!-- BOTÓN ADMINISTRADOR FIJO -->
-  <button id="adminBtn" class="admin-fixed-btn" style="display: none;">
-    <span>+</span>
-  </button>
-
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Sport Port</h1>
-      <p>Tu tienda de insumos deportivos</p>
-    </div>
-  </section>
-
-  <main>
-    <section class="productos-section">
-      <h2 class="seccion-titulo">Recomendados</h2>
-      <div class="productos-lista">
-      </div>
-    </section>
-
-    <!-- SECCIÓN OFERTAS -->
-    <section class="productos-section">
-      <h2 class="seccion-titulo">Ofertas</h2>
-      <div class="productos-lista">
-      </div>
-    </section>
-
-    <!-- SECCIÓN NOVEDADES -->
-    <section class="productos-section">
-      <h2 class="seccion-titulo">Novedades</h2>
-      <div class="productos-lista">
-      </div>
-    </section>
   </main>
 
   <footer class="footer">
@@ -112,6 +95,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="JS/agregar-producto.js"></script>
 
 </body>
 </html>

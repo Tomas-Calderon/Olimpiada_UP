@@ -25,41 +25,52 @@ window.addEventListener('resize', () => {
 });
 
 // ==================== FUNCIONALIDAD DE PRODUCTOS ====================
-// Mapeo de productos por nombre
-const productosMapping = {
-    'Producto 1': 'producto1',
-    'Producto 2': 'producto2',
-    'Producto 3': 'producto3',
-    'Producto 4': 'producto4',
-    'Producto 5': 'producto5',
-    'Oferta 1': 'oferta1',
-    'Oferta 2': 'oferta2',
-    'Oferta 3': 'oferta3',
-    'Oferta 4': 'oferta4',
-    'Oferta 5': 'oferta5',
-    'Novedad 1': 'novedad1',
-    'Novedad 2': 'novedad2',
-    'Novedad 3': 'novedad3',
-    'Novedad 4': 'novedad4',
-    'Novedad 5': 'novedad5'
-};
-
 // Agregar event listeners a los productos
 document.addEventListener('DOMContentLoaded', () => {
-    const productos = document.querySelectorAll('.producto');
-    
+    cargarProductos();
+});
+
+function cargarProductos() {
+    const productos = JSON.parse(localStorage.getItem('productos')) || [];
+
+    // Limpiar secciones
+    const recomendadosLista = document.querySelector('.productos-section:nth-of-type(1) .productos-lista');
+    const ofertasLista = document.querySelector('.productos-section:nth-of-type(2) .productos-lista');
+    const novedadesLista = document.querySelector('.productos-section:nth-of-type(3) .productos-lista');
+
+    recomendadosLista.innerHTML = '';
+    ofertasLista.innerHTML = '';
+    novedadesLista.innerHTML = '';
+
     productos.forEach(producto => {
-        producto.style.cursor = 'pointer';
-        producto.addEventListener('click', () => {
-            const nombreProducto = producto.querySelector('.producto-nombre').textContent;
-            const idProducto = productosMapping[nombreProducto];
-            
-            if (idProducto) {
-                window.location.href = `producto.html?id=${idProducto}`;
-            }
+        // Crear elemento producto
+        const productoDiv = document.createElement('div');
+        productoDiv.className = 'producto';
+        productoDiv.style.cursor = 'pointer';
+        productoDiv.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
+            <h3 class="producto-nombre">${producto.nombre}</h3>
+            <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
+        `;
+
+        // Event listener para click
+        productoDiv.addEventListener('click', () => {
+            window.location.href = `producto.html?id=${producto.id}`;
+        });
+
+        // Agregar a Recomendados y Novedades
+        recomendadosLista.appendChild(productoDiv.cloneNode(true));
+        novedadesLista.appendChild(productoDiv.cloneNode(true));
+
+        // Re-agregar event listeners a los clones
+        recomendadosLista.lastChild.addEventListener('click', () => {
+            window.location.href = `producto.html?id=${producto.id}`;
+        });
+        novedadesLista.lastChild.addEventListener('click', () => {
+            window.location.href = `producto.html?id=${producto.id}`;
         });
     });
-});
+}
 
 // ==================== FUNCIONALIDAD DE INICIO DE SESIÓN ====================
 document.addEventListener('DOMContentLoaded', () => {
@@ -101,5 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === userModal) {
             userModal.style.display = 'none';
         }
+    });
+
+    // Event listener para el botón admin
+    adminBtn.addEventListener('click', () => {
+        window.location.href = 'agregar-producto.html';
     });
 });

@@ -1,126 +1,20 @@
-// Datos de productos
-const productosData = {
-    producto1: {
-        nombre: "Producto 1",
-        imagen: "CSS/imagenes/producto1.png",
-        precio: 25.00,
-        precioAnterior: null,
-        descripcion: "Este es un excelente producto de calidad para mejorar tu rendimiento deportivo. Diseñado con materiales premium y tecnología avanzada.",
-        tipo: "Recomendado"
-    },
-    producto2: {
-        nombre: "Producto 2",
-        imagen: "CSS/imagenes/producto2.png",
-        precio: 30.00,
-        precioAnterior: null,
-        descripcion: "Producto versátil y duradero, perfecto para cualquier tipo de entrenamiento.",
-        tipo: "Recomendado"
-    },
-    producto3: {
-        nombre: "Producto 3",
-        imagen: "CSS/imagenes/producto3.png",
-        precio: 20.00,
-        precioAnterior: null,
-        descripcion: "Accesorio esencial para deportistas profesionales y principiantes.",
-        tipo: "Recomendado"
-    },
-    producto4: {
-        nombre: "Producto 4",
-        imagen: "CSS/imagenes/producto4.png",
-        precio: 35.00,
-        precioAnterior: null,
-        descripcion: "Diseño innovador y funcional para maximizar tu rendimiento.",
-        tipo: "Recomendado"
-    },
-    producto5: {
-        nombre: "Producto 5",
-        imagen: "CSS/imagenes/producto5.png",
-        precio: 40.00,
-        precioAnterior: null,
-        descripcion: "Premium quality para atletas que buscan lo mejor.",
-        tipo: "Recomendado"
-    },
-    oferta1: {
-        nombre: "Oferta 1",
-        imagen: "CSS/imagenes/oferta1.png",
-        precio: 15.00,
-        precioAnterior: 25.00,
-        descripcion: "¡Oferta especial! Ahorra 40% en este producto premium.",
-        tipo: "Oferta"
-    },
-    oferta2: {
-        nombre: "Oferta 2",
-        imagen: "CSS/imagenes/oferta2.png",
-        precio: 20.00,
-        precioAnterior: 30.00,
-        descripcion: "Descuento limitado en este producto popular.",
-        tipo: "Oferta"
-    },
-    oferta3: {
-        nombre: "Oferta 3",
-        imagen: "CSS/imagenes/oferta3.png",
-        precio: 10.00,
-        precioAnterior: 20.00,
-        descripcion: "Gran oferta con 50% de descuento.",
-        tipo: "Oferta"
-    },
-    oferta4: {
-        nombre: "Oferta 4",
-        imagen: "CSS/imagenes/oferta4.png",
-        precio: 25.00,
-        precioAnterior: 35.00,
-        descripcion: "Precio especial solo por hoy.",
-        tipo: "Oferta"
-    },
-    oferta5: {
-        nombre: "Oferta 5",
-        imagen: "CSS/imagenes/oferta5.png",
-        precio: 30.00,
-        precioAnterior: 40.00,
-        descripcion: "Oferta exclusiva para clientes VIP.",
-        tipo: "Oferta"
-    },
-    novedad1: {
-        nombre: "Novedad 1",
-        imagen: "CSS/imagenes/novedad1.png",
-        precio: 45.00,
-        precioAnterior: null,
-        descripcion: "Último lanzamiento con tecnología de punta.",
-        tipo: "Novedad"
-    },
-    novedad2: {
-        nombre: "Novedad 2",
-        imagen: "CSS/imagenes/novedad2.png",
-        precio: 50.00,
-        precioAnterior: null,
-        descripcion: "Producto nuevo con características revolucionarias.",
-        tipo: "Novedad"
-    },
-    novedad3: {
-        nombre: "Novedad 3",
-        imagen: "CSS/imagenes/novedad3.png",
-        precio: 35.00,
-        precioAnterior: null,
-        descripcion: "Diseño moderno y funcional para los deportistas actuales.",
-        tipo: "Novedad"
-    },
-    novedad4: {
-        nombre: "Novedad 4",
-        imagen: "CSS/imagenes/novedad4.png",
-        precio: 40.00,
-        precioAnterior: null,
-        descripcion: "Innovación en rendimiento deportivo.",
-        tipo: "Novedad"
-    },
-    novedad5: {
-        nombre: "Novedad 5",
-        imagen: "CSS/imagenes/novedad5.png",
-        precio: 55.00,
-        precioAnterior: null,
-        descripcion: "Premium edition con características exclusivas.",
-        tipo: "Novedad"
-    }
-};
+// Datos de productos (cargados desde localStorage)
+let productosData = {};
+
+function cargarProductosDesdeStorage() {
+    productosData = {};
+    const productos = JSON.parse(localStorage.getItem('productos')) || [];
+    productos.forEach(producto => {
+        productosData[producto.id] = {
+            nombre: producto.nombre,
+            imagen: producto.imagen,
+            precio: producto.precio,
+            precioAnterior: null,
+            descripcion: producto.descripcion,
+            tipo: producto.tipo
+        };
+    });
+}
 
 // Obtener el ID del producto desde la URL
 function obtenerProductoDelURL() {
@@ -130,6 +24,8 @@ function obtenerProductoDelURL() {
 
 // Cargar datos del producto
 function cargarProducto() {
+    cargarProductosDesdeStorage();
+    
     const productoId = obtenerProductoDelURL();
     
     if (!productoId || !productosData[productoId]) {
@@ -160,6 +56,36 @@ function cargarProducto() {
     // Agregar eventos a botones de compra
     document.querySelector('.btn-agregar-carrito').addEventListener('click', agregarAlCarrito);
     document.querySelector('.btn-comprar-ahora').addEventListener('click', comprarAhora);
+
+    // Cargar productos relacionados
+    cargarProductosRelacionados(productoId);
+}
+
+// Cargar productos relacionados
+function cargarProductosRelacionados(productoId) {
+    const relacionadosLista = document.querySelector('.productos-relacionados .productos-lista');
+    relacionadosLista.innerHTML = '';
+
+    const productos = Object.keys(productosData).filter(id => id !== productoId);
+    
+    // Mostrar hasta 4 productos relacionados
+    productos.slice(0, 4).forEach(id => {
+        const producto = productosData[id];
+        const productoDiv = document.createElement('div');
+        productoDiv.className = 'producto';
+        productoDiv.style.cursor = 'pointer';
+        productoDiv.innerHTML = `
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
+            <h3 class="producto-nombre">${producto.nombre}</h3>
+            <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
+        `;
+
+        productoDiv.addEventListener('click', () => {
+            window.location.href = `producto.html?id=${id}`;
+        });
+
+        relacionadosLista.appendChild(productoDiv);
+    });
 }
 
 // Funciones de cantidad
@@ -249,6 +175,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === userModal) {
             userModal.style.display = 'none';
         }
+    });
+
+    // Event listener para el botón admin
+    adminBtn.addEventListener('click', () => {
+        window.location.href = 'agregar-producto.html';
     });
 });
 
