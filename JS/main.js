@@ -26,29 +26,29 @@ window.addEventListener('resize', () => {
 
 // ==================== FUNCIONALIDAD DE PRODUCTOS ====================
 // Agregar event listeners a los productos
-document.addEventListener('DOMContentLoaded', () => {
-    cargarProductos();
-});
+const productosPorPagina = 10;
+let paginaRecomendados = 1;
+let paginaOfertas = 1;
+let paginaNovedades = 1;
 
-function cargarProductos() {
+function renderProductos(seccion, pagina) {
     const productos = JSON.parse(localStorage.getItem('productos')) || [];
-
-    // Limpiar secciones (solo si existen en la página)
-    const recomendadosLista = document.querySelector('.productos-section:nth-of-type(1) .productos-lista');
-    const ofertasLista = document.querySelector('.productos-section:nth-of-type(2) .productos-lista');
-    const novedadesLista = document.querySelector('.productos-section:nth-of-type(3) .productos-lista');
-
-    // Salir si no hay secciones de productos (como en agregar-producto.html)
-    if (!recomendadosLista || !ofertasLista || !novedadesLista) {
-        return;
+    let productosFiltrados = [];
+    if (seccion === 'recomendados') {
+        productosFiltrados = productos;
+    } else if (seccion === 'ofertas') {
+        productosFiltrados = productos.filter(p => p.precioAnterior);
+    } else if (seccion === 'novedades') {
+        productosFiltrados = productos.filter(p => p.tipo === 'Novedad');
     }
-
-    recomendadosLista.innerHTML = '';
-    ofertasLista.innerHTML = '';
-    novedadesLista.innerHTML = '';
-
-    productos.forEach(producto => {
-        // Crear elemento producto
+    const totalProductos = productosFiltrados.length;
+    const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
+    const inicio = (pagina - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+    const productosPagina = productosFiltrados.slice(inicio, fin);
+    const lista = document.getElementById(`productos-${seccion}`);
+    lista.innerHTML = '';
+    productosPagina.forEach(producto => {
         const productoDiv = document.createElement('div');
         productoDiv.className = 'producto';
         productoDiv.style.cursor = 'pointer';
@@ -56,24 +56,95 @@ function cargarProductos() {
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
             <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
+            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2)}</p>` : ''}
         `;
-
-        // Event listener para click
         productoDiv.addEventListener('click', () => {
             window.location.href = `producto.html?id=${producto.id}`;
         });
+        lista.appendChild(productoDiv);
+    });
+    // Actualizar paginación
+    const info = document.getElementById(`pagina-info-${seccion}`);
+    info.textContent = `Página ${pagina} de ${totalPaginas || 1}`;
+    const btnInicio = document.getElementById(`btn-inicio-${seccion}`);
+    const btnAnterior = document.getElementById(`btn-anterior-${seccion}`);
+    const btnSiguiente = document.getElementById(`btn-siguiente-${seccion}`);
+    btnInicio.disabled = pagina === 1;
+    btnAnterior.disabled = pagina === 1;
+    btnSiguiente.disabled = pagina === totalPaginas || totalPaginas === 0;
+}
 
-        // Agregar a Recomendados y Novedades
-        recomendadosLista.appendChild(productoDiv.cloneNode(true));
-        novedadesLista.appendChild(productoDiv.cloneNode(true));
+document.addEventListener('DOMContentLoaded', () => {
+    cargarProductos();
+});
 
-        // Re-agregar event listeners a los clones
-        recomendadosLista.lastChild.addEventListener('click', () => {
-            window.location.href = `producto.html?id=${producto.id}`;
-        });
-        novedadesLista.lastChild.addEventListener('click', () => {
-            window.location.href = `producto.html?id=${producto.id}`;
-        });
+function cargarProductos() {
+    // Salir si no hay secciones de productos (como en agregar-producto.html)
+    if (!document.getElementById('productos-recomendados')) {
+        return;
+    }
+    renderProductos('recomendados', paginaRecomendados);
+    renderProductos('ofertas', paginaOfertas);
+    renderProductos('novedades', paginaNovedades);
+    // Agregar event listeners para paginación
+    // Recomendados
+    document.getElementById('btn-inicio-recomendados').addEventListener('click', () => {
+        paginaRecomendados = 1;
+        renderProductos('recomendados', paginaRecomendados);
+    });
+    document.getElementById('btn-anterior-recomendados').addEventListener('click', () => {
+        if (paginaRecomendados > 1) {
+            paginaRecomendados--;
+            renderProductos('recomendados', paginaRecomendados);
+        }
+    });
+    document.getElementById('btn-siguiente-recomendados').addEventListener('click', () => {
+        const productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const totalPaginas = Math.ceil(productos.length / productosPorPagina);
+        if (paginaRecomendados < totalPaginas) {
+            paginaRecomendados++;
+            renderProductos('recomendados', paginaRecomendados);
+        }
+    });
+    // Ofertas
+    document.getElementById('btn-inicio-ofertas').addEventListener('click', () => {
+        paginaOfertas = 1;
+        renderProductos('ofertas', paginaOfertas);
+    });
+    document.getElementById('btn-anterior-ofertas').addEventListener('click', () => {
+        if (paginaOfertas > 1) {
+            paginaOfertas--;
+            renderProductos('ofertas', paginaOfertas);
+        }
+    });
+    document.getElementById('btn-siguiente-ofertas').addEventListener('click', () => {
+        const productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const productosFiltrados = productos.filter(p => p.precioAnterior);
+        const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+        if (paginaOfertas < totalPaginas) {
+            paginaOfertas++;
+            renderProductos('ofertas', paginaOfertas);
+        }
+    });
+    // Novedades
+    document.getElementById('btn-inicio-novedades').addEventListener('click', () => {
+        paginaNovedades = 1;
+        renderProductos('novedades', paginaNovedades);
+    });
+    document.getElementById('btn-anterior-novedades').addEventListener('click', () => {
+        if (paginaNovedades > 1) {
+            paginaNovedades--;
+            renderProductos('novedades', paginaNovedades);
+        }
+    });
+    document.getElementById('btn-siguiente-novedades').addEventListener('click', () => {
+        const productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const productosFiltrados = productos.filter(p => p.tipo === 'Novedad');
+        const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+        if (paginaNovedades < totalPaginas) {
+            paginaNovedades++;
+            renderProductos('novedades', paginaNovedades);
+        }
     });
 }
 
