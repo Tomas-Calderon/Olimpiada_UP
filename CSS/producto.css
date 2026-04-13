@@ -1,0 +1,342 @@
+/* ==================== PRODUCTO DETAIL PAGE ==================== */
+.producto-detail {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    margin-bottom: 120px;
+    background-color: #1a1a1a;
+}
+
+.producto-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* IMAGEN DEL PRODUCTO */
+.producto-imagen-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 2rem;
+    min-height: 400px;
+}
+
+.producto-imagen {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* INFO DEL PRODUCTO */
+.producto-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.producto-titulo {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.producto-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.stars {
+    color: #ffc107;
+    font-size: 1.3rem;
+}
+
+.reviews {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.producto-precio-section {
+    margin-bottom: 1.5rem;
+}
+
+.precio-actual {
+    font-size: 2rem;
+    color: #ffc107;
+    font-weight: bold;
+    margin: 0;
+}
+
+.precio-anterior {
+    font-size: 1.1rem;
+    color: #888;
+    text-decoration: line-through;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+.producto-descripcion {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.producto-descripcion h3 {
+    color: white;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.producto-descripcion p {
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.producto-especificaciones {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.producto-especificaciones h3 {
+    color: white;
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.producto-especificaciones ul {
+    list-style: none;
+    color: #ddd;
+}
+
+.producto-especificaciones li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.producto-especificaciones li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #ffc107;
+    font-weight: bold;
+}
+
+/* ACCIONES */
+.producto-acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.cantidad-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: fit-content;
+}
+
+.cantidad-selector button {
+    background-color: #ffc107;
+    border: none;
+    color: black;
+    width: 35px;
+    height: 35px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.cantidad-selector button:hover {
+    background-color: #ffb300;
+}
+
+.cantidad-selector input {
+    width: 50px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.cantidad-selector input::-webkit-outer-spin-button,
+.cantidad-selector input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.btn-agregar-carrito {
+    padding: 1rem;
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar-carrito:hover {
+    background-color: #ffb300;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-comprar-ahora {
+    padding: 1rem;
+    background-color: transparent;
+    color: #ffc107;
+    border: 2px solid #ffc107;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-comprar-ahora:hover {
+    background-color: #ffc107;
+    color: black;
+}
+
+/* INFORMACIÓN DE ENVÍO */
+.producto-envio {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ffc107;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.producto-envio p {
+    color: #ddd;
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+/* PRODUCTOS RELACIONADOS */
+.productos-relacionados {
+    margin-top: 4rem;
+}
+
+.productos-relacionados .seccion-titulo {
+    color: white;
+}
+
+/* ==================== TABLET  ==================== */
+@media screen and (max-width: 768px) {
+    .producto-detail {
+        padding: 1rem;
+    }
+
+    .producto-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .producto-imagen-container {
+        min-height: 300px;
+    }
+
+    .producto-titulo {
+        font-size: 1.8rem;
+    }
+
+    .precio-actual {
+        font-size: 1.5rem;
+    }
+
+    .cantidad-selector {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-agregar-carrito,
+    .btn-comprar-ahora {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+}
+
+/* ==================== CELULAR  ==================== */
+@media screen and (max-width: 480px) {
+    .producto-detail {
+        padding: 0.5rem;
+        margin-bottom: 100px;
+    }
+
+    .producto-container {
+        padding: 0.8rem;
+        gap: 1.5rem;
+    }
+
+    .producto-imagen-container {
+        min-height: 250px;
+        padding: 1rem;
+    }
+
+    .producto-titulo {
+        font-size: 1.4rem;
+    }
+
+    .precio-actual {
+        font-size: 1.3rem;
+    }
+
+    .producto-descripcion,
+    .producto-especificaciones {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .producto-especificaciones li {
+        font-size: 0.9rem;
+    }
+
+    .cantidad-selector button {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .cantidad-selector input {
+        width: 40px;
+        font-size: 0.9rem;
+    }
+
+    .btn-agregar-carrito,
+    .btn-comprar-ahora {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .producto-envio {
+        padding: 0.8rem;
+    }
+
+    .producto-envio p {
+        font-size: 0.85rem;
+        margin: 0.3rem 0;
+    }
+}

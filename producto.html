@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="CSS/main.css">
+  <link rel="stylesheet" href="CSS/producto.css">
+  <title>Detalle del Producto - Sport Port</title>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <!-- IZQUIERDA / LOGO -->
+      <div class="logo" onclick="location.href='main.html'">
+        <img src="CSS/imagenes/Logo.png" class="logo-img">
+
+        <div class="texto-logo">
+          <div class="logo-nombre">Sport Port</div>
+          <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        </div>
+      </div>
+
+      <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- DERECHA / BOTONES -->
+      <nav class="botones" id="headerNav">
+        <button class="btn-cuenta">Crear cuenta</button>
+        <button class="btn-sesion">Iniciar sesión</button>
+      </nav>
+    </div>
+  <script src="JS/main.js"></script>
+  </header>
+
+  <main class="producto-detail">
+    <div class="producto-container">
+      <!-- IZQUIERDA: IMAGEN -->
+      <div class="producto-imagen-container">
+        <img id="productoImagen" src="" alt="Imagen del Producto" class="producto-imagen">
+      </div>
+
+      <!-- DERECHA: INFORMACIÓN -->
+      <div class="producto-info">
+        <h1 id="productoNombre" class="producto-titulo">Nombre del Producto</h1>
+        
+        <div class="producto-rating">
+          <span class="stars">★★★★★</span>
+          <span class="reviews">(45 reseñas)</span>
+        </div>
+
+        <div class="producto-precio-section">
+          <p id="productoPrecio" class="precio-actual">$0.00</p>
+          <p id="productoPrecioAnterior" class="precio-anterior" style="display: none;">$0.00</p>
+        </div>
+
+        <div class="producto-descripcion">
+          <h3>Descripción</h3>
+          <p id="productoDescripcion">Este es un excelente producto de calidad para mejorar tu rendimiento deportivo.</p>
+        </div>
+
+        <div class="producto-especificaciones">
+          <h3>Especificaciones</h3>
+          <ul>
+            <li>Material: Premium</li>
+            <li>Tamaño: Ajustable</li>
+            <li>Color: Múltiples opciones</li>
+            <li>Garantía: 1 año</li>
+          </ul>
+        </div>
+
+        <div class="producto-acciones">
+          <div class="cantidad-selector">
+            <button id="decrementBtn">-</button>
+            <input type="number" id="cantidad" value="1" min="1" max="99">
+            <button id="incrementBtn">+</button>
+          </div>
+          <button class="btn-agregar-carrito">Agregar al carrito</button>
+          <button class="btn-comprar-ahora">Comprar ahora</button>
+        </div>
+
+        <div class="producto-envio">
+          <p>📦 Envío gratis en compras mayores a $100</p>
+          <p>🔄 Devolución gratuita dentro de 30 días</p>
+          <p>✅ Producto disponible en stock</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTOS RELACIONADOS -->
+    <section class="productos-relacionados">
+      <h2 class="seccion-titulo">Productos Relacionados</h2>
+      <div class="productos-lista">
+        <div class="producto">
+          <img src="CSS/imagenes/producto2.png" alt="Producto 2" class="producto-img">
+          <h3 class="producto-nombre">Producto 2</h3>
+          <p class="producto-precio">$30.00</p>
+        </div>
+        <div class="producto">
+          <img src="CSS/imagenes/producto3.png" alt="Producto 3" class="producto-img">
+          <h3 class="producto-nombre">Producto 3</h3>
+          <p class="producto-precio">$20.00</p>
+        </div>
+        <div class="producto">
+          <img src="CSS/imagenes/producto4.png" alt="Producto 4" class="producto-img">
+          <h3 class="producto-nombre">Producto 4</h3>
+          <p class="producto-precio">$35.00</p>
+        </div>
+        <div class="producto">
+          <img src="CSS/imagenes/producto5.png" alt="Producto 5" class="producto-img">
+          <h3 class="producto-nombre">Producto 5</h3>
+          <p class="producto-precio">$40.00</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- IZQUIERDA / TEXTO -->
+      <div class="footer-izq">
+        <p class="footer-texto">© 2026 Sport Port. Todos los derechos reservados.</p>
+      </div>
+
+      <!-- DERECHA / BOTONES IMAGEN -->
+      <div class="footer-der">
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_facebook.png" alt="Botón 1" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_instagram.png" alt="Botón 2" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_twtter_(X).png" alt="Botón 3" class="footer-img">
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="JS/producto.js"></script>
+
+</body>
+</html>
