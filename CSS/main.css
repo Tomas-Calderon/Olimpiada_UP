@@ -1,69 +1,236 @@
-header {
-  position: fixed;       /* requerido */
-  top: 0;
-  left: 0;
-  width: 100%;           /* requerido */
-  background: #222;
-  color: white;
-
-  display: flex;
-  justify-content: space-between; /* izquierda / derecha */
-  align-items: center;
-
-  padding: 10px 30px;
+/* ==================== RESET Y ESTILOS BASE ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* IZQUIERDA */
+body {
+    background-image: url("imagenes/Fondo.png");
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* ==================== HEADER  ==================== */
+.header {
+    background-color: #222;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO E IMAGEN IZQUIERDA */
 .header-izq {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    flex: 1;
 }
 
 .logo-img {
-  width: 50px;
-  height: 50px;
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.texto-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .logo-nombre {
-  font-weight: bold;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
 }
 
 .logo-slogan {
-  font-size: 12px;
-  color: #ccc;
+    font-size: 0.75rem;
+    color: #ccc;
 }
 
-/* DERECHA */
-.header-der button {
-  margin-left: 10px;
-  padding: 8px 12px;
-  border: none;
-  background: white;
-  color: #222;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.botones button {
-    padding: 8px 16px;
-    background: #fff;
-    color: #222;
+/* MENÚ HAMBURGUESA (para movil) */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-    font-weight: bold;
+    gap: 5px;
+    padding: 0.5rem;
 }
+
+.menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* BOTONES DERECHA */
+.header-der {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.header-der button {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.btn-cuenta {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-cuenta:hover {
+    background-color: white;
+    color: #222;
+}
+
+.btn-sesion {
+    background-color: white;
+    color: #222;
+}
+
+.btn-sesion:hover {
+    background-color: #ccc;
+}
+
+/* ==================== TABLET  ==================== */
+@media screen and (max-width: 768px) {
+    .header-container {
+        padding: 1rem 1.5rem;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .header-der {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #222;
+        flex-direction: column;
+        gap: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        padding: 0;
+        border-top: 1px solid #444;
+    }
+
+    .header-der.active {
+        max-height: 300px;
+        padding: 1rem;
+    }
+
+    .header-der button {
+        width: 100%;
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+
+    .logo-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-nombre {
+        font-size: 1.2rem;
+    }
+
+    .logo-slogan {
+        font-size: 0.65rem;
+    }
+
+    /* Animación del menú hamburguesa */
+    .menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(10px, 10px);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+}
+
+/* ==================== CELULAR  ==================== */
+@media screen and (max-width: 480px) {
+    .header-container {
+        padding: 0.8rem 1rem;
+    }
+
+    .header-izq {
+        gap: 0.75rem;
+    }
+
+    .logo-img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .logo-nombre {
+        font-size: 1rem;
+    }
+
+    .logo-slogan {
+        font-size: 0.6rem;
+    }
+
+    .menu-toggle span {
+        width: 20px;
+        height: 2.5px;
+    }
+
+    .header-der button {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* ==================== MAIN ==================== */
 main {
-    margin-top: 60px;
-    padding: 20px;
-  }
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 80px;
+}
 
+main h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: white;
+}
 
-body{
-    background-image: url("CSS/imagenes/Fondo.png");
-    background-size: cover;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+main p {
+    font-size: 1.1rem;
+    color: #ddd;
 }

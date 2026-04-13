@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
   <title>Sport Port</title>
 </head>
 
 <body>
 
-  <header>
+  <header class="header">
+    <div class="header-container">
+      <!-- IZQUIERDA / LOGO -->
+      <div class="header-izq" onclick="location.reload()">
+        <img src="CSS/imagenes/Logo.png" class="logo-img">
 
-    <!-- IZQUIERDA -->
-    <div class="header-izq" onclick="location.reload()">
-      <img src="CSS/imagenes/Logo.png" class="logo-img">
-
-      <div class="texto-logo">
-        <div class="logo-nombre">Sport Port</div>
-        <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        <div class="texto-logo">
+          <div class="logo-nombre">Sport Port</div>
+          <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        </div>
       </div>
-    </div>
 
-    <!-- DERECHA -->
-    <div class="header-der">
-      <button>Crear cuenta</button>
-      <button>Iniciar sesión</button>
-    </div>
+      <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
+      <!-- DERECHA / BOTONES -->
+      <nav class="header-der" id="headerNav">
+        <button class="btn-cuenta">Crear cuenta</button>
+        <button class="btn-sesion">Iniciar sesión</button>
+      </nav>
+    </div>
+  <script src="JS/main.js"></script>
   </header>
 
   <main>
