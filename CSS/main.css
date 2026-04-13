@@ -6,8 +6,7 @@
 }
 
 body {
-    background-image: url("imagenes/Fondo.png");
-    background-size: cover;
+    background-color: #1a1a1a;
     font-family: Arial, sans-serif;
     color: #333;
 }
@@ -19,6 +18,36 @@ body {
     top: 0;
     z-index: 1000;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero {
+    width: 100%;
+    height: 100vh;
+    background-image: url("imagenes/Fondo.png");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+.hero-content {
+    z-index: 10;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.hero-content p {
+    font-size: 1.5rem;
+    color: #ddd;
 }
 
 .header-container {
@@ -120,6 +149,18 @@ body {
 
 /* ==================== TABLET  ==================== */
 @media screen and (max-width: 768px) {
+    .hero {
+        height: 70vh;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
     .header-container {
         padding: 1rem 1.5rem;
     }
@@ -183,6 +224,18 @@ body {
 
 /* ==================== CELULAR  ==================== */
 @media screen and (max-width: 480px) {
+    .hero {
+        height: 60vh;
+    }
+
+    .hero-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-content p {
+        font-size: 0.9rem;
+    }
+
     .header-container {
         padding: 0.8rem 1rem;
     }
@@ -218,10 +271,10 @@ body {
 /* ==================== MAIN ==================== */
 main {
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 0 auto;
     padding: 2rem;
-    margin-top: 80px;
     margin-bottom: 120px;
+    background-color: #1a1a1a;
 }
 
 /* ==================== SECCIONES DE PRODUCTOS ==================== */
