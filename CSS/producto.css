@@ -82,6 +82,28 @@
     border-radius: 8px;
 }
 
+.imagenes-adicionales {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.imagen-adicional {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.imagen-adicional:hover {
+    border-color: #ffc107;
+}
+
 /* INFO DEL PRODUCTO */
 .producto-info {
     display: flex;

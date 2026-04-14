@@ -160,6 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const userType = localStorage.getItem('userType');
     if (userType === 'admin') {
         adminBtn.style.display = 'block';
+        addPanel();
+    } else {
+        adminBtn.style.display = 'none';
+        removePanel();
     }
 
     // Mostrar modal al hacer clic en "Iniciar sesión"
@@ -171,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAdmin.addEventListener('click', () => {
         localStorage.setItem('userType', 'admin');
         adminBtn.style.display = 'block';
+        addPanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Administrador');
     });
@@ -179,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnUser.addEventListener('click', () => {
         localStorage.setItem('userType', 'user');
         adminBtn.style.display = 'none';
+        removePanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Usuario');
     });
@@ -195,6 +201,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'agregar-producto.html';
     });
 });
+
+function addPanel() {
+    // Remover si ya existe
+    removePanel();
+    const categoriasDiv = document.querySelector('.categorias');
+    const panelDiv = document.createElement('div');
+    panelDiv.className = 'panel';
+    panelDiv.innerHTML = `
+        <span class="panel-label">Panel</span>
+        <div class="panel-dropdown">
+            <a href="#" class="panel-item" id="modificar-productos">Modificar productos</a>
+            <a href="#" class="panel-item" id="estadisticas">Estadísticas</a>
+        </div>
+    `;
+    categoriasDiv.insertAdjacentElement('afterend', panelDiv);
+
+    // Event listeners para panel
+    document.getElementById('modificar-productos').addEventListener('click', () => {
+        window.location.href = 'modificar-productos.html';
+    });
+    document.getElementById('estadisticas').addEventListener('click', () => {
+        window.location.href = 'estadisticas.html';
+    });
+}
+
+function removePanel() {
+    const panel = document.querySelector('.panel');
+    if (panel) {
+        panel.remove();
+    }
+}
 
 // ==================== AJUSTAR POSICIÓN DEL BOTÓN ADMIN CERCA DEL FOOTER ====================
 function ajustarPosicionBotonAdmin() {

@@ -8,9 +8,12 @@ function cargarProductosDesdeStorage() {
         productosData[producto.id] = {
             nombre: producto.nombre,
             imagen: producto.imagen,
+            imagenesAdicionales: producto.imagenesAdicionales || [],
             precio: producto.precio,
             precioAnterior: null,
             descripcion: producto.descripcion,
+            stock: producto.stock,
+            descuento: producto.descuento || 0,
             tipo: producto.tipo
         };
     });
@@ -43,11 +46,28 @@ function cargarProducto() {
     document.getElementById('productoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
     document.getElementById('productoDescripcion').textContent = producto.descripcion;
 
-    // Mostrar precio anterior si existe (es una oferta)
-    if (producto.precioAnterior) {
-        document.getElementById('productoPrecioAnterior').textContent = `$${producto.precioAnterior.toFixed(2)}`;
+    // Calcular precio con descuento
+    let precioFinal = producto.precio;
+    if (producto.descuento > 0) {
+        precioFinal = producto.precio * (1 - producto.descuento / 100);
+        document.getElementById('productoPrecio').textContent = `$${precioFinal.toFixed(2)}`;
+        document.getElementById('productoPrecioAnterior').textContent = `$${producto.precio.toFixed(2)}`;
         document.getElementById('productoPrecioAnterior').style.display = 'block';
     }
+
+    // Mostrar imágenes adicionales
+    const imagenesAdicionalesContainer = document.getElementById('imagenesAdicionales');
+    imagenesAdicionalesContainer.innerHTML = '';
+    producto.imagenesAdicionales.forEach((img, index) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = img;
+        imgElement.alt = `Imagen adicional ${index + 1}`;
+        imgElement.className = 'imagen-adicional';
+        imgElement.addEventListener('click', () => {
+            document.getElementById('productoImagen').src = img;
+        });
+        imagenesAdicionalesContainer.appendChild(imgElement);
+    });
 
     // Agregar eventos a los botones de cantidad
     document.getElementById('incrementBtn').addEventListener('click', incrementarCantidad);
