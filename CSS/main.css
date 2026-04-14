@@ -208,19 +208,6 @@ body {
     background-color: #ccc;
 }
 
-.btn-administrador {
-    background-color: #f6ee10;
-    color: #000000;
-    font-size: 0.9rem;
-    padding: 0.6rem 1.2rem;
-}
-
-.btn-administrador:hover {
-    background-color: #e6de00;
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(246, 238, 16, 0.3);
-}
-
 /* ==================== TABLET  ==================== */
 @media screen and (max-width: 768px) {
     .hero {
