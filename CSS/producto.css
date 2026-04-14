@@ -4,7 +4,7 @@
     background-color: #222;
     padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     gap: 2rem;
     border-bottom: none;
@@ -36,6 +36,12 @@
     transition: all 0.3s ease;
     white-space: nowrap;
     flex-shrink: 0;
+    /* Posicionamiento fijo en la pantalla */
+    position: absolute;
+    right: 2rem;
+    top: auto;
+    bottom: auto;
+    z-index: 999;
 }
 
 .header-boton-atras:hover {

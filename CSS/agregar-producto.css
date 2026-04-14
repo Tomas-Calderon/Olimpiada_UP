@@ -50,6 +50,11 @@
     border-color: #ffc107;
 }
 
+#imagenes.completo {
+    border-color: #51CF66;
+    background-color: rgba(81, 207, 102, 0.1);
+}
+
 .imagen-preview {
     margin-top: 1rem;
     max-width: 200px;
@@ -70,6 +75,14 @@
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
+}
+
+.imagenes-count {
+    display: block;
+    margin-top: 0.5rem;
+    color: #ffc107;
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 .imagen-item {
@@ -97,6 +110,89 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.preview-imagen {
+    position: relative;
+    display: inline-block;
+    margin: 0.5rem;
+}
+
+.preview-imagen img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #555;
+}
+
+.preview-imagen.image-principal img {
+    border: 3px solid #ffc107;
+}
+
+.btn-eliminar-imagen {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-eliminar-imagen:hover {
+    background-color: rgba(255, 0, 0, 1);
+    transform: scale(1.1);
+}
+
+.btn-hacer-principal {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #00ff00;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-hacer-principal:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.btn-hacer-principal.principal-activa {
+    background-color: #ffc107;
+    color: black;
+    font-weight: bold;
+}
+
+.badge-principal {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #ffc107;
+    color: black;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 .btn-agregar {

@@ -154,15 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const userModal = document.getElementById('userModal');
     const btnAdmin = document.getElementById('btnAdmin');
     const btnUser = document.getElementById('btnUser');
-    const adminBtn = document.getElementById('adminBtn');
 
     // Verificar si ya hay un tipo de usuario guardado
     const userType = localStorage.getItem('userType');
     if (userType === 'admin') {
-        adminBtn.style.display = 'block';
         addPanel();
     } else {
-        adminBtn.style.display = 'none';
         removePanel();
     }
 
@@ -174,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionar Administrador
     btnAdmin.addEventListener('click', () => {
         localStorage.setItem('userType', 'admin');
-        adminBtn.style.display = 'block';
         addPanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Administrador');
@@ -183,7 +179,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionar Usuario
     btnUser.addEventListener('click', () => {
         localStorage.setItem('userType', 'user');
-        adminBtn.style.display = 'none';
         removePanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Usuario');
@@ -195,12 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
             userModal.style.display = 'none';
         }
     });
-
-    // Event listener para el botón admin - OCULTADO
-    // ya que ahora acceso es por el panel de administración
-    // adminBtn.addEventListener('click', () => {
-    //     window.location.href = 'agregar-producto.html';
-    // });
 });
 
 function addPanel() {
@@ -238,33 +227,3 @@ function removePanel() {
     }
 }
 
-// ==================== AJUSTAR POSICIÓN DEL BOTÓN ADMIN CERCA DEL FOOTER ====================
-function ajustarPosicionBotonAdmin() {
-    const adminBtn = document.getElementById('adminBtn');
-    const footer = document.querySelector('.footer');
-    
-    if (!adminBtn || !footer) return;
-    
-    const footerRect = footer.getBoundingClientRect();
-    const buttonHeight = 60;
-    const buttonMargin = 20;
-    const viewportHeight = window.innerHeight;
-    
-    // Si el footer está visible en la ventana
-    if (footerRect.top < viewportHeight) {
-        // Calcular cuánto espacio hay para el botón
-        const espacioDisponible = footerRect.top - buttonMargin - buttonHeight;
-        
-        // Ajustar el position bottom del botón
-        const newBottom = viewportHeight - footerRect.top + buttonMargin;
-        adminBtn.style.bottom = newBottom + 'px';
-    } else {
-        // Si el footer no está visible, volver a la posición normal
-        adminBtn.style.bottom = '20px';
-    }
-}
-
-// Ejecutar al cargar y durante el scroll
-window.addEventListener('scroll', ajustarPosicionBotonAdmin);
-window.addEventListener('resize', ajustarPosicionBotonAdmin);
-window.addEventListener('load', ajustarPosicionBotonAdmin);

@@ -902,32 +902,3 @@ main {
 .user-btn:hover {
     background-color: #ffb300;
 }
-
-/* ==================== BOTÓN ADMINISTRADOR FIJO ==================== */
-.admin-fixed-btn {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #ff4444;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
-}
-
-.admin-fixed-btn:hover {
-    background-color: #cc3333;
-    transform: scale(1.1);
-}
-
-.admin-fixed-btn span {
-    display: block;
-    line-height: 60px;
-}
