@@ -13,112 +13,319 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
     }, 4000);
 }
 
+// Variable global para almacenar la imagen
+let imagenCargadaBase64 = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('productoForm');
-    const imagenInput = document.getElementById('imagen');
-    const imagenPreview = document.getElementById('imagenPreview');
+    const precioInput = document.getElementById('precio');
+    const stockInput = document.getElementById('stock');
+    const descuentoInput = document.getElementById('descuento');
+    const imagenesInput = document.getElementById('imagenes');
+    const imagenesPreview = document.getElementById('imagenesPreview');
     const btnAgregar = document.querySelector('.btn-agregar');
 
-    // Preview de imagen
-    imagenInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                imagenPreview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            imagenPreview.innerHTML = '';
-        }
+    // VALIDACIÓN PRECIO EN TIEMPO REAL
+    precioInput.addEventListener('input', function() {
+        validarPrecio(this);
     });
+
+    // VALIDACIÓN STOCK EN TIEMPO REAL
+    stockInput.addEventListener('input', function() {
+        validarStock(this);
+    });
+
+    // VALIDACIÓN DESCUENTO EN TIEMPO REAL
+    descuentoInput.addEventListener('input', function() {
+        validarDescuento(this);
+    });
+
+    // Preview de imágenes
+    imagenesInput.addEventListener('change', mostrarPreviewsImagenes);
 
     // Validación y envío del formulario
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    form.addEventListener('submit', guardarProducto);
+});
 
-        // Obtener valores
-        const nombre = document.getElementById('nombre').value.trim();
-        const precio = parseFloat(document.getElementById('precio').value);
-        const descripcion = document.getElementById('descripcion').value.trim();
-        const stock = parseInt(document.getElementById('stock').value);
-        const imagenFile = imagenInput.files[0];
-
-        // Validaciones
-        let errores = [];
-
-        if (!nombre) {
-            errores.push('El nombre es obligatorio.');
+// Valida PRECIO: solo dígitos y un punto, máx 2 decimales
+function validarPrecio(input) {
+    let valor = input.value;
+    
+    // Solo permite dígitos y puntos
+    valor = valor.replace(/[^\d.]/g, '');
+    
+    // Solo un punto, si hay más, elimina todo menos el primero
+    const partes = valor.split('.');
+    if (partes.length > 2) {
+        valor = partes[0] + '.' + partes.slice(1).join('');
+    }
+    
+    // Máximo 2 decimales
+    if (valor.includes('.')) {
+        const [entero, decimal] = valor.split('.');
+        if (decimal.length > 2) {
+            valor = entero + '.' + decimal.substring(0, 2);
         }
+    }
+    
+    input.value = valor;
+}
 
-        if (isNaN(precio) || precio <= 0) {
-            errores.push('El precio debe ser un número positivo.');
-        }
+// Valida DESCUENTO: solo dígitos, máx 3 caracteres, max 100
+function validarDescuento(input) {
+    let valor = input.value;
+    let posicionCursor = input.selectionStart;
+    
+    // Remueve cualquier carácter que no sea dígito
+    valor = valor.replace(/[^\d]/g, '');
+    
+    // Limitar a 3 caracteres
+    if (valor.length > 3) {
+        valor = valor.substring(0, 3);
+    }
+    
+    // Asegurar que no sea mayor a 100
+    if (valor && parseInt(valor) > 100) {
+        valor = '100';
+    }
+    
+    input.value = valor;
+    
+    // Restaurar posición del cursor después de que el navegador procese el cambio
+    setTimeout(() => {
+        const nuevaPosicion = Math.min(posicionCursor, input.value.length);
+        input.setSelectionRange(nuevaPosicion, nuevaPosicion);
+    }, 0);
+}
 
-        if (!descripcion) {
-            errores.push('La descripción es obligatoria.');
-        }
+// Valida STOCK: solo dígitos, sin límite de caracteres
+function validarStock(input) {
+    let valor = input.value;
+    let posicionCursor = input.selectionStart;
+    
+    // Remueve cualquier carácter que no sea dígito
+    valor = valor.replace(/[^\d]/g, '');
+    
+    input.value = valor;
+    
+    // Restaurar posición del cursor después de que el navegador procese el cambio
+    setTimeout(() => {
+        const nuevaPosicion = Math.min(posicionCursor, input.value.length);
+        input.setSelectionRange(nuevaPosicion, nuevaPosicion);
+    }, 0);
+}
 
-        if (isNaN(stock) || stock < 0) {
-            errores.push('La cantidad en stock debe ser un número entero no negativo.');
-        }
+// Función auxiliar para actualizar el contador de imágenes
+function actualizarContadorImagenes() {
+    const countDiv = document.getElementById('imagenesCount');
+    const cantidad = imagenesCargadasBase64.length;
+    
+    if (cantidad === 0) {
+        countDiv.textContent = '';
+    } else if (cantidad === 1) {
+        countDiv.textContent = '✓ 1 imagen cargada';
+    } else {
+        countDiv.textContent = `✓ ${cantidad} imágenes cargadas`;
+    }
+}
 
-        if (!imagenFile) {
-            errores.push('Debe seleccionar una imagen.');
-        } else {
-            const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-            if (!allowedTypes.includes(imagenFile.type)) {
-                errores.push('La imagen debe ser PNG o JPG.');
-            }
-        }
+// Función para actualizar el estado visual del input de imágenes
+function actualizarEstadoInputImagenes() {
+    const inputImagenes = document.getElementById('imagenes');
+    const countDiv = document.getElementById('imagenesCount');
+    
+    if (imagenCargadaBase64) {
+        // Mostrar que el campo está completo
+        inputImagenes.classList.add('completo');
+        countDiv.innerHTML = `✓ Imagen cargada`;
+    } else {
+        inputImagenes.classList.remove('completo');
+        countDiv.textContent = '';
+    }
+}
 
-        if (errores.length > 0) {
-            mostrarNotificacion(errores[0], 'error');
-            return;
-        }
-
-        // Verificar si el producto ya existe
-        let productos = JSON.parse(localStorage.getItem('productos')) || [];
-        const productoExiste = productos.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+// Función auxiliar para redibujar el preview
+function redibujarPreviews() {
+    const preview = document.getElementById('imagenesPreview');
+    preview.innerHTML = '';
+    
+    if (imagenCargadaBase64) {
+        const div = document.createElement('div');
+        div.className = 'preview-imagen image-principal';
         
-        if (productoExiste) {
-            mostrarNotificacion('Error: Ya existe un producto con ese nombre.', 'error');
-            return;
-        }
+        const img = document.createElement('img');
+        img.src = imagenCargadaBase64;
+        img.alt = 'Imagen del producto';
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'btn-eliminar-imagen';
+        deleteBtn.textContent = '×';
+        deleteBtn.onclick = (e) => {
+            e.preventDefault();
+            eliminarImagenPreview();
+            return false;
+        };
+        
+        div.appendChild(img);
+        div.appendChild(deleteBtn);
+        preview.appendChild(div);
+    }
+}
 
-        // Deshabilitar botón mientras procesa
-        btnAgregar.disabled = true;
-        btnAgregar.textContent = 'Agregando...';
+function mostrarPreviewsImagenes(evento) {
+    const files = evento.target.files;
+    
+    if (!files || files.length === 0) {
+        return;
+    }
 
-        // Convertir imagen a base64
+    const file = files[0];
+    if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const imagenBase64 = e.target.result;
-
-            // Crear objeto producto
-            const producto = {
-                id: 'custom_' + Date.now(),
-                nombre: nombre,
-                precio: precio,
-                descripcion: descripcion,
-                stock: stock,
-                imagen: imagenBase64,
-                tipo: 'Novedad' // Todos los nuevos productos van a Novedades y Recomendados
-            };
-
-            // Guardar en localStorage
-            let productosActualizados = JSON.parse(localStorage.getItem('productos')) || [];
-            productosActualizados.push(producto);
-            localStorage.setItem('productos', JSON.stringify(productosActualizados));
-
-            // Mostrar notificación de éxito
-            mostrarNotificacion('Producto agregado exitosamente.', 'success');
-
-            // Redirigir después de 1.5 segundos
-            setTimeout(() => {
-                window.location.href = 'main.html';
-            }, 1500);
+            const base64Original = e.target.result;
+            
+            // Comprimir la imagen
+            comprimirImagen(base64Original, (base64Comprimido) => {
+                // Guardar la imagen comprimida
+                imagenCargadaBase64 = base64Comprimido;
+                console.log('Imagen cargada y comprimida');
+                
+                // Redibujar preview
+                redibujarPreviews();
+                
+                // Actualizar estado del input
+                actualizarEstadoInputImagenes();
+            });
         };
-        reader.readAsDataURL(imagenFile);
-    });
-});
+        reader.readAsDataURL(file);
+    }
+}
+
+// Función para comprimir imagen
+function comprimirImagen(base64, callback) {
+    const img = new Image();
+    img.src = base64;
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 800;
+        const maxHeight = 800;
+        let width = img.width;
+        let height = img.height;
+        
+        // Calcular nuevas dimensiones manteniendo aspecto
+        if (width > height) {
+            if (width > maxWidth) {
+                height = height * (maxWidth / width);
+                width = maxWidth;
+            }
+        } else {
+            if (height > maxHeight) {
+                width = width * (maxHeight / height);
+                height = maxHeight;
+            }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convertir a base64 con compresión (quality 0.7)
+        const base64Comprimido = canvas.toDataURL('image/jpeg', 0.7);
+        callback(base64Comprimido);
+    };
+}
+
+function eliminarImagenPreview() {
+    imagenCargadaBase64 = null;
+    
+    // Limpiar el input file
+    document.getElementById('imagenes').value = '';
+    
+    // Redibujar previews
+    redibujarPreviews();
+    
+    // Actualizar estado del input
+    actualizarEstadoInputImagenes();
+}
+
+function guardarProducto(evento) {
+    evento.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const descripcion = document.getElementById('descripcion').value.trim();
+    const precio = parseFloat(document.getElementById('precio').value);
+    const descuento = document.getElementById('descuento').value 
+        ? parseInt(document.getElementById('descuento').value) 
+        : 0;
+    const stock = parseInt(document.getElementById('stock').value);
+
+    // Validación
+    if (!nombre || !descripcion || !precio || !stock) {
+        mostrarNotificacion('Por favor completa todos los campos requeridos', 'error');
+        return;
+    }
+
+    if (!imagenCargadaBase64) {
+        mostrarNotificacion('Debes cargar una imagen', 'error');
+        return;
+    }
+
+    // Validar nombre único
+    let productos = JSON.parse(localStorage.getItem('productos')) || [];
+    if (productos.some(p => p.nombre.toLowerCase() === nombre.toLowerCase())) {
+        mostrarNotificacion('Este nombre de producto ya existe. Por favor elige otro.', 'error');
+        return;
+    }
+
+    // Validar descuento
+    if (descuento > 100) {
+        mostrarNotificacion('El descuento no puede ser mayor a 100%', 'error');
+        return;
+    }
+
+    // Calcular precio con descuento
+    const precioConDescuento = descuento > 0 ? precio * (1 - descuento / 100) : precio;
+
+    // Crear producto
+    const nuevoProducto = {
+        id: 'custom_' + Date.now(),
+        nombre,
+        descripcion,
+        precio: parseFloat(precio.toFixed(2)),
+        precioConDescuento: parseFloat(precioConDescuento.toFixed(2)),
+        descuento,
+        stock,
+        imagenes: [imagenCargadaBase64],
+        imagen: imagenCargadaBase64,
+        imagenPrincipal: imagenCargadaBase64,
+        tipo: 'Novedad',
+        fechaCreacion: new Date().toISOString()
+    };
+
+    // Guardar en localStorage
+    try {
+        productos.push(nuevoProducto);
+        localStorage.setItem('productos', JSON.stringify(productos));
+        console.log('Producto guardado:', nuevoProducto);
+    } catch (error) {
+        console.error('Error al guardar producto:', error);
+        mostrarNotificacion('Error al guardar el producto. localStorage lleno o error desconocido.', 'error');
+        return;
+    }
+
+    // Mostrar éxito
+    mostrarNotificacion('Producto agregado exitosamente.', 'success');
+    document.getElementById('productoForm').reset();
+    document.getElementById('imagenesPreview').innerHTML = '';
+    document.getElementById('imagenesCount').textContent = '';
+    document.getElementById('imagenes').classList.remove('completo');
+    imagenCargadaBase64 = null; // Limpiar imagen
+
+    // Redirigir después de 1.5 segundos
+    setTimeout(() => {
+        window.location.href = 'main.html';
+    }, 1500);
+}

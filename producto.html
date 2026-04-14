@@ -64,6 +64,7 @@
       <!-- IZQUIERDA: IMAGEN -->
       <div class="producto-imagen-container">
         <img id="productoImagen" src="" alt="Imagen del Producto" class="producto-imagen">
+        <div id="imagenesAdicionales" class="imagenes-adicionales"></div>
       </div>
 
       <!-- DERECHA: INFORMACIÓN -->
@@ -98,7 +99,7 @@
         <div class="producto-acciones">
           <div class="cantidad-selector">
             <button id="decrementBtn">-</button>
-            <input type="number" id="cantidad" value="1" min="1" max="99">
+            <input type="text" id="cantidad" value="1" min="1" max="99">
             <button id="incrementBtn">+</button>
           </div>
           <button class="btn-agregar-carrito">Agregar al carrito</button>

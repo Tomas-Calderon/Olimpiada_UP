@@ -26,21 +26,62 @@ window.addEventListener('resize', () => {
 
 // ==================== FUNCIONALIDAD DE PRODUCTOS ====================
 // Agregar event listeners a los productos
-const productosPorPagina = 10;
+const productosPorPagina = 5;
 let paginaRecomendados = 1;
 let paginaOfertas = 1;
 let paginaNovedades = 1;
+let productosRecomendadosAleatorios = []; // Almacenar los 10 productos aleatorios
+let productosOfertasAleatorios = []; // Almacenar los 10 productos de ofertas aleatorios
+let productosNovedadesAleatorios = []; // Almacenar los 10 productos de novedades aleatorios
+
+// Función para obtener 10 productos aleatorios sin repetir
+function obtenerProductosAleatorios(productos, cantidad = 10) {
+    // Si hay menos productos que la cantidad solicitada, devolver todos
+    if (productos.length <= cantidad) {
+        return productos.sort(() => Math.random() - 0.5);
+    }
+    
+    // Crear una copia del array
+    const productosDisponibles = [...productos];
+    const productosSeleccionados = [];
+    
+    // Seleccionar 'cantidad' productos aleatorios sin repetir
+    for (let i = 0; i < cantidad; i++) {
+        const indiceAleatorio = Math.floor(Math.random() * productosDisponibles.length);
+        productosSeleccionados.push(productosDisponibles[indiceAleatorio]);
+        // Remover el producto seleccionado para no repetir
+        productosDisponibles.splice(indiceAleatorio, 1);
+    }
+    
+    return productosSeleccionados;
+}
 
 function renderProductos(seccion, pagina) {
     const productos = JSON.parse(localStorage.getItem('productos')) || [];
     let productosFiltrados = [];
+    
     if (seccion === 'recomendados') {
-        productosFiltrados = productos;
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosRecomendadosAleatorios.length === 0) {
+            productosRecomendadosAleatorios = obtenerProductosAleatorios(productos, 10);
+        }
+        productosFiltrados = productosRecomendadosAleatorios;
     } else if (seccion === 'ofertas') {
-        productosFiltrados = productos.filter(p => p.precioAnterior);
+        const productosConOferta = productos.filter(p => p.precioAnterior);
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosOfertasAleatorios.length === 0) {
+            productosOfertasAleatorios = obtenerProductosAleatorios(productosConOferta, 10);
+        }
+        productosFiltrados = productosOfertasAleatorios;
     } else if (seccion === 'novedades') {
-        productosFiltrados = productos.filter(p => p.tipo === 'Novedad');
+        const productosNuevos = productos.filter(p => p.tipo === 'Novedad');
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosNovedadesAleatorios.length === 0) {
+            productosNovedadesAleatorios = obtenerProductosAleatorios(productosNuevos, 10);
+        }
+        productosFiltrados = productosNovedadesAleatorios;
     }
+    
     const totalProductos = productosFiltrados.length;
     const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
     const inicio = (pagina - 1) * productosPorPagina;
@@ -55,8 +96,8 @@ function renderProductos(seccion, pagina) {
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
-            <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
-            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2)}</p>` : ''}
+            <p class="producto-precio">$${producto.precio.toFixed(2).replace('.', ',')}</p>
+            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2).replace('.', ',')}</p>` : ''}
         `;
         productoDiv.addEventListener('click', () => {
             window.location.href = `producto.html?id=${producto.id}`;
@@ -154,12 +195,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const userModal = document.getElementById('userModal');
     const btnAdmin = document.getElementById('btnAdmin');
     const btnUser = document.getElementById('btnUser');
-    const adminBtn = document.getElementById('adminBtn');
 
     // Verificar si ya hay un tipo de usuario guardado
     const userType = localStorage.getItem('userType');
     if (userType === 'admin') {
-        adminBtn.style.display = 'block';
+        addPanel();
+    } else {
+        removePanel();
     }
 
     // Mostrar modal al hacer clic en "Iniciar sesión"
@@ -170,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionar Administrador
     btnAdmin.addEventListener('click', () => {
         localStorage.setItem('userType', 'admin');
-        adminBtn.style.display = 'block';
+        addPanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Administrador');
     });
@@ -178,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Seleccionar Usuario
     btnUser.addEventListener('click', () => {
         localStorage.setItem('userType', 'user');
-        adminBtn.style.display = 'none';
+        removePanel();
         userModal.style.display = 'none';
         alert('Sesión iniciada como Usuario');
     });
@@ -189,40 +231,40 @@ document.addEventListener('DOMContentLoaded', () => {
             userModal.style.display = 'none';
         }
     });
-
-    // Event listener para el botón admin
-    adminBtn.addEventListener('click', () => {
-        window.location.href = 'agregar-producto.html';
-    });
 });
 
-// ==================== AJUSTAR POSICIÓN DEL BOTÓN ADMIN CERCA DEL FOOTER ====================
-function ajustarPosicionBotonAdmin() {
-    const adminBtn = document.getElementById('adminBtn');
-    const footer = document.querySelector('.footer');
-    
-    if (!adminBtn || !footer) return;
-    
-    const footerRect = footer.getBoundingClientRect();
-    const buttonHeight = 60;
-    const buttonMargin = 20;
-    const viewportHeight = window.innerHeight;
-    
-    // Si el footer está visible en la ventana
-    if (footerRect.top < viewportHeight) {
-        // Calcular cuánto espacio hay para el botón
-        const espacioDisponible = footerRect.top - buttonMargin - buttonHeight;
-        
-        // Ajustar el position bottom del botón
-        const newBottom = viewportHeight - footerRect.top + buttonMargin;
-        adminBtn.style.bottom = newBottom + 'px';
-    } else {
-        // Si el footer no está visible, volver a la posición normal
-        adminBtn.style.bottom = '20px';
+function addPanel() {
+    // Remover si ya existe
+    removePanel();
+    const categoriasDiv = document.querySelector('.categorias');
+    const panelDiv = document.createElement('div');
+    panelDiv.className = 'panel';
+    panelDiv.innerHTML = `
+        <span class="panel-label">Panel</span>
+        <div class="panel-dropdown">
+            <a href="#" class="panel-item" id="agregar-producto">Agregar Producto</a>
+            <a href="#" class="panel-item" id="modificar-productos">Modificar productos</a>
+            <a href="#" class="panel-item" id="estadisticas">Estadísticas</a>
+        </div>
+    `;
+    categoriasDiv.insertAdjacentElement('afterend', panelDiv);
+
+    // Event listeners para panel
+    document.getElementById('agregar-producto').addEventListener('click', () => {
+        window.location.href = 'agregar-producto.html';
+    });
+    document.getElementById('modificar-productos').addEventListener('click', () => {
+        window.location.href = 'modificar-productos.html';
+    });
+    document.getElementById('estadisticas').addEventListener('click', () => {
+        window.location.href = 'estadisticas.html';
+    });
+}
+
+function removePanel() {
+    const panel = document.querySelector('.panel');
+    if (panel) {
+        panel.remove();
     }
 }
 
-// Ejecutar al cargar y durante el scroll
-window.addEventListener('scroll', ajustarPosicionBotonAdmin);
-window.addEventListener('resize', ajustarPosicionBotonAdmin);
-window.addEventListener('load', ajustarPosicionBotonAdmin);

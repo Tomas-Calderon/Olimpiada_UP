@@ -1,11 +1,10 @@
-Ar<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
-  <link rel="stylesheet" href="CSS/agregar-producto.css">
-  <title>Agregar Producto - Sport Port</title>
+  <title>Modificar Productos - Sport Port</title>
 </head>
 
 <body>
@@ -38,48 +37,13 @@ Ar<!DOCTYPE html>
   <script src="JS/main.js"></script>
   </header>
 
-  <!-- NOTIFICACIÓN PERSONALIZADA -->
-  <div id="notification" class="notification"></div>
-
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="agregar-producto-main">
-    <div class="form-container">
-      <h1>Agregar Nuevo Producto</h1>
-      <form id="productoForm">
-        <div class="form-group">
-          <label for="nombre">Nombre del Producto:</label>
-          <input type="text" id="nombre" name="nombre" maxlength="50" required>
-        </div>
-
-        <div class="form-group">
-          <label for="precio">Precio:</label>
-          <input type="text" id="precio" name="precio" maxlength="20" required>
-        </div>
-
-        <div class="form-group">
-          <label for="descripcion">Descripción:</label>
-          <textarea id="descripcion" name="descripcion" rows="4" maxlength="300" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="stock">Cantidad en Stock:</label>
-          <input type="text" id="stock" name="stock" maxlength="15" required>
-        </div>
-
-        <div class="form-group">
-          <label for="descuento">Descuento (%):</label>
-          <input type="text" id="descuento" name="descuento" maxlength="3" value="0">
-        </div>
-
-        <div class="form-group">
-          <label for="imagenes">Imagen del Producto (PNG o JPG):</label>
-          <input type="file" id="imagenes" name="imagenes" accept=".png,.jpg,.jpeg" required>
-          <div id="imagenesCount" class="imagenes-count"></div>
-          <div id="imagenesPreview" class="imagenes-preview"></div>
-        </div>
-
-        <button type="submit" class="btn-agregar">Agregar Producto</button>
-      </form>
+  <main class="modificar-productos-main">
+    <div class="container">
+      <h1>Modificar Productos</h1>
+      <div id="productos-lista" class="productos-lista-modificar">
+        <!-- Productos se cargarán aquí -->
+      </div>
     </div>
   </main>
 
@@ -105,7 +69,6 @@ Ar<!DOCTYPE html>
     </div>
   </footer>
 
-  <script src="JS/agregar-producto.js"></script>
-
+  <script src="JS/modificar-productos.js"></script>
 </body>
 </html>
