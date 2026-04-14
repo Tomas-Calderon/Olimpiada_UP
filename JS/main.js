@@ -26,21 +26,62 @@ window.addEventListener('resize', () => {
 
 // ==================== FUNCIONALIDAD DE PRODUCTOS ====================
 // Agregar event listeners a los productos
-const productosPorPagina = 10;
+const productosPorPagina = 5;
 let paginaRecomendados = 1;
 let paginaOfertas = 1;
 let paginaNovedades = 1;
+let productosRecomendadosAleatorios = []; // Almacenar los 10 productos aleatorios
+let productosOfertasAleatorios = []; // Almacenar los 10 productos de ofertas aleatorios
+let productosNovedadesAleatorios = []; // Almacenar los 10 productos de novedades aleatorios
+
+// Función para obtener 10 productos aleatorios sin repetir
+function obtenerProductosAleatorios(productos, cantidad = 10) {
+    // Si hay menos productos que la cantidad solicitada, devolver todos
+    if (productos.length <= cantidad) {
+        return productos.sort(() => Math.random() - 0.5);
+    }
+    
+    // Crear una copia del array
+    const productosDisponibles = [...productos];
+    const productosSeleccionados = [];
+    
+    // Seleccionar 'cantidad' productos aleatorios sin repetir
+    for (let i = 0; i < cantidad; i++) {
+        const indiceAleatorio = Math.floor(Math.random() * productosDisponibles.length);
+        productosSeleccionados.push(productosDisponibles[indiceAleatorio]);
+        // Remover el producto seleccionado para no repetir
+        productosDisponibles.splice(indiceAleatorio, 1);
+    }
+    
+    return productosSeleccionados;
+}
 
 function renderProductos(seccion, pagina) {
     const productos = JSON.parse(localStorage.getItem('productos')) || [];
     let productosFiltrados = [];
+    
     if (seccion === 'recomendados') {
-        productosFiltrados = productos;
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosRecomendadosAleatorios.length === 0) {
+            productosRecomendadosAleatorios = obtenerProductosAleatorios(productos, 10);
+        }
+        productosFiltrados = productosRecomendadosAleatorios;
     } else if (seccion === 'ofertas') {
-        productosFiltrados = productos.filter(p => p.precioAnterior);
+        const productosConOferta = productos.filter(p => p.precioAnterior);
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosOfertasAleatorios.length === 0) {
+            productosOfertasAleatorios = obtenerProductosAleatorios(productosConOferta, 10);
+        }
+        productosFiltrados = productosOfertasAleatorios;
     } else if (seccion === 'novedades') {
-        productosFiltrados = productos.filter(p => p.tipo === 'Novedad');
+        const productosNuevos = productos.filter(p => p.tipo === 'Novedad');
+        // Si no tenemos los productos aleatorios cargados, generarlos
+        if (productosNovedadesAleatorios.length === 0) {
+            productosNovedadesAleatorios = obtenerProductosAleatorios(productosNuevos, 10);
+        }
+        productosFiltrados = productosNovedadesAleatorios;
     }
+    
     const totalProductos = productosFiltrados.length;
     const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
     const inicio = (pagina - 1) * productosPorPagina;

@@ -184,19 +184,58 @@ function mostrarPreviewsImagenes(evento) {
     if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const base64 = e.target.result;
-            // Guardar la imagen
-            imagenCargadaBase64 = base64;
-            console.log('Imagen cargada');
+            const base64Original = e.target.result;
             
-            // Redibujar preview
-            redibujarPreviews();
-            
-            // Actualizar estado del input
-            actualizarEstadoInputImagenes();
+            // Comprimir la imagen
+            comprimirImagen(base64Original, (base64Comprimido) => {
+                // Guardar la imagen comprimida
+                imagenCargadaBase64 = base64Comprimido;
+                console.log('Imagen cargada y comprimida');
+                
+                // Redibujar preview
+                redibujarPreviews();
+                
+                // Actualizar estado del input
+                actualizarEstadoInputImagenes();
+            });
         };
         reader.readAsDataURL(file);
     }
+}
+
+// Función para comprimir imagen
+function comprimirImagen(base64, callback) {
+    const img = new Image();
+    img.src = base64;
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 800;
+        const maxHeight = 800;
+        let width = img.width;
+        let height = img.height;
+        
+        // Calcular nuevas dimensiones manteniendo aspecto
+        if (width > height) {
+            if (width > maxWidth) {
+                height = height * (maxWidth / width);
+                width = maxWidth;
+            }
+        } else {
+            if (height > maxHeight) {
+                width = width * (maxHeight / height);
+                height = maxHeight;
+            }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Convertir a base64 con compresión (quality 0.7)
+        const base64Comprimido = canvas.toDataURL('image/jpeg', 0.7);
+        callback(base64Comprimido);
+    };
 }
 
 function eliminarImagenPreview() {
@@ -267,8 +306,15 @@ function guardarProducto(evento) {
     };
 
     // Guardar en localStorage
-    productos.push(nuevoProducto);
-    localStorage.setItem('productos', JSON.stringify(productos));
+    try {
+        productos.push(nuevoProducto);
+        localStorage.setItem('productos', JSON.stringify(productos));
+        console.log('Producto guardado:', nuevoProducto);
+    } catch (error) {
+        console.error('Error al guardar producto:', error);
+        mostrarNotificacion('Error al guardar el producto. localStorage lleno o error desconocido.', 'error');
+        return;
+    }
 
     // Mostrar éxito
     mostrarNotificacion('Producto agregado exitosamente.', 'success');
