@@ -43,15 +43,15 @@ function cargarProducto() {
     document.getElementById('productoNombre').textContent = producto.nombre;
     document.getElementById('headerProductoNombre').textContent = producto.nombre;
     document.getElementById('productoImagen').src = producto.imagen;
-    document.getElementById('productoPrecio').textContent = `$${producto.precio.toFixed(2)}`;
+    document.getElementById('productoPrecio').textContent = `$${producto.precio.toFixed(2).replace('.', ',')}`;
     document.getElementById('productoDescripcion').textContent = producto.descripcion;
 
     // Calcular precio con descuento
     let precioFinal = producto.precio;
     if (producto.descuento > 0) {
         precioFinal = producto.precio * (1 - producto.descuento / 100);
-        document.getElementById('productoPrecio').textContent = `$${precioFinal.toFixed(2)}`;
-        document.getElementById('productoPrecioAnterior').textContent = `$${producto.precio.toFixed(2)}`;
+        document.getElementById('productoPrecio').textContent = `$${precioFinal.toFixed(2).replace('.', ',')}`;
+        document.getElementById('productoPrecioAnterior').textContent = `$${producto.precio.toFixed(2).replace('.', ',')}`;
         document.getElementById('productoPrecioAnterior').style.display = 'block';
     }
 
@@ -107,7 +107,7 @@ function cargarProductosRelacionados(productoId) {
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
-            <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
+            <p class="producto-precio">$${producto.precio.toFixed(2).replace('.', ',')}</p>
         `;
 
         productoDiv.addEventListener('click', () => {

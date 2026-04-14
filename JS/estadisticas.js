@@ -14,6 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('productos-totales').textContent = productosTotales;
         document.getElementById('productos-sin-stock').textContent = productosSinStock;
-        document.getElementById('precio-total-stock').textContent = `$${precioTotalStock.toFixed(2)}`;
+        document.getElementById('precio-total-stock').textContent = `$${precioTotalStock.toFixed(2).replace('.', ',')}`;
     }
 });

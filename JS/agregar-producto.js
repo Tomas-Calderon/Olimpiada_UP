@@ -15,17 +15,74 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('productoForm');
+    const precioInput = document.getElementById('precio');
+    const stockInput = document.getElementById('stock');
+    const descuentoInput = document.getElementById('descuento');
     const imagenesInput = document.getElementById('imagenes');
     const imagenesPreview = document.getElementById('imagenesPreview');
     const btnAgregar = document.querySelector('.btn-agregar');
 
     let imagenesFiles = []; // Array de File objects
 
+    // VALIDACIÓN PRECIO EN TIEMPO REAL
+    precioInput.addEventListener('input', (e) => {
+        let valor = e.target.value;
+        // Solo permitir números y coma
+        valor = valor.replace(/[^0-9,]/g, '');
+        // Solo una coma
+        if ((valor.match(/,/g) || []).length > 1) {
+            valor = valor.substring(0, valor.lastIndexOf(','));
+        }
+        // Máximo 2 decimales
+        if (valor.includes(',')) {
+            const partes = valor.split(',');
+            if (partes[1].length > 2) {
+                valor = partes[0] + ',' + partes[1].substring(0, 2);
+            }
+        }
+        e.target.value = valor;
+    });
+
+    // VALIDACIÓN STOCK EN TIEMPO REAL
+    stockInput.addEventListener('input', (e) => {
+        let valor = e.target.value;
+        // Solo números
+        valor = valor.replace(/[^0-9]/g, '');
+        // Máximo 15 dígitos
+        if (valor.length > 15) {
+            valor = valor.substring(0, 15);
+        }
+        e.target.value = valor;
+    });
+
+    // VALIDACIÓN DESCUENTO EN TIEMPO REAL
+    descuentoInput.addEventListener('input', (e) => {
+        let valor = e.target.value;
+        // Solo números
+        valor = valor.replace(/[^0-9]/g, '');
+        // Máximo 100
+        if (parseInt(valor) > 100) {
+            valor = '100';
+        }
+        e.target.value = valor;
+    });
+
     // Preview de imágenes
     imagenesInput.addEventListener('change', (e) => {
-        const files = Array.from(e.target.files);
-        imagenesFiles = files;
+        const newFiles = Array.from(e.target.files);
+        
+        // Agregar nuevos archivos al array existente
+        imagenesFiles = [...imagenesFiles, ...newFiles];
+        
+        // Limitar a máximo 5 imágenes
+        if (imagenesFiles.length > 5) {
+            imagenesFiles = imagenesFiles.slice(0, 5);
+            mostrarNotificacion('Máximo 5 imágenes permitidas. Se han limitado a 5.', 'error');
+        }
+        
         renderPreviews();
+        // Limpiar el input para permitir seleccionar nuevamente
+        imagenesInput.value = '';
     });
 
     function renderPreviews() {
@@ -35,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             reader.onload = (e) => {
                 const imgDiv = document.createElement('div');
                 imgDiv.className = 'imagen-item';
+                imgDiv.style.position = 'relative';
                 const starColor = index === 0 ? 'gold' : 'green';
                 const star = document.createElement('span');
                 star.className = 'star';
@@ -51,8 +109,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 const img = document.createElement('img');
                 img.src = e.target.result;
                 img.alt = `Imagen ${index + 1}`;
+                
+                // Botón para eliminar imagen
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.textContent = '✕';
+                deleteBtn.style.position = 'absolute';
+                deleteBtn.style.top = '5px';
+                deleteBtn.style.left = '5px';
+                deleteBtn.style.cursor = 'pointer';
+                deleteBtn.style.background = 'rgba(255, 0, 0, 0.8)';
+                deleteBtn.style.color = 'white';
+                deleteBtn.style.border = 'none';
+                deleteBtn.style.width = '25px';
+                deleteBtn.style.height = '25px';
+                deleteBtn.style.borderRadius = '50%';
+                deleteBtn.style.fontSize = '16px';
+                deleteBtn.style.padding = '0';
+                deleteBtn.addEventListener('click', () => {
+                    imagenesFiles.splice(index, 1);
+                    renderPreviews();
+                });
+                
                 imgDiv.appendChild(star);
                 imgDiv.appendChild(img);
+                imgDiv.appendChild(deleteBtn);
                 imagenesPreview.appendChild(imgDiv);
             };
             reader.readAsDataURL(file);
@@ -65,51 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Obtener valores
         const nombre = document.getElementById('nombre').value.trim();
-        const precio = document.getElementById('precio').value.trim();
         const descripcion = document.getElementById('descripcion').value.trim();
-        const stock = document.getElementById('stock').value.trim();
-        const descuento = document.getElementById('descuento').value.trim();
-        const imagenesFiles = Array.from(imagenesInput.files);
-
-        // Validaciones
-        let errores = [];
-
-        if (!nombre || nombre.length > 50) {
-            errores.push('El nombre es obligatorio y no puede superar 50 caracteres.');
-        }
-
-        const precioRegex = /^\d+(\.\d{1,2})?$/;
-        if (!precio || precio.length > 15 || !precioRegex.test(precio) || parseFloat(precio) <= 0) {
-            errores.push('El precio debe ser un número positivo con máximo 2 decimales y 15 caracteres.');
-        }
-
-        if (!descripcion || descripcion.length > 300) {
-            errores.push('La descripción es obligatoria y no puede superar 300 caracteres.');
-        }
-
-        if (!stock || isNaN(stock) || parseInt(stock) < 0 || stock.includes('.') || stock.length > 15) {
-            errores.push('La cantidad en stock debe ser un número entero no negativo, sin decimales y máximo 15 caracteres.');
-        }
-
-        if (!descuento || isNaN(descuento) || parseInt(descuento) < 0 || parseInt(descuento) > 100 || descuento.includes('.') || descuento.includes(/[^0-9]/)) {
-            errores.push('El descuento debe ser un número entero entre 0 y 100, sin decimales ni caracteres especiales.');
-        }
-
-        if (imagenesFiles.length < 1) {
-            errores.push('Debe seleccionar al menos una imagen.');
-        } else {
-            for (let file of imagenesFiles) {
-                if (!['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
-                    errores.push('Todas las imágenes deben ser PNG o JPG.');
-                    break;
-                }
-            }
-        }
-
-        if (errores.length > 0) {
-            mostrarNotificacion(errores[0], 'error');
-            return;
-        }
+        const imagenesFilesArray = Array.from(imagenesInput.files);
 
         // Verificar si el producto ya existe
         let productos = JSON.parse(localStorage.getItem('productos')) || [];
@@ -124,24 +162,28 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAgregar.disabled = true;
         btnAgregar.textContent = 'Agregando...';
 
+        const precio = parseFloat(precioInput.value.replace(',', '.'));
+        const stock = parseInt(stockInput.value);
+        const descuento = parseInt(descuentoInput.value) || 0;
+
         // Convertir imágenes a base64
         let imagenesBase64 = [];
         let filesProcessed = 0;
 
-        for (let i = 0; i < imagenesFiles.length; i++) {
+        for (let i = 0; i < imagenesFilesArray.length; i++) {
             const reader = new FileReader();
             reader.onload = (e) => {
                 imagenesBase64.push(e.target.result);
                 filesProcessed++;
-                if (filesProcessed === imagenesFiles.length) {
-                    crearProducto(imagenesBase64);
+                if (filesProcessed === imagenesFilesArray.length) {
+                    crearProducto(nombre, precio, descripcion, stock, descuento, imagenesBase64);
                 }
             };
-            reader.readAsDataURL(imagenesFiles[i]);
+            reader.readAsDataURL(imagenesFilesArray[i]);
         }
     });
 
-    function crearProducto(imagenesBase64) {
+    function crearProducto(nombre, precio, descripcion, stock, descuento, imagenesBase64) {
         // Crear objeto producto
         const producto = {
             id: 'custom_' + Date.now(),

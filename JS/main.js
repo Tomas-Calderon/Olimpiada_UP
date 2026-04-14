@@ -55,8 +55,8 @@ function renderProductos(seccion, pagina) {
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
-            <p class="producto-precio">$${producto.precio.toFixed(2)}</p>
-            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2)}</p>` : ''}
+            <p class="producto-precio">$${producto.precio.toFixed(2).replace('.', ',')}</p>
+            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2).replace('.', ',')}</p>` : ''}
         `;
         productoDiv.addEventListener('click', () => {
             window.location.href = `producto.html?id=${producto.id}`;
@@ -196,10 +196,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Event listener para el botón admin
-    adminBtn.addEventListener('click', () => {
-        window.location.href = 'agregar-producto.html';
-    });
+    // Event listener para el botón admin - OCULTADO
+    // ya que ahora acceso es por el panel de administración
+    // adminBtn.addEventListener('click', () => {
+    //     window.location.href = 'agregar-producto.html';
+    // });
 });
 
 function addPanel() {
@@ -211,6 +212,7 @@ function addPanel() {
     panelDiv.innerHTML = `
         <span class="panel-label">Panel</span>
         <div class="panel-dropdown">
+            <a href="#" class="panel-item" id="agregar-producto">Agregar Producto</a>
             <a href="#" class="panel-item" id="modificar-productos">Modificar productos</a>
             <a href="#" class="panel-item" id="estadisticas">Estadísticas</a>
         </div>
@@ -218,6 +220,9 @@ function addPanel() {
     categoriasDiv.insertAdjacentElement('afterend', panelDiv);
 
     // Event listeners para panel
+    document.getElementById('agregar-producto').addEventListener('click', () => {
+        window.location.href = 'agregar-producto.html';
+    });
     document.getElementById('modificar-productos').addEventListener('click', () => {
         window.location.href = 'modificar-productos.html';
     });

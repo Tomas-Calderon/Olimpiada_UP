@@ -157,7 +157,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    margin-left: 2rem;
+    margin-right: auto;
 }
 
 .panel-label {
