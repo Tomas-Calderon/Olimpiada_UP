@@ -1,4 +1,4 @@
-// ==================== FUNCIONALIDAD DE AGREGAR PRODUCTO ====================
+1// ==================== FUNCIONALIDAD DE AGREGAR PRODUCTO ====================
 
 // Función para mostrar notificaciones personalizadas
 function mostrarNotificacion(mensaje, tipo = 'error') {

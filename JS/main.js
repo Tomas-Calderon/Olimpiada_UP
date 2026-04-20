@@ -268,3 +268,13 @@ function removePanel() {
     }
 }
 
+// Redirigir al formulario de crear cuenta
+document.addEventListener('DOMContentLoaded', () => {
+    const btnCrear = document.querySelector('.btn-cuenta');
+    if (btnCrear) {
+        btnCrear.addEventListener('click', () => {
+            window.location.href = 'crear-cuenta.html';
+        });
+    }
+});
+
