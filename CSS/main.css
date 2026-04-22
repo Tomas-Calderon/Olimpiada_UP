@@ -419,6 +419,131 @@ body {
     background-color: #ccc;
 }
 
+/* ==================== USUARIO AUTENTICADO  ==================== */
+.usuario-autenticado {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.usuario-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.usuario-nombre {
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* ==================== AVATAR  ==================== */
+.avatar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1rem;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.avatar-btn:hover .avatar {
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(0, 123, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.avatar-btn:active .avatar {
+    transform: scale(0.95);
+}
+
+#avatarIniciales {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ==================== DROPDOWN MENU  ==================== */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    min-width: 200px;
+    margin-top: 0.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: none;
+    z-index: 1001;
+    overflow: hidden;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding-left: 1.5rem;
+}
+
+.dropdown-item.btn-logout {
+    color: #ff6b6b;
+}
+
+.dropdown-item.btn-logout:hover {
+    background-color: rgba(255, 107, 107, 0.15);
+    color: #ff8585;
+}
+
+.dropdown-divider {
+    margin: 0.5rem 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.botones-grupo {
+    display: flex;
+    gap: 1rem;
+}
+
 /* ==================== TABLET  ==================== */
 @media screen and (max-width: 768px) {
     .hero {
@@ -439,6 +564,38 @@ body {
 
     .menu-toggle {
         display: flex;
+    }
+
+    .usuario-autenticado {
+        gap: 0.5rem;
+    }
+
+    .usuario-info {
+        display: none;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-menu {
+        right: -10px;
+    }
+
+    .botones {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .botones-grupo {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .botones button {
+        width: 100%;
     }
 
     .header-der {

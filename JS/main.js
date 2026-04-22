@@ -1,3 +1,115 @@
+// ==================== GESTIÓN DE SESIÓN ====================
+
+/**
+ * Obtiene las iniciales de nombre y apellido
+ */
+function obtenerInicialesUsuario(nombre, apellido) {
+    const inicial1 = nombre.charAt(0).toUpperCase();
+    const inicial2 = apellido.charAt(0).toUpperCase();
+    return inicial1 + inicial2;
+}
+
+/**
+ * Actualiza la interfaz según el estado de autenticación
+ */
+function actualizarInterfazAutenticacion() {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    
+    const botonesNoAutenticado = document.getElementById('botones-no-autenticado');
+    const usuarioAutenticado = document.getElementById('usuario-autenticado');
+    
+    if (sesionActual) {
+        // Usuario autenticado
+        if (botonesNoAutenticado) botonesNoAutenticado.style.display = 'none';
+        if (usuarioAutenticado) usuarioAutenticado.style.display = 'flex';
+        
+        // Mostrar nombre del usuario
+        const usuarioNombreEl = document.getElementById('usuarioNombre');
+        if (usuarioNombreEl) {
+            usuarioNombreEl.textContent = sesionActual.nombre;
+        }
+        
+        // Mostrar iniciales en avatar
+        const avatarInicialesEl = document.getElementById('avatarIniciales');
+        if (avatarInicialesEl) {
+            avatarInicialesEl.textContent = obtenerInicialesUsuario(
+                sesionActual.nombre,
+                sesionActual.apellido
+            );
+        }
+    } else {
+        // Usuario no autenticado
+        if (botonesNoAutenticado) botonesNoAutenticado.style.display = 'flex';
+        if (usuarioAutenticado) usuarioAutenticado.style.display = 'none';
+    }
+}
+
+/**
+ * Maneja el dropdown del usuario
+ */
+function configurarDropdown() {
+    const btnAvatar = document.getElementById('btnAvatar');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    
+    if (btnAvatar) {
+        btnAvatar.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (dropdownMenu) {
+                dropdownMenu.classList.toggle('show');
+            }
+        });
+    }
+    
+    // Cerrar dropdown al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (btnAvatar && !btnAvatar.contains(e.target) && dropdownMenu && !dropdownMenu.contains(e.target)) {
+            if (dropdownMenu) {
+                dropdownMenu.classList.remove('show');
+            }
+        }
+    });
+    
+    // Cerrar sesión
+    if (btnCerrarSesion) {
+        btnCerrarSesion.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+                localStorage.removeItem('sesionActual');
+                window.location.href = 'main.html';
+            }
+        });
+    }
+}
+
+/**
+ * Configura los botones de navegación
+ */
+function configurarBotonesNavegacion() {
+    const btnCrearCuenta = document.getElementById('btnCrearCuenta');
+    const btnIniciarSesion = document.getElementById('btnIniciarSesion');
+    
+    if (btnCrearCuenta) {
+        btnCrearCuenta.addEventListener('click', () => {
+            window.location.href = 'crear-cuenta.html';
+        });
+    }
+    
+    if (btnIniciarSesion) {
+        btnIniciarSesion.addEventListener('click', () => {
+            window.location.href = 'iniciar-sesion.html';
+        });
+    }
+}
+
+// Ejecutar al cargar el DOM
+document.addEventListener('DOMContentLoaded', () => {
+    actualizarInterfazAutenticacion();
+    configurarDropdown();
+    configurarBotonesNavegacion();
+});
+
 // Toggle del menú en dispositivos móviles
 const menuToggle = document.getElementById('menuToggle');
 const headerNav = document.getElementById('headerNav');
@@ -5,10 +117,16 @@ const headerNav = document.getElementById('headerNav');
 menuToggle.addEventListener('click', () => {
     menuToggle.classList.toggle('active');
     headerNav.classList.toggle('active');
+    
+    // Cerrar dropdown cuando se abre el menú hamburguesa
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    if (dropdownMenu) {
+        dropdownMenu.classList.remove('show');
+    }
 });
 
 // Cerrar menú al hacer clic en un botón
-const buttons = document.querySelectorAll('.header-der button');
+const buttons = document.querySelectorAll('.botones button, .botones a');
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         menuToggle.classList.remove('active');
