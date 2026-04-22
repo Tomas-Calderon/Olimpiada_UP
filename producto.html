@@ -31,6 +31,11 @@
 
       <!-- DERECHA / BOTONES -->
       <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
+          🛒 Carrito
+        </button>
+
         <!-- VISTA SIN AUTENTICAR -->
         <div id="botones-no-autenticado" class="botones-grupo">
           <button class="btn-cuenta">Crear cuenta</button>
@@ -52,6 +57,7 @@
           <div class="dropdown-menu" id="dropdownMenu">
             <a href="mi-perfil.html" class="dropdown-item" id="miPerfil">Mi Perfil</a>
             <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
             <hr class="dropdown-divider">
             <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
           </div>
@@ -104,19 +110,22 @@
           <p id="productoPrecioAnterior" class="precio-anterior" style="display: none;">$0.00</p>
         </div>
 
-        <div class="producto-descripcion">
-          <h3>Descripción</h3>
-          <p id="productoDescripcion">Este es un excelente producto de calidad para mejorar tu rendimiento deportivo.</p>
-        </div>
+        <!-- CONTENEDOR CON SCROLL PARA DESCRIPCIÓN Y ESPECIFICACIONES -->
+        <div class="producto-detalles-scroll">
+          <div class="producto-descripcion">
+            <h3>Descripción</h3>
+            <p id="productoDescripcion">Este es un excelente producto de calidad para mejorar tu rendimiento deportivo.</p>
+          </div>
 
-        <div class="producto-especificaciones">
-          <h3>Especificaciones</h3>
-          <ul>
-            <li>Material: Premium</li>
-            <li>Tamaño: Ajustable</li>
-            <li>Color: Múltiples opciones</li>
-            <li>Garantía: 1 año</li>
-          </ul>
+          <div class="producto-especificaciones">
+            <h3>Especificaciones</h3>
+            <ul>
+              <li>Material: Premium</li>
+              <li>Tamaño: Ajustable</li>
+              <li>Color: Múltiples opciones</li>
+              <li>Garantía: 1 año</li>
+            </ul>
+          </div>
         </div>
 
         <div class="producto-acciones">

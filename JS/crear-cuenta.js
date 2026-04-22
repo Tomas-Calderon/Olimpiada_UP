@@ -28,12 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /**
      * Valida el formato del email
-     * Debe terminar en @gmail.com
+     * Acepta cualquier dominio válido
      */
     const validarEmail = (valor) => {
         const email = valor.trim().toLowerCase();
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email) && email.endsWith('@gmail.com');
+        return regex.test(email);
     };
 
     /**
@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!valor) {
             mostrarError(inputEmail, 'El email es obligatorio');
         } else if (!validarEmail(valor)) {
-            mostrarError(inputEmail, 'Email inválido. Debe ser un correo @gmail.com válido');
+            mostrarError(inputEmail, 'Email inválido. Ingresa un correo válido');
         } else {
             mostrarExito(inputEmail);
         }
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
             mostrarError(inputEmail, 'El email es obligatorio');
             esValido = false;
         } else if (!validarEmail(email)) {
-            mostrarError(inputEmail, 'Email inválido. Debe ser un correo @gmail.com válido');
+            mostrarError(inputEmail, 'Email inválido. Ingresa un correo válido');
             esValido = false;
         }
 
@@ -392,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
             email,
             password,
             telefono,
+            role: 'user',
             fechaCreacion: new Date().toISOString()
         };
 

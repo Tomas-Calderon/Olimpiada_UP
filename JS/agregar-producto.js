@@ -17,6 +17,16 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
 let imagenCargadaBase64 = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ==================== VERIFICAR PERMISOS DE ADMIN ====================
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    
+    if (!sesionActual || sesionActual.role !== 'admin') {
+        // Redirigir a main.html si no es admin
+        alert('⚠️ Acceso denegado. Solo los administradores pueden agregar productos.');
+        window.location.href = 'main.html';
+        return;
+    }
+
     const form = document.getElementById('productoForm');
     const precioInput = document.getElementById('precio');
     const stockInput = document.getElementById('stock');

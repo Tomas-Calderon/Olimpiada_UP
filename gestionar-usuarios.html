@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="CSS/main.css">
+  <title>Gestionar Usuarios - Sport Port</title>
+  <style>
+    .gestionar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #111;
+      min-height: calc(100vh - 150px);
+    }
+    
+    .gestionar-header {
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .gestionar-header h1 {
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .gestionar-header p {
+      color: #aaa;
+      margin: 0;
+    }
+    
+    .usuarios-table {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: white;
+    }
+    
+    thead {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
+    
+    th {
+      padding: 1.2rem;
+      text-align: left;
+      color: #ffc107;
+      font-weight: bold;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    td {
+      padding: 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .usuario-nombre {
+      font-weight: 500;
+    }
+    
+    .usuario-email {
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    .rol-badge {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    
+    .rol-admin {
+      background-color: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+      border: 1px solid #ffc107;
+    }
+    
+    .rol-user {
+      background-color: rgba(100, 200, 255, 0.2);
+      color: #64c8ff;
+      border: 1px solid #64c8ff;
+    }
+    
+    .rol-selector {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    
+    .rol-select {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    
+    .rol-select:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    .rol-select option {
+      background-color: #222;
+      color: white;
+    }
+    
+    .btn-cambiar-rol {
+      background-color: #ffc107;
+      color: black;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-cambiar-rol:hover {
+      background-color: #ffb300;
+      transform: scale(1.05);
+    }
+    
+    .btn-cambiar-rol:disabled {
+      background-color: #999;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    .btn-cambiar-rol:disabled:hover {
+      background-color: #999;
+      transform: none;
+    }
+    
+    .fecha-creacion {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    
+    .sin-usuarios {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #aaa;
+    }
+    
+    .sin-usuarios p {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    
+    .acceso-denegado {
+      background-color: rgba(255, 68, 68, 0.1);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      color: #ff6b6b;
+      margin-top: 2rem;
+    }
+    
+    .acceso-denegado p {
+      margin: 0 0 1.5rem 0;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .btn-volver {
+      background-color: transparent;
+      color: #ff6b6b;
+      border: 2px solid #ff6b6b;
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-volver:hover {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    
+    @media (max-width: 768px) {
+      .gestionar-container {
+        padding: 1rem;
+      }
+      
+      table {
+        font-size: 0.9rem;
+      }
+      
+      th, td {
+        padding: 0.8rem;
+      }
+      
+      .usuario-nombre,
+      .usuario-email {
+        display: block;
+      }
+      
+      .rol-selector {
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-container">
+      <!-- IZQUIERDA / LOGO -->
+      <div class="logo" onclick="window.location.href='main.html'">
+        <img src="CSS/imagenes/Logo.png" class="logo-img">
+
+        <div class="texto-logo">
+          <div class="logo-nombre">Sport Port</div>
+          <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍAS -->
+      <div class="categorias">
+        <span class="categorias-label">Categorías</span>
+        <div class="categorias-dropdown">
+          <a href="#" class="categoria-item">Recomendados</a>
+          <a href="#" class="categoria-item">Ofertas</a>
+          <a href="#" class="categoria-item">Novedades</a>
+        </div>
+      </div>
+
+      <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- DERECHA / BOTONES -->
+      <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
+          🛒 Carrito
+        </button>
+
+        <!-- VISTA SIN AUTENTICAR -->
+        <div id="botones-no-autenticado" class="botones-grupo">
+          <button class="btn-cuenta" id="btnCrearCuenta">Crear cuenta</button>
+          <button class="btn-sesion" id="btnIniciarSesion">Iniciar sesión</button>
+        </div>
+
+        <!-- VISTA AUTENTICADA -->
+        <div id="usuario-autenticado" class="usuario-autenticado" style="display: none;">
+          <div class="usuario-info">
+            <span class="usuario-nombre" id="usuarioNombre"></span>
+          </div>
+          <button class="avatar-btn" id="btnAvatar">
+            <div class="avatar" id="avatarCirculo">
+              <span id="avatarIniciales"></span>
+            </div>
+          </button>
+          
+          <!-- MENÚ DESPLEGABLE -->
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#" class="dropdown-item" id="miPerfil">Mi Perfil</a>
+            <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+            <a href="#" class="dropdown-item" id="agregarProductoBtn" style="display: none; color: #27ae60; font-weight: bold;">➕ Agregar Producto</a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <script src="JS/main.js"></script>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="gestionar-container">
+    <div class="gestionar-header">
+      <h1>👥 Gestionar Usuarios</h1>
+      <p>Administra los permisos de los usuarios registrados en el sistema</p>
+    </div>
+
+    <!-- CONTENEDOR DE USUARIOS -->
+    <div id="usuarios-container"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- IZQUIERDA / TEXTO -->
+      <div class="footer-izq">
+        <p class="footer-texto">© 2026 Sport Port. Todos los derechos reservados.</p>
+      </div>
+
+      <!-- DERECHA / BOTONES IMAGEN -->
+      <div class="footer-der">
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_facebook.png" alt="Botón 1" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_instagram.png" alt="Botón 2" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_twtter_(X).png" alt="Botón 3" class="footer-img">
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="JS/gestionar-usuarios.js"></script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Verificar Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .code {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✓ Sistema de Admin Configurado</h1>
+        
+        <div class="success">
+            <strong>✓ Usuario Admin Creado:</strong><br>
+            <div class="code">
+Nombre: admin<br>
+Apellido: admin<br>
+Email: admin.admin@admin.admin<br>
+Contraseña: admin<br>
+Rol: admin
+            </div>
+        </div>
+
+        <div class="info">
+            <strong>Cambios Realizados:</strong>
+            <ol>
+                <li>✓ Agregado campo "role" a usuarios (admin/user)</li>
+                <li>✓ Creado archivo init-db.js para inicializar la BD con el admin</li>
+                <li>✓ Actualizado crear-cuenta.js para incluir rol "user"</li>
+                <li>✓ Actualizado iniciar-sesion.js para guardar rol en sesión</li>
+                <li>✓ Agregado botón "Agregar Producto" en dropdown para admins</li>
+                <li>✓ Protegida página agregar-producto.html (solo admins)</li>
+                <li>✓ Cargado init-db.js en main.html</li>
+            </ol>
+        </div>
+
+        <div class="info">
+            <strong>Funcionalidad:</strong>
+            <ul>
+                <li>Usuarios normales: pueden ver y comprar productos</li>
+                <li>Admin: puede agregar y modificar productos</li>
+                <li>El admin se crea automáticamente la primera vez que se abre la app</li>
+            </ul>
+        </div>
+
+        <button onclick="irAMain()">Ir a Main (Probar)</button>
+    </div>
+
+    <script src="JS/init-db.js"></script>
+    <script>
+        function irAMain() {
+            window.location.href = 'main.html';
+        }
+
+        // Mostrar info en consola
+        const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+        console.log('Usuarios en localStorage:', usuarios);
+        const admin = usuarios.find(u => u.role === 'admin');
+        if (admin) {
+            console.log('✓ Admin encontrado:', admin);
+        }
+    </script>
+</body>
+</html>

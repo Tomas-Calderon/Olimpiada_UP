@@ -17,11 +17,13 @@ function actualizarInterfazAutenticacion() {
     
     const botonesNoAutenticado = document.getElementById('botones-no-autenticado');
     const usuarioAutenticado = document.getElementById('usuario-autenticado');
+    const btnCarrito = document.getElementById('btnCarrito');
     
     if (sesionActual) {
         // Usuario autenticado
         if (botonesNoAutenticado) botonesNoAutenticado.style.display = 'none';
         if (usuarioAutenticado) usuarioAutenticado.style.display = 'flex';
+        if (btnCarrito) btnCarrito.style.display = 'inline-block';
         
         // Mostrar nombre del usuario
         const usuarioNombreEl = document.getElementById('usuarioNombre');
@@ -41,6 +43,7 @@ function actualizarInterfazAutenticacion() {
         // Usuario no autenticado
         if (botonesNoAutenticado) botonesNoAutenticado.style.display = 'flex';
         if (usuarioAutenticado) usuarioAutenticado.style.display = 'none';
+        if (btnCarrito) btnCarrito.style.display = 'none';
     }
 }
 
@@ -51,6 +54,7 @@ function configurarDropdown() {
     const btnAvatar = document.getElementById('btnAvatar');
     const dropdownMenu = document.getElementById('dropdownMenu');
     const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     
     if (btnAvatar) {
         btnAvatar.addEventListener('click', (e) => {
@@ -78,6 +82,34 @@ function configurarDropdown() {
             e.preventDefault();
             window.location.href = 'mi-perfil.html';
         });
+    }
+
+    // Mostrar botón de agregar producto solo para admins
+    const agregarProductoBtn = document.getElementById('agregarProductoBtn');
+    if (agregarProductoBtn) {
+        if (sesionActual && sesionActual.role === 'admin') {
+            agregarProductoBtn.style.display = 'block';
+            agregarProductoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'agregar-producto.html';
+            });
+        } else {
+            agregarProductoBtn.style.display = 'none';
+        }
+    }
+
+    // Mostrar botón de gestionar usuarios solo para admins
+    const gestionarUsuariosBtn = document.getElementById('gestionarUsuarios');
+    if (gestionarUsuariosBtn) {
+        if (sesionActual && sesionActual.role === 'admin') {
+            gestionarUsuariosBtn.style.display = 'block';
+            gestionarUsuariosBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'gestionar-usuarios.html';
+            });
+        } else {
+            gestionarUsuariosBtn.style.display = 'none';
+        }
     }
 
     // Cerrar sesión
@@ -149,6 +181,14 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarDropdown();
     configurarBotonesNavegacion();
     agregarPanelUsuario();
+    
+    // Configurar botón carrito
+    const btnCarrito = document.getElementById('btnCarrito');
+    if (btnCarrito) {
+        btnCarrito.addEventListener('click', () => {
+            window.location.href = 'carrito.html';
+        });
+    }
 });
 
 // Toggle del menú en dispositivos móviles
@@ -226,7 +266,7 @@ function renderProductos(seccion, pagina) {
         }
         productosFiltrados = productosRecomendadosAleatorios;
     } else if (seccion === 'ofertas') {
-        const productosConOferta = productos.filter(p => p.precioAnterior);
+        const productosConOferta = productos.filter(p => p.descuento > 0);
         // Si no tenemos los productos aleatorios cargados, generarlos
         if (productosOfertasAleatorios.length === 0) {
             productosOfertasAleatorios = obtenerProductosAleatorios(productosConOferta, 10);
@@ -252,11 +292,21 @@ function renderProductos(seccion, pagina) {
         const productoDiv = document.createElement('div');
         productoDiv.className = 'producto';
         productoDiv.style.cursor = 'pointer';
+        
+        // Calcular precio con descuento
+        let precioMostrado = producto.precio;
+        let precioOriginalMostrado = '';
+        
+        if (producto.descuento > 0) {
+            precioMostrado = producto.precioConDescuento || (producto.precio * (1 - producto.descuento / 100));
+            precioOriginalMostrado = `<p class="precio-anterior">$${producto.precio.toFixed(2).replace('.', ',')}</p>`;
+        }
+        
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
-            <p class="producto-precio">$${producto.precio.toFixed(2).replace('.', ',')}</p>
-            ${producto.precioAnterior ? `<p class="precio-anterior">$${producto.precioAnterior.toFixed(2).replace('.', ',')}</p>` : ''}
+            <p class="producto-precio">$${precioMostrado.toFixed(2).replace('.', ',')}</p>
+            ${precioOriginalMostrado}
         `;
         productoDiv.addEventListener('click', () => {
             window.location.href = `producto.html?id=${producto.id}`;
@@ -319,7 +369,7 @@ function cargarProductos() {
     });
     document.getElementById('btn-siguiente-ofertas').addEventListener('click', () => {
         const productos = JSON.parse(localStorage.getItem('productos')) || [];
-        const productosFiltrados = productos.filter(p => p.precioAnterior);
+        const productosFiltrados = productos.filter(p => p.descuento > 0);
         const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
         if (paginaOfertas < totalPaginas) {
             paginaOfertas++;

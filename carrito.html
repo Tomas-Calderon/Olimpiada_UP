@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="CSS/main.css">
+  <title>Carrito de Compras - Sport Port</title>
+  <style>
+    .carrito-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #111;
+      min-height: calc(100vh - 150px);
+    }
+    
+    .carrito-header {
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .carrito-header h1 {
+      margin: 0;
+    }
+    
+    .carrito-content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+    
+    .carrito-items-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 2rem;
+    }
+    
+    #carrito-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .carrito-vacio {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+      gap: 1.5rem;
+      color: #aaa;
+    }
+    
+    .carrito-icon {
+      font-size: 4rem;
+    }
+    
+    .carrito-vacio p {
+      color: #aaa;
+      margin: 0;
+    }
+    
+    .carrito-vacio p:first-of-type {
+      font-size: 1.3rem;
+      color: white;
+      font-weight: 500;
+    }
+    
+    .btn-volver {
+      background-color: #ffc107;
+      color: black;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-volver:hover {
+      background-color: #ffb300;
+      transform: scale(1.05);
+    }
+    
+    /* ITEMS DEL CARRITO */
+    .carrito-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto auto auto;
+      gap: 1.5rem;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .item-imagen img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    
+    .item-info h3 {
+      margin: 0 0 0.5rem 0;
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .item-precio {
+      margin: 0;
+      color: #ffc107;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    
+    .item-descuento {
+      margin: 0.3rem 0 0 0;
+      color: #4CAF50;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+    
+    .item-cantidad {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      padding: 0.3rem;
+    }
+    
+    .btn-cantidad {
+      background-color: #ffc107;
+      color: black;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-cantidad:hover {
+      background-color: #ffb300;
+    }
+    
+    .input-cantidad {
+      width: 45px;
+      text-align: center;
+      background-color: transparent;
+      border: none;
+      color: white;
+      font-size: 1rem;
+    }
+    
+    .input-cantidad::-webkit-outer-spin-button,
+    .input-cantidad::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    .item-total {
+      text-align: right;
+    }
+    
+    .total-precio {
+      margin: 0;
+      color: #ffc107;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .btn-eliminar {
+      background-color: transparent;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-eliminar:hover {
+      transform: scale(1.2);
+    }
+    
+    /* RESUMEN DEL CARRITO */
+    .resumen-carrito {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.5rem;
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+    
+    .resumen-carrito h2 {
+      margin: 0 0 1.5rem 0;
+      color: white;
+      font-size: 1.2rem;
+    }
+    
+    .resumen-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      color: #aaa;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .resumen-item:last-of-type {
+      border-bottom: none;
+      margin-bottom: 1.5rem;
+    }
+    
+    .resumen-total {
+      display: flex;
+      justify-content: space-between;
+      color: white;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-comprar-ahora {
+      width: 100%;
+      padding: 1rem;
+      background-color: #ffc107;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 1rem;
+    }
+    
+    .btn-comprar-ahora:hover {
+      background-color: #ffb300;
+      transform: translateY(-2px);
+    }
+    
+    .btn-vaciar-carrito {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: transparent;
+      color: #ff6b6b;
+      border: 2px solid #ff6b6b;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-vaciar-carrito:hover {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .carrito-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .carrito-item {
+        grid-template-columns: 60px 1fr;
+        gap: 1rem;
+      }
+      
+      .item-cantidad {
+        grid-column: 1 / -1;
+        justify-content: center;
+      }
+      
+      .item-total {
+        grid-column: 1 / -1;
+        text-align: center;
+      }
+      
+      .btn-eliminar {
+        grid-column: 1 / -1;
+      }
+      
+      .resumen-carrito {
+        position: static;
+        top: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header-container">
+      <!-- IZQUIERDA / LOGO -->
+      <div class="logo" onclick="window.location.href='main.html'">
+        <img src="CSS/imagenes/Logo.png" class="logo-img">
+
+        <div class="texto-logo">
+          <div class="logo-nombre">Sport Port</div>
+          <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍAS -->
+      <div class="categorias">
+        <span class="categorias-label">Categorías</span>
+        <div class="categorias-dropdown">
+          <a href="#" class="categoria-item">Recomendados</a>
+          <a href="#" class="categoria-item">Ofertas</a>
+          <a href="#" class="categoria-item">Novedades</a>
+        </div>
+      </div>
+
+      <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- DERECHA / BOTONES -->
+      <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;" disabled>
+          🛒 Carrito
+        </button>
+
+        <!-- VISTA SIN AUTENTICAR -->
+        <div id="botones-no-autenticado" class="botones-grupo">
+          <button class="btn-cuenta" id="btnCrearCuenta">Crear cuenta</button>
+          <button class="btn-sesion" id="btnIniciarSesion">Iniciar sesión</button>
+        </div>
+
+        <!-- VISTA AUTENTICADA -->
+        <div id="usuario-autenticado" class="usuario-autenticado" style="display: none;">
+          <div class="usuario-info">
+            <span class="usuario-nombre" id="usuarioNombre"></span>
+          </div>
+          <button class="avatar-btn" id="btnAvatar">
+            <div class="avatar" id="avatarCirculo">
+              <span id="avatarIniciales"></span>
+            </div>
+          </button>
+          
+          <!-- MENÚ DESPLEGABLE -->
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="#" class="dropdown-item" id="miPerfil">Mi Perfil</a>
+            <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <script src="JS/main.js"></script>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="carrito-container">
+    <div class="carrito-header">
+      <h1>🛒 Carrito de Compras</h1>
+    </div>
+
+    <div class="carrito-content">
+      <!-- PRODUCTOS EN EL CARRITO -->
+      <div class="carrito-items-container">
+        <div id="carrito-items">
+          <!-- Los items se cargarán aquí -->
+        </div>
+      </div>
+
+      <!-- RESUMEN DEL CARRITO -->
+      <div class="resumen-carrito" id="resumen-carrito" style="display: none;">
+        <h2>Resumen</h2>
+        
+        <div class="resumen-item">
+          <span>Subtotal:</span>
+          <span>$0.00</span>
+        </div>
+        
+        <div class="resumen-item">
+          <span>Envío:</span>
+          <span>Gratis</span>
+        </div>
+        
+        <div class="resumen-total">
+          <span>Total:</span>
+          <span id="total-carrito">$0.00</span>
+        </div>
+
+        <button class="btn-comprar-ahora" id="btnComprarAhora" style="display: none;">
+          💳 Comprar Ahora
+        </button>
+
+        <button class="btn-vaciar-carrito" onclick="vaciarCarrito()">
+          🗑️ Vaciar Carrito
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- IZQUIERDA / TEXTO -->
+      <div class="footer-izq">
+        <p class="footer-texto">© 2026 Sport Port. Todos los derechos reservados.</p>
+      </div>
+
+      <!-- DERECHA / BOTONES IMAGEN -->
+      <div class="footer-der">
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_facebook.png" alt="Botón 1" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_instagram.png" alt="Botón 2" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="CSS/imagenes/boton_twtter_(X).png" alt="Botón 3" class="footer-img">
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="JS/carrito.js"></script>
+</body>
+</html>

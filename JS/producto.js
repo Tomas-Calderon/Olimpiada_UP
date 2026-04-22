@@ -85,9 +85,11 @@ function cargarProducto() {
     cargarProductosRelacionados(productoId);
 
     // Mostrar botón eliminar si es admin
-    const userType = localStorage.getItem('userType');
-    if (userType === 'admin') {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    if (sesionActual && sesionActual.role === 'admin') {
         document.getElementById('eliminarProductoBtn').style.display = 'block';
+    } else {
+        document.getElementById('eliminarProductoBtn').style.display = 'none';
     }
 }
 
@@ -148,12 +150,36 @@ function validarCantidad() {
 
 // Funciones de compra
 function agregarAlCarrito() {
-    const cantidad = document.getElementById('cantidad').value;
+    const cantidad = parseInt(document.getElementById('cantidad').value);
     const productoId = obtenerProductoDelURL();
     const producto = productosData[productoId];
     
+    // Obtener carrito actual del localStorage
+    let carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+    
+    // Buscar si el producto ya existe en el carrito
+    const indiceProducto = carrito.findIndex(item => item.id === productoId);
+    
+    if (indiceProducto !== -1) {
+        // El producto ya existe, aumentar cantidad
+        carrito[indiceProducto].cantidad += cantidad;
+    } else {
+        // Nuevo producto
+        carrito.push({
+            id: productoId,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            descuento: producto.descuento,
+            precioConDescuento: producto.descuento > 0 ? producto.precio * (1 - producto.descuento / 100) : producto.precio,
+            imagen: producto.imagen,
+            cantidad: cantidad
+        });
+    }
+    
+    // Guardar carrito actualizado
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    
     alert(`${cantidad} unidad(es) de "${producto.nombre}" agregada(s) al carrito`);
-    // Aquí se podría implementar la lógica real del carrito
 }
 
 function comprarAhora() {
@@ -184,53 +210,18 @@ function eliminarProducto() {
     }
 }
 
-// ==================== FUNCIONALIDAD DE INICIO DE SESIÓN ====================
-document.addEventListener('DOMContentLoaded', () => {
-    const btnSesion = document.querySelector('.btn-sesion');
-    const userModal = document.getElementById('userModal');
-    const btnAdmin = document.getElementById('btnAdmin');
-    const btnUser = document.getElementById('btnUser');
-    const adminBtn = document.getElementById('adminBtn');
-
-    // Verificar si ya hay un tipo de usuario guardado
-    const userType = localStorage.getItem('userType');
-    if (userType === 'admin') {
-        adminBtn.style.display = 'block';
+// Agregar evento al botón de carrito
+function configurarBotonesAdicionales() {
+    const btnCarrito = document.getElementById('btnCarrito');
+    if (btnCarrito) {
+        btnCarrito.addEventListener('click', () => {
+            window.location.href = 'carrito.html';
+        });
     }
-
-    // Mostrar modal al hacer clic en "Iniciar sesión"
-    btnSesion.addEventListener('click', () => {
-        userModal.style.display = 'flex';
-    });
-
-    // Seleccionar Administrador
-    btnAdmin.addEventListener('click', () => {
-        localStorage.setItem('userType', 'admin');
-        adminBtn.style.display = 'block';
-        userModal.style.display = 'none';
-        alert('Sesión iniciada como Administrador');
-    });
-
-    // Seleccionar Usuario
-    btnUser.addEventListener('click', () => {
-        localStorage.setItem('userType', 'user');
-        adminBtn.style.display = 'none';
-        userModal.style.display = 'none';
-        alert('Sesión iniciada como Usuario');
-    });
-
-    // Cerrar modal al hacer clic fuera
-    userModal.addEventListener('click', (e) => {
-        if (e.target === userModal) {
-            userModal.style.display = 'none';
-        }
-    });
-
-    // Event listener para el botón admin
-    adminBtn.addEventListener('click', () => {
-        window.location.href = 'agregar-producto.html';
-    });
-});
+}
 
 // Cargar el producto cuando la página esté lista
-document.addEventListener('DOMContentLoaded', cargarProducto);
+document.addEventListener('DOMContentLoaded', () => {
+    cargarProducto();
+    configurarBotonesAdicionales();
+});

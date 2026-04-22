@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
   <title>Sport Port</title>
+  <script src="JS/init-db.js"></script>
 </head>
 
 <body>
@@ -40,6 +41,11 @@
 
       <!-- DERECHA / BOTONES -->
       <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
+          🛒 Carrito
+        </button>
+
         <!-- VISTA SIN AUTENTICAR -->
         <div id="botones-no-autenticado" class="botones-grupo">
           <button class="btn-cuenta" id="btnCrearCuenta">Crear cuenta</button>
@@ -61,6 +67,8 @@
           <div class="dropdown-menu" id="dropdownMenu">
             <a href="#" class="dropdown-item" id="miPerfil">Mi Perfil</a>
             <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+            <a href="#" class="dropdown-item" id="agregarProductoBtn" style="display: none; color: #27ae60; font-weight: bold;">➕ Agregar Producto</a>
             <hr class="dropdown-divider">
             <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
           </div>
