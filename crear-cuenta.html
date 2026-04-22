@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
+  <link rel="stylesheet" href="CSS/crear-cuenta.css">
   <title>Crear Cuenta - Sport Port</title>
 </head>
 <body>
@@ -21,24 +22,86 @@
   <main class="form-container">
     <section class="form-section">
       <h2>Crear cuenta</h2>
+      
+      <!-- FORMULARIO DE REGISTRO -->
       <form id="crearCuentaForm">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" required>
+        <!-- NOMBRE -->
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan" required>
+          <div class="error-message" id="error-nombre"></div>
+          <div class="success-message" id="success-nombre">✓ Nombre válido</div>
+        </div>
 
-        <label for="apellido">Apellido</label>
-        <input type="text" id="apellido" name="apellido" required>
+        <!-- APELLIDO -->
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" name="apellido" placeholder="Ej: García" required>
+          <div class="error-message" id="error-apellido"></div>
+          <div class="success-message" id="success-apellido">✓ Apellido válido</div>
+        </div>
 
-        <label for="email">Mail</label>
-        <input type="email" id="email" name="email" required>
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="Ej: tu@gmail.com" required>
+          <div class="error-message" id="error-email"></div>
+          <div class="success-message" id="success-email">✓ Email válido</div>
+        </div>
 
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" required>
+        <!-- CONTRASEÑA -->
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+            <button type="button" class="btn-toggle-password" id="btnTogglePassword" title="Mostrar/ocultar contraseña">
+              <span class="eye-icon">👁️</span>
+            </button>
+          </div>
+          <div class="password-strength" id="password-strength">
+            <div class="strength-bar" id="bar1"></div>
+            <div class="strength-bar" id="bar2"></div>
+            <div class="strength-bar" id="bar3"></div>
+            <div class="strength-text" id="strength-text">Muy débil</div>
+          </div>
+          <div class="error-message" id="error-password"></div>
+          <div class="success-message" id="success-password">✓ Contraseña válida</div>
+        </div>
 
-        <label for="telefono">Teléfono</label>
-        <input type="tel" id="telefono" name="telefono">
+        <!-- CONFIRMAR CONTRASEÑA -->
+        <div class="form-group">
+          <label for="password-confirm">Confirmar contraseña</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="password-confirm" name="password-confirm" placeholder="Repite tu contraseña" required>
+            <button type="button" class="btn-toggle-password" id="btnTogglePasswordConfirm" title="Mostrar/ocultar contraseña">
+              <span class="eye-icon">👁️</span>
+            </button>
+          </div>
+          <div class="error-message" id="error-password-confirm"></div>
+          <div class="success-message" id="success-password-confirm">✓ Las contraseñas coinciden</div>
+        </div>
 
-        <button type="submit" class="btn-guardar">Crear cuenta</button>
+        <!-- TELÉFONO (OPCIONAL) -->
+        <div class="form-group">
+          <label for="telefono">Teléfono (opcional)</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="Ej: 123456789">
+          <div class="error-message" id="error-telefono"></div>
+          <div class="success-message" id="success-telefono">✓ Teléfono válido</div>
+        </div>
+
+        <!-- BOTONES -->
+        <div class="button-group">
+          <button type="submit" class="btn-guardar" id="btn-guardar">Crear cuenta</button>
+          <button type="button" class="btn-cancelar" id="btn-cancelar">Cancelar</button>
+        </div>
       </form>
+
+      <!-- MENSAJE DE ÉXITO -->
+      <div class="success-state" id="successState">
+        <div class="success-icon">✓</div>
+        <div class="success-message-title">¡Cuenta creada exitosamente!</div>
+        <div class="success-message-desc">Serás redirigido al inicio en unos segundos...</div>
+      </div>
     </section>
   </main>
 
