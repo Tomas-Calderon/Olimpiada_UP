@@ -112,11 +112,43 @@ function configurarBotonesNavegacion() {
     }
 }
 
+/**
+ * Agrega un panel de administración para usuarios autenticados
+ */
+function agregarPanelUsuario() {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    
+    if (!sesionActual) {
+        return;
+    }
+
+    // Remover si ya existe
+    const panelExistente = document.querySelector('.panel-usuario');
+    if (panelExistente) {
+        panelExistente.remove();
+    }
+
+    const categoriasDiv = document.querySelector('.categorias');
+    if (!categoriasDiv) return;
+
+    const panelDiv = document.createElement('div');
+    panelDiv.className = 'panel-usuario';
+    panelDiv.innerHTML = `
+        <span class="panel-label">Mis Productos</span>
+        <div class="panel-dropdown">
+            <a href="agregar-producto.html" class="panel-item" id="agregar-producto">Agregar Producto</a>
+            <a href="modificar-productos.html" class="panel-item" id="modificar-productos">Mis Productos</a>
+        </div>
+    `;
+    categoriasDiv.insertAdjacentElement('afterend', panelDiv);
+}
+
 // Ejecutar al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
     actualizarInterfazAutenticacion();
     configurarDropdown();
     configurarBotonesNavegacion();
+    agregarPanelUsuario();
 });
 
 // Toggle del menú en dispositivos móviles

@@ -153,7 +153,8 @@ body {
 }
 
 /* PANEL DROPDOWN */
-.panel {
+.panel,
+.panel-usuario {
     position: relative;
     display: flex;
     align-items: center;
@@ -190,7 +191,8 @@ body {
     z-index: 999;
 }
 
-.panel:hover .panel-dropdown {
+.panel:hover .panel-dropdown,
+.panel-usuario:hover .panel-dropdown {
     max-height: 200px;
 }
 
@@ -226,6 +228,13 @@ body {
     padding: 1rem;
     border-radius: 5px;
     gap: 1rem;
+}
+
+.sin-productos {
+    text-align: center;
+    color: #888;
+    padding: 2rem 1rem;
+    font-size: 1.1rem;
 }
 
 .producto-img-modificar {

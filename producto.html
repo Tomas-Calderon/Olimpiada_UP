@@ -31,8 +31,31 @@
 
       <!-- DERECHA / BOTONES -->
       <nav class="botones" id="headerNav">
-        <button class="btn-cuenta">Crear cuenta</button>
-        <button class="btn-sesion">Iniciar sesión</button>
+        <!-- VISTA SIN AUTENTICAR -->
+        <div id="botones-no-autenticado" class="botones-grupo">
+          <button class="btn-cuenta">Crear cuenta</button>
+          <button class="btn-sesion">Iniciar sesión</button>
+        </div>
+
+        <!-- VISTA AUTENTICADA -->
+        <div id="usuario-autenticado" class="usuario-autenticado" style="display: none;">
+          <div class="usuario-info">
+            <span class="usuario-nombre" id="usuarioNombre"></span>
+          </div>
+          <button class="avatar-btn" id="btnAvatar">
+            <div class="avatar" id="avatarCirculo">
+              <span id="avatarIniciales"></span>
+            </div>
+          </button>
+          
+          <!-- MENÚ DESPLEGABLE -->
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="mi-perfil.html" class="dropdown-item" id="miPerfil">Mi Perfil</a>
+            <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
+          </div>
+        </div>
       </nav>
     </div>
   <script src="JS/main.js"></script>

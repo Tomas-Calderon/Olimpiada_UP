@@ -286,6 +286,10 @@ function guardarProducto(evento) {
         return;
     }
 
+    // Obtener ID del creador desde la sesión actual
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    const creadorId = sesionActual ? sesionActual.usuarioId : null;
+
     // Calcular precio con descuento
     const precioConDescuento = descuento > 0 ? precio * (1 - descuento / 100) : precio;
 
@@ -302,7 +306,8 @@ function guardarProducto(evento) {
         imagen: imagenCargadaBase64,
         imagenPrincipal: imagenCargadaBase64,
         tipo: 'Novedad',
-        fechaCreacion: new Date().toISOString()
+        fechaCreacion: new Date().toISOString(),
+        creadorId: creadorId
     };
 
     // Guardar en localStorage

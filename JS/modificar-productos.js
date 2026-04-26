@@ -1,12 +1,30 @@
 // ==================== FUNCIONALIDAD DE MODIFICAR PRODUCTOS ====================
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Verificar sesión
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    if (!sesionActual) {
+        alert('Debes iniciar sesión para acceder a esta página');
+        window.location.href = 'main.html';
+        return;
+    }
+
     cargarProductos();
 
     function cargarProductos() {
-        const productos = JSON.parse(localStorage.getItem('productos')) || [];
+        const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+        const productosTodos = JSON.parse(localStorage.getItem('productos')) || [];
+        
+        // Filtrar solo los productos del usuario actual
+        const productos = productosTodos.filter(p => p.creadorId === sesionActual.usuarioId);
+        
         const lista = document.getElementById('productos-lista');
         lista.innerHTML = '';
+
+        if (productos.length === 0) {
+            lista.innerHTML = '<p class="sin-productos">No has creado ningún producto aún.</p>';
+            return;
+        }
 
         productos.forEach(producto => {
             const productoDiv = document.createElement('div');
@@ -157,7 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function eliminarProducto(id) {
+        const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
         let productos = JSON.parse(localStorage.getItem('productos')) || [];
+        
+        // Verificar que el producto pertenece al usuario actual
+        const producto = productos.find(p => p.id === id);
+        if (!producto || producto.creadorId !== sesionActual.usuarioId) {
+            alert('No tienes permiso para eliminar este producto.');
+            return;
+        }
+        
         productos = productos.filter(p => p.id !== id);
         localStorage.setItem('productos', JSON.stringify(productos));
         cargarProductos();
