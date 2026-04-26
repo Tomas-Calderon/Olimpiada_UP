@@ -71,6 +71,15 @@ function configurarDropdown() {
         }
     });
     
+    // Mi Perfil
+    const miPerfil = document.getElementById('miPerfil');
+    if (miPerfil) {
+        miPerfil.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'mi-perfil.html';
+        });
+    }
+
     // Cerrar sesión
     if (btnCerrarSesion) {
         btnCerrarSesion.addEventListener('click', (e) => {
@@ -305,85 +314,6 @@ function cargarProductos() {
             renderProductos('novedades', paginaNovedades);
         }
     });
-}
-
-// ==================== FUNCIONALIDAD DE INICIO DE SESIÓN ====================
-document.addEventListener('DOMContentLoaded', () => {
-    const btnSesion = document.querySelector('.btn-sesion');
-    const userModal = document.getElementById('userModal');
-    const btnAdmin = document.getElementById('btnAdmin');
-    const btnUser = document.getElementById('btnUser');
-
-    // Verificar si ya hay un tipo de usuario guardado
-    const userType = localStorage.getItem('userType');
-    if (userType === 'admin') {
-        addPanel();
-    } else {
-        removePanel();
-    }
-
-    // Mostrar modal al hacer clic en "Iniciar sesión"
-    btnSesion.addEventListener('click', () => {
-        userModal.style.display = 'flex';
-    });
-
-    // Seleccionar Administrador
-    btnAdmin.addEventListener('click', () => {
-        localStorage.setItem('userType', 'admin');
-        addPanel();
-        userModal.style.display = 'none';
-        alert('Sesión iniciada como Administrador');
-    });
-
-    // Seleccionar Usuario
-    btnUser.addEventListener('click', () => {
-        localStorage.setItem('userType', 'user');
-        removePanel();
-        userModal.style.display = 'none';
-        alert('Sesión iniciada como Usuario');
-    });
-
-    // Cerrar modal al hacer clic fuera
-    userModal.addEventListener('click', (e) => {
-        if (e.target === userModal) {
-            userModal.style.display = 'none';
-        }
-    });
-});
-
-function addPanel() {
-    // Remover si ya existe
-    removePanel();
-    const categoriasDiv = document.querySelector('.categorias');
-    const panelDiv = document.createElement('div');
-    panelDiv.className = 'panel';
-    panelDiv.innerHTML = `
-        <span class="panel-label">Panel</span>
-        <div class="panel-dropdown">
-            <a href="#" class="panel-item" id="agregar-producto">Agregar Producto</a>
-            <a href="#" class="panel-item" id="modificar-productos">Modificar productos</a>
-            <a href="#" class="panel-item" id="estadisticas">Estadísticas</a>
-        </div>
-    `;
-    categoriasDiv.insertAdjacentElement('afterend', panelDiv);
-
-    // Event listeners para panel
-    document.getElementById('agregar-producto').addEventListener('click', () => {
-        window.location.href = 'agregar-producto.html';
-    });
-    document.getElementById('modificar-productos').addEventListener('click', () => {
-        window.location.href = 'modificar-productos.html';
-    });
-    document.getElementById('estadisticas').addEventListener('click', () => {
-        window.location.href = 'estadisticas.html';
-    });
-}
-
-function removePanel() {
-    const panel = document.querySelector('.panel');
-    if (panel) {
-        panel.remove();
-    }
 }
 
 // Redirigir al formulario de crear cuenta

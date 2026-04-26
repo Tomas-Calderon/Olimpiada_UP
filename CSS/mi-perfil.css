@@ -1,0 +1,384 @@
+/* ==================== MI PERFIL - ESTILOS ====================*/
+
+:root {
+    --primary-color: #ffffff;
+    --primary-dark: #e0e0e0;
+    --secondary-color: #007bff;
+    --secondary-hover: #0056b3;
+    --success-color: #28a745;
+    --success-hover: #218838;
+    --danger-color: #dc3545;
+    --danger-hover: #c82333;
+    --warning-color: #ffc107;
+    --light-color: #f8f9fa;
+    --dark-color: #2a2a2a;
+    --darker-color: #1e1e1e;
+    --border-color: #444;
+    --bg-input: #1a1a1a;
+    --text-color: #ffffff;
+    --text-secondary: #ccc;
+}
+
+/* ==================== CONTENEDOR PRINCIPAL ====================*/
+
+.perfil-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.perfil-section {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 40px;
+}
+
+.perfil-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.perfil-header h1 {
+    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.perfil-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+/* ==================== FORMULARIO ====================*/
+
+.perfil-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: var(--primary-dark);
+    font-size: 0.95em;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.form-group input {
+    padding: 12px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95em;
+    background-color: var(--bg-input);
+    color: var(--text-color);
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+.form-group input:not([readonly]) {
+    background-color: #252525;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+}
+
+.form-group input[readonly] {
+    background-color: #1a1a1a;
+    color: var(--text-secondary);
+    cursor: not-allowed;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+}
+
+.form-group input::placeholder {
+    color: #888;
+}
+
+/* ==================== CAMPO BLOQUEADO ====================*/
+
+.campo-bloqueado {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+    font-size: 0.85em;
+    padding: 8px 12px;
+    background-color: #1a1a1a;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.lock-icon,
+.info-icon {
+    font-size: 1em;
+}
+
+/* ==================== FIELD ACTION ====================*/
+
+.field-action {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit {
+    padding: 8px 16px;
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: var(--secondary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-edit.btn-cancel-edit {
+    background-color: var(--warning-color);
+    color: #111;
+}
+
+.btn-edit.btn-cancel-edit:hover {
+    background-color: #e0a800;
+}
+
+/* ==================== PASSWORD INPUT WRAPPER ====================*/
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: var(--secondary-color);
+    transition: color 0.3s ease;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+}
+
+.btn-toggle-password:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* ==================== FORM ACTIONS ====================*/
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btn-cancelar,
+.btn-guardar {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancelar {
+    background-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.btn-cancelar:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-guardar {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: var(--success-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* ==================== MODAL ====================*/
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 400px;
+    width: 90%;
+}
+
+.modal-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.3em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.modal-content p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    font-size: 0.95em;
+}
+
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.modal-content .form-group label {
+    font-weight: 500;
+    color: var(--primary-dark);
+    text-transform: uppercase;
+}
+
+.modal-content .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.95em;
+    background-color: var(--bg-input);
+    color: var(--text-color);
+    font-family: inherit;
+}
+
+.modal-content .form-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+}
+
+.modal-content .form-group input::placeholder {
+    color: #888;
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-size: 0.85em;
+    margin-top: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.modal-actions .btn-cancelar,
+.modal-actions .btn-guardar {
+    flex: 1;
+    padding: 10px 16px;
+}
+
+/* ==================== RESPONSIVE ====================*/
+
+@media (max-width: 768px) {
+    .perfil-container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .perfil-section {
+        padding: 25px;
+    }
+
+    .perfil-header h1 {
+        font-size: 1.5em;
+    }
+
+    .form-group {
+        gap: 6px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn-cancelar,
+    .form-actions .btn-guardar {
+        width: 100%;
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .perfil-section {
+        padding: 20px 15px;
+    }
+
+    .perfil-header h1 {
+        font-size: 1.3em;
+    }
+
+    .form-group input {
+        font-size: 0.9em;
+        padding: 10px 12px;
+    }
+
+    .btn-edit {
+        padding: 6px 12px;
+        font-size: 0.8em;
+    }
+
+    .field-action {
+        gap: 8px;
+    }
+}
