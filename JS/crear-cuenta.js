@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Redirigir después de 3 segundos
         setTimeout(() => {
-            window.location.href = 'main.html';
+            window.location.href = 'index.html';
         }, 3000);
     });
 
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnCancelar.addEventListener('click', () => {
         if (confirm('¿Está seguro de que desea cancelar el registro?')) {
-            window.location.href = 'main.html';
+            window.location.href = 'index.html';
         }
     });
 });

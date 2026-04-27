@@ -214,22 +214,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Redirigir después de 2 segundos
         setTimeout(() => {
-            window.location.href = 'main.html';
+            window.location.href = 'index.html';
         }, 2000);
     });
 
     // ==================== BOTÓN CANCELAR ====================
 
     btnCancelar.addEventListener('click', () => {
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
     });
 
     // ==================== VERIFICAR SI YA ESTÁ LOGUEADO ====================
     
-    // Si el usuario ya tiene sesión, redirigir a main.html
+    // Si el usuario ya tiene sesión, redirigir a index.html
     const sesionActual = localStorage.getItem('sesionActual');
     if (sesionActual) {
         // El usuario ya está logueado, redirigir
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
     }
 });

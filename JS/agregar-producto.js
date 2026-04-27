@@ -16,16 +16,42 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
 // Variable global para almacenar la imagen
 let imagenCargadaBase64 = null;
 
+// ==================== FUNCIONES PARA CARACTERÍSTICAS ====================
+
+function cargarCaracteristicas() {
+    const caracteristicas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+    const container = document.getElementById('caracteristicasContainer');
+    container.innerHTML = '';
+
+    if (caracteristicas.length === 0) {
+        container.innerHTML = '<p style="color: #999;">No hay características creadas. Crea algunas en "Administrar Características"</p>';
+        return;
+    }
+
+    caracteristicas.forEach(caracteristica => {
+        const checkbox = document.createElement('label');
+        checkbox.className = 'caracteristica-checkbox';
+        checkbox.innerHTML = `
+            <input type="checkbox" name="caracteristica" value="${caracteristica.id}" data-nombre="${caracteristica.nombre}">
+            <span class="checkbox-label">${caracteristica.icono} ${caracteristica.nombre}</span>
+        `;
+        container.appendChild(checkbox);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // ==================== VERIFICAR PERMISOS DE ADMIN ====================
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     
     if (!sesionActual || sesionActual.role !== 'admin') {
-        // Redirigir a main.html si no es admin
+        // Redirigir a index.html si no es admin
         alert('⚠️ Acceso denegado. Solo los administradores pueden agregar productos.');
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
+
+    // Cargar características
+    cargarCaracteristicas();
 
     const form = document.getElementById('productoForm');
     const precioInput = document.getElementById('precio');
@@ -303,6 +329,13 @@ function guardarProducto(evento) {
     // Calcular precio con descuento
     const precioConDescuento = descuento > 0 ? precio * (1 - descuento / 100) : precio;
 
+    // Obtener características seleccionadas
+    const checkboxes = document.querySelectorAll('input[name="caracteristica"]:checked');
+    const caracteristicasSeleccionadas = Array.from(checkboxes).map(cb => ({
+        id: cb.value,
+        nombre: cb.getAttribute('data-nombre')
+    }));
+
     // Crear producto
     const nuevoProducto = {
         id: 'custom_' + Date.now(),
@@ -317,7 +350,8 @@ function guardarProducto(evento) {
         imagenPrincipal: imagenCargadaBase64,
         tipo: 'Novedad',
         fechaCreacion: new Date().toISOString(),
-        creadorId: creadorId
+        creadorId: creadorId,
+        caracteristicas: caracteristicasSeleccionadas
     };
 
     // Guardar en localStorage
@@ -341,6 +375,6 @@ function guardarProducto(evento) {
 
     // Redirigir después de 1.5 segundos
     setTimeout(() => {
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
     }, 1500);
 }

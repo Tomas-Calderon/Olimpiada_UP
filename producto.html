@@ -13,7 +13,7 @@
   <header class="header">
     <div class="header-container">
       <!-- IZQUIERDA / LOGO -->
-      <div class="logo" onclick="location.href='main.html'">
+      <div class="logo" onclick="location.href='index.html'">
         <img src="CSS/imagenes/Logo.png" class="logo-img">
 
         <div class="texto-logo">
@@ -33,7 +33,7 @@
       <nav class="botones" id="headerNav">
         <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
         <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
-          🛒 Carrito
+          Carrito
         </button>
 
         <!-- VISTA SIN AUTENTICAR -->
@@ -84,7 +84,7 @@
   <!-- HEADER DEL PRODUCTO -->
   <section class="producto-header">
     <h1 id="headerProductoNombre" class="header-titulo">Nombre del Producto</h1>
-    <button class="header-boton-atras" onclick="window.location.href='main.html'">← Volver</button>
+    <button class="header-boton-atras" onclick="window.location.href='index.html'">← Volver</button>
   </section>
 
   <!-- CONTENIDO PRINCIPAL -->
@@ -103,6 +103,12 @@
         <div class="producto-rating">
           <span class="stars">★★★★★</span>
           <span class="reviews">(45 reseñas)</span>
+        </div>
+
+        <!-- CARACTERÍSTICAS DEL PRODUCTO -->
+        <div id="caracteristicasProducto" class="caracteristicas-producto" style="display: none;">
+          <h3>Características</h3>
+          <div id="listaCaracteristicas" class="lista-caracteristicas"></div>
         </div>
 
         <div class="producto-precio-section">

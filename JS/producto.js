@@ -14,7 +14,8 @@ function cargarProductosDesdeStorage() {
             descripcion: producto.descripcion,
             stock: producto.stock,
             descuento: producto.descuento || 0,
-            tipo: producto.tipo
+            tipo: producto.tipo,
+            caracteristicas: producto.caracteristicas || []
         };
     });
 }
@@ -33,7 +34,7 @@ function cargarProducto() {
     
     if (!productoId || !productosData[productoId]) {
         // Si no hay producto válido, redirigir a inicio
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -45,6 +46,28 @@ function cargarProducto() {
     document.getElementById('productoImagen').src = producto.imagen;
     document.getElementById('productoPrecio').textContent = `$${producto.precio.toFixed(2).replace('.', ',')}`;
     document.getElementById('productoDescripcion').textContent = producto.descripcion;
+
+    // Mostrar características si existen
+    if (producto.caracteristicas && producto.caracteristicas.length > 0) {
+        const caracteristicasDiv = document.getElementById('caracteristicasProducto');
+        const listaCaracteristicas = document.getElementById('listaCaracteristicas');
+        
+        // Obtener todas las características del localStorage
+        const todasLasCaracteristicas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+        
+        listaCaracteristicas.innerHTML = '';
+        producto.caracteristicas.forEach(caracteristicaId => {
+            const caracteristica = todasLasCaracteristicas.find(c => c.id === caracteristicaId.id || c.id === caracteristicaId);
+            if (caracteristica) {
+                const tag = document.createElement('span');
+                tag.className = 'caracteristica-tag';
+                tag.innerHTML = `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono-img" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;"> ${caracteristica.nombre}`;
+                listaCaracteristicas.appendChild(tag);
+            }
+        });
+        
+        caracteristicasDiv.style.display = 'block';
+    }
 
     // Calcular precio con descuento
     let precioFinal = producto.precio;
@@ -205,8 +228,8 @@ function eliminarProducto() {
         // Guardar de vuelta
         localStorage.setItem('productos', JSON.stringify(productos));
         
-        // Redirigir a main.html
-        window.location.href = 'main.html';
+        // Redirigir a index.html
+        window.location.href = 'index.html';
     }
 }
 

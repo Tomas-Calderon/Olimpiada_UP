@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     if (!sesionActual) {
         alert('Debes iniciar sesión para acceder a esta página');
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     
                     <label>Descuento (%):</label>
                     <input type="text" id="editDescuento" value="${producto.descuento}">
+
+                    <label>Características:</label>
+                    <div class="caracteristicas-editar" id="caracteristicasEditarContainer"></div>
                     
                     <button type="submit">Guardar Cambios</button>
                     <button type="button" id="cancelarEditar">Cancelar</button>
@@ -95,6 +98,25 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         document.body.appendChild(modal);
+
+        const caracteristicasDisponibles = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+        const caracteristicasSeleccionadas = (producto.caracteristicas || []).map(c => typeof c === 'string' ? c : c.id);
+        const caracteristicasEditarContainer = document.getElementById('caracteristicasEditarContainer');
+        if (caracteristicasEditarContainer) {
+            if (caracteristicasDisponibles.length === 0) {
+                caracteristicasEditarContainer.innerHTML = '<p class="sin-caracteristicas">No hay características disponibles.</p>';
+            } else {
+                caracteristicasEditarContainer.innerHTML = caracteristicasDisponibles.map(caracteristica => {
+                    const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'checked' : '';
+                    return `
+                        <label class="checkbox-caracteristica">
+                            <input type="checkbox" name="caracteristicaEditar" value="${caracteristica.id}" data-nombre="${caracteristica.nombre}" data-icono="${caracteristica.icono}" ${seleccionado}>
+                            <img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono-img" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;"> ${caracteristica.nombre}
+                        </label>
+                    `;
+                }).join('');
+            }
+        }
 
         const editPrecio = document.getElementById('editPrecio');
         const editStock = document.getElementById('editStock');

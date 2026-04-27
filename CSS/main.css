@@ -27,8 +27,13 @@ body {
     margin: 0 auto;
     padding: 1rem 2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 1rem;
+}
+
+.botones {
+    margin-left: auto;
 }
 
 /* LOGO E IMAGEN IZQUIERDA */
@@ -105,7 +110,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    margin-right: auto;
+    margin-right: 0;
 }
 
 .categorias-label {
@@ -167,7 +172,10 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    margin-right: auto;
+}
+
+.panel-usuario {
+    margin-left: 1rem;
 }
 
 .panel-label {
@@ -230,6 +238,56 @@ body {
     gap: 1rem;
 }
 
+.producto-caracteristicas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.producto-caracteristica-icono {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px;
+}
+
+.caracteristicas-editar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.checkbox-caracteristica {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.checkbox-caracteristica:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.checkbox-caracteristica input {
+    accent-color: #ffc107;
+}
+
 .producto-modificar {
     display: flex;
     align-items: center;
@@ -267,14 +325,32 @@ body {
     color: #ccc;
 }
 
-.btn-editar {
-    background-color: #ffc107;
-    color: black;
-    border: none;
+.producto-modificar .btn-editar,
+.producto-modificar .btn-eliminar {
+    min-width: 120px;
     padding: 0.5rem 1rem;
     border-radius: 5px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+
+.producto-modificar .btn-editar {
+    background-color: #ffc107;
+    color: black;
+}
+
+.producto-modificar .btn-eliminar {
+    background-color: #888;
+    color: black;
+}
+
+.producto-modificar .btn-editar:hover {
+    background-color: #e0a800;
+}
+
+.producto-modificar .btn-eliminar:hover {
+    background-color: #777;
 }
 
 .btn-editar:hover {
@@ -671,6 +747,11 @@ body {
 
     .logo-slogan {
         font-size: 0.65rem;
+    }
+
+    /* Ocultar panel de usuario en móviles */
+    .panel-usuario {
+        display: none;
     }
 
     /* Animación del menú hamburguesa */

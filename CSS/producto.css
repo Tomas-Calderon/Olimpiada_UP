@@ -147,6 +147,44 @@
     font-size: 0.9rem;
 }
 
+/* ==================== CARACTERÍSTICAS DEL PRODUCTO ==================== */
+.caracteristicas-producto {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 193, 7, 0.1);
+    border-left: 4px solid #ffc107;
+    border-radius: 5px;
+}
+
+.caracteristicas-producto h3 {
+    color: #ffc107;
+    margin-top: 0;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+}
+
+.lista-caracteristicas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.caracteristica-tag {
+    display: inline-block;
+    background-color: rgba(255, 193, 7, 0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #ffc107;
+    transition: all 0.2s ease;
+}
+
+.caracteristica-tag:hover {
+    background-color: rgba(255, 193, 7, 0.3);
+    transform: scale(1.05);
+}
+
 .producto-precio-section {
     margin-bottom: 1.5rem;
 }

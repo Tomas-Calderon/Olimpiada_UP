@@ -24,7 +24,7 @@ function mostrarAccesoDenegado() {
         <div class="acceso-denegado">
             <p>⚠️ Acceso Denegado</p>
             <p style="font-size: 1rem; font-weight: normal; margin-bottom: 1.5rem;">Solo los administradores pueden gestionar usuarios.</p>
-            <button class="btn-volver" onclick="window.location.href='main.html'">
+            <button class="btn-volver" onclick="window.location.href='index.html'">
                 ← Volver a la tienda
             </button>
         </div>

@@ -39,11 +39,28 @@ function actualizarInterfazAutenticacion() {
                 sesionActual.apellido
             );
         }
+
+        // Mostrar panel de usuario si es admin
+        if (sesionActual.role === 'admin') {
+            agregarPanelUsuario();
+        } else {
+            // Remover panel si existe y no es admin
+            const panelExistente = document.querySelector('.panel-usuario');
+            if (panelExistente) {
+                panelExistente.remove();
+            }
+        }
     } else {
         // Usuario no autenticado
         if (botonesNoAutenticado) botonesNoAutenticado.style.display = 'flex';
         if (usuarioAutenticado) usuarioAutenticado.style.display = 'none';
         if (btnCarrito) btnCarrito.style.display = 'none';
+
+        // Remover panel de usuario
+        const panelExistente = document.querySelector('.panel-usuario');
+        if (panelExistente) {
+            panelExistente.remove();
+        }
     }
 }
 
@@ -112,13 +129,41 @@ function configurarDropdown() {
         }
     }
 
+    // Mostrar botón de administrar características solo para admins
+    const administrarCaracteristicasBtn = document.getElementById('administrarCaracteristicas');
+    if (administrarCaracteristicasBtn) {
+        if (sesionActual && sesionActual.role === 'admin') {
+            administrarCaracteristicasBtn.style.display = 'block';
+            administrarCaracteristicasBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'administrar-caracteristicas.html';
+            });
+        } else {
+            administrarCaracteristicasBtn.style.display = 'none';
+        }
+    }
+
+    // Mostrar botón de modificar productos solo para admins
+    const modificarProductosBtn = document.getElementById('modificarProductos');
+    if (modificarProductosBtn) {
+        if (sesionActual && sesionActual.role === 'admin') {
+            modificarProductosBtn.style.display = 'block';
+            modificarProductosBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'modificar-productos.html';
+            });
+        } else {
+            modificarProductosBtn.style.display = 'none';
+        }
+    }
+
     // Cerrar sesión
     if (btnCerrarSesion) {
         btnCerrarSesion.addEventListener('click', (e) => {
             e.preventDefault();
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
                 localStorage.removeItem('sesionActual');
-                window.location.href = 'main.html';
+                window.location.href = 'index.html';
             }
         });
     }
@@ -150,7 +195,7 @@ function configurarBotonesNavegacion() {
 function agregarPanelUsuario() {
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     
-    if (!sesionActual) {
+    if (!sesionActual || sesionActual.role !== 'admin') {
         return;
     }
 
@@ -170,6 +215,7 @@ function agregarPanelUsuario() {
         <div class="panel-dropdown">
             <a href="agregar-producto.html" class="panel-item" id="agregar-producto">Agregar Producto</a>
             <a href="modificar-productos.html" class="panel-item" id="modificar-productos">Mis Productos</a>
+            <a href="administrar-caracteristicas.html" class="panel-item" id="administrar-caracteristicas">Administrar Características</a>
         </div>
     `;
     categoriasDiv.insertAdjacentElement('afterend', panelDiv);
@@ -180,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarInterfazAutenticacion();
     configurarDropdown();
     configurarBotonesNavegacion();
-    agregarPanelUsuario();
     
     // Configurar botón carrito
     const btnCarrito = document.getElementById('btnCarrito');
@@ -199,15 +244,21 @@ menuToggle.addEventListener('click', () => {
     menuToggle.classList.toggle('active');
     headerNav.classList.toggle('active');
     
-    // Cerrar dropdown cuando se abre el menú hamburguesa
+    // Cerrar dropdowns cuando se abre el menú hamburguesa
     const dropdownMenu = document.getElementById('dropdownMenu');
     if (dropdownMenu) {
         dropdownMenu.classList.remove('show');
     }
+    
+    // Cerrar dropdown del panel de usuario
+    const panelDropdown = document.querySelector('.panel-dropdown');
+    if (panelDropdown) {
+        panelDropdown.style.maxHeight = '0';
+    }
 });
 
 // Cerrar menú al hacer clic en un botón
-const buttons = document.querySelectorAll('.botones button, .botones a');
+const buttons = document.querySelectorAll('.botones button, .botones a, .panel-item');
 buttons.forEach(button => {
     button.addEventListener('click', () => {
         menuToggle.classList.remove('active');
@@ -253,6 +304,22 @@ function obtenerProductosAleatorios(productos, cantidad = 10) {
     }
     
     return productosSeleccionados;
+}
+
+function obtenerIconosCaracteristicas(producto) {
+    const todasLasCaracteristicas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+    const caracteristicasProducto = producto.caracteristicas || [];
+    return caracteristicasProducto.reduce((icons, caracteristica) => {
+        const id = typeof caracteristica === 'string' ? caracteristica : caracteristica.id;
+        const caracteristicaData = todasLasCaracteristicas.find(c => c.id === id);
+        if (caracteristicaData) {
+            icons.push({
+                imagen: caracteristicaData.icono,
+                nombre: caracteristicaData.nombre
+            });
+        }
+        return icons;
+    }, []);
 }
 
 function renderProductos(seccion, pagina) {
@@ -302,11 +369,19 @@ function renderProductos(seccion, pagina) {
             precioOriginalMostrado = `<p class="precio-anterior">$${producto.precio.toFixed(2).replace('.', ',')}</p>`;
         }
         
+        const caracteristicasIcons = obtenerIconosCaracteristicas(producto);
+        const caracteristicasHtml = caracteristicasIcons.length > 0 ? `
+            <div class="producto-caracteristicas">
+                ${caracteristicasIcons.map(icono => `<img src="${icono.imagen}" alt="${icono.nombre}" class="producto-caracteristica-icono" title="${icono.nombre}">`).join('')}
+            </div>
+        ` : '';
+
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
             <p class="producto-precio">$${precioMostrado.toFixed(2).replace('.', ',')}</p>
             ${precioOriginalMostrado}
+            ${caracteristicasHtml}
         `;
         productoDiv.addEventListener('click', () => {
             window.location.href = `producto.html?id=${producto.id}`;

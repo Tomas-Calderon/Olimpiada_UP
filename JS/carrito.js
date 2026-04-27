@@ -19,7 +19,7 @@ function cargarCarrito() {
                 <div class="carrito-icon">🛍️</div>
                 <p>Tu carrito está vacío</p>
                 <p style="font-size: 1rem; color: #888;">Agrega productos para comenzar a comprar</p>
-                <button class="btn-volver" onclick="window.location.href='main.html'">
+                <button class="btn-volver" onclick="window.location.href='index.html'">
                     ← Volver a la tienda
                 </button>
             </div>

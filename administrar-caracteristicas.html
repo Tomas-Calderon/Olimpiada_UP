@@ -1,11 +1,11 @@
-Ar<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="CSS/main.css">
-  <link rel="stylesheet" href="CSS/agregar-producto.css">
-  <title>Agregar Producto - Sport Port</title>
+  <link rel="stylesheet" href="CSS/administrar-caracteristicas.css">
+  <title>Administrar Características - Sport Port</title>
 </head>
 
 <body>
@@ -22,6 +22,16 @@ Ar<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- CATEGORÍAS -->
+      <div class="categorias">
+        <span class="categorias-label">Categorías</span>
+        <div class="categorias-dropdown">
+          <a href="#" class="categoria-item">Recomendados</a>
+          <a href="#" class="categoria-item">Ofertas</a>
+          <a href="#" class="categoria-item">Novedades</a>
+        </div>
+      </div>
+
       <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
       <button class="menu-toggle" id="menuToggle">
         <span></span>
@@ -31,6 +41,11 @@ Ar<!DOCTYPE html>
 
       <!-- DERECHA / BOTONES -->
       <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
+          Carrito
+        </button>
+
         <!-- VISTA SIN AUTENTICAR -->
         <div id="botones-no-autenticado" class="botones-grupo">
           <button class="btn-cuenta">Crear cuenta</button>
@@ -52,6 +67,10 @@ Ar<!DOCTYPE html>
           <div class="dropdown-menu" id="dropdownMenu">
             <a href="mi-perfil.html" class="dropdown-item" id="miPerfil">Mi Perfil</a>
             <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+            <a href="modificar-productos.html" class="dropdown-item" id="modificarProductos" style="display: none; color: #27ae60; font-weight: bold;">📦 Mis Productos</a>
+            <a href="administrar-caracteristicas.html" class="dropdown-item" id="administrarCaracteristicas" style="display: none; color: #3498db; font-weight: bold;">🏷️ Administrar Características</a>
+            <a href="agregar-producto.html" class="dropdown-item" id="agregarProductoBtn" style="display: none; color: #27ae60; font-weight: bold;">➕ Agregar Producto</a>
             <hr class="dropdown-divider">
             <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
           </div>
@@ -65,53 +84,48 @@ Ar<!DOCTYPE html>
   <div id="notification" class="notification"></div>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <main class="agregar-producto-main">
-    <div class="form-container">
-      <h1>Agregar Nuevo Producto</h1>
-      <form id="productoForm">
+  <main class="admin-caracteristicas-main">
+    <div class="admin-container">
+      <h1>Administrar Características</h1>
+      
+      <!-- BOTÓN AGREGAR NUEVA CARACTERÍSTICA -->
+      <button class="btn-agregar-caracteristica" id="btnAgregarCaracteristica">
+        Añadir Nueva Característica
+      </button>
+
+      <!-- LISTA DE CARACTERÍSTICAS -->
+      <div class="caracteristicas-container" id="caracteristicasContainer">
+        <!-- Se llenará dinámicamente con JavaScript -->
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL PARA AGREGAR/EDITAR CARACTERÍSTICA -->
+  <div id="modalCaracteristica" class="modal-caracteristica" style="display: none;">
+    <div class="modal-content">
+      <h2 id="modalTitulo">Añadir Nueva Característica</h2>
+      
+      <form id="formCaracteristica">
         <div class="form-group">
-          <label for="nombre">Nombre del Producto:</label>
-          <input type="text" id="nombre" name="nombre" maxlength="50" required>
+          <label for="nombreCaracteristica">Nombre de la Característica:</label>
+          <input type="text" id="nombreCaracteristica" name="nombre" maxlength="30" required>
         </div>
 
         <div class="form-group">
-          <label for="precio">Precio:</label>
-          <input type="text" id="precio" name="precio" maxlength="20" required>
-        </div>
-
-        <div class="form-group">
-          <label for="descripcion">Descripción:</label>
-          <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="stock">Cantidad en Stock:</label>
-          <input type="text" id="stock" name="stock" maxlength="15" required>
-        </div>
-
-        <div class="form-group">
-          <label for="descuento">Descuento (%):</label>
-          <input type="text" id="descuento" name="descuento" maxlength="3" value="0">
-        </div>
-
-        <div class="form-group">
-          <label for="imagenes">Imagen del Producto (PNG o JPG):</label>
-          <input type="file" id="imagenes" name="imagenes" accept=".png,.jpg,.jpeg" required>
-          <div id="imagenesCount" class="imagenes-count"></div>
-          <div id="imagenesPreview" class="imagenes-preview"></div>
-        </div>
-
-        <div class="form-group">
-          <label>Características del Producto:</label>
-          <div id="caracteristicasContainer" class="caracteristicas-selector">
-            <!-- Se cargará dinámicamente con JavaScript -->
+          <label for="iconoCaracteristica">Imagen de la Característica:</label>
+          <input type="file" id="iconoCaracteristica" name="icono" accept="image/*" required>
+          <div id="previewImagen" class="preview-imagen" style="display: none;">
+            <img id="previewImg" src="" alt="Vista previa" style="max-width: 50px; max-height: 50px;">
           </div>
         </div>
 
-        <button type="submit" class="btn-agregar">Agregar Producto</button>
+        <div class="modal-buttons">
+          <button type="submit" class="btn-guardar" id="btnGuardarCaracteristica">Guardar</button>
+          <button type="button" class="btn-cancelar" id="btnCancelarModal">Cancelar</button>
+        </div>
       </form>
     </div>
-  </main>
+  </div>
 
   <footer class="footer">
     <div class="footer-container">
@@ -135,7 +149,7 @@ Ar<!DOCTYPE html>
     </div>
   </footer>
 
-  <script src="JS/agregar-producto.js"></script>
+  <script src="JS/administrar-caracteristicas.js"></script>
 
 </body>
-</html
+</html>

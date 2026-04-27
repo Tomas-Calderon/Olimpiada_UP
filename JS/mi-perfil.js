@@ -24,7 +24,7 @@ function cargarDatosUsuario() {
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     
     if (!sesionActual) {
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -34,7 +34,7 @@ function cargarDatosUsuario() {
 
     if (!usuario) {
         alert('Error: No se encontró el usuario');
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -87,10 +87,10 @@ function configurarEventos() {
         btnVolver.addEventListener('click', () => {
             if (Object.keys(cambiosPendientes).length > 0) {
                 if (confirm('Tienes cambios sin guardar. ¿Estás seguro de que deseas salir?')) {
-                    window.location.href = 'main.html';
+                    window.location.href = 'index.html';
                 }
             } else {
-                window.location.href = 'main.html';
+                window.location.href = 'index.html';
             }
         });
     }
@@ -345,7 +345,7 @@ function actualizarInterfazAutenticacion() {
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
     
     if (!sesionActual) {
-        window.location.href = 'main.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -394,7 +394,7 @@ function configurarDropdown() {
             e.preventDefault();
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
                 localStorage.removeItem('sesionActual');
-                window.location.href = 'main.html';
+                window.location.href = 'index.html';
             }
         });
     }
