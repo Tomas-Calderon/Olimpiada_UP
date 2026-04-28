@@ -16,6 +16,74 @@ function mostrarNotificacion(mensaje, tipo = 'error') {
 // Variable global para almacenar la imagen
 let imagenCargadaBase64 = null;
 
+// Variable para almacenar la imagen de nueva característica
+let imagenCaracteristicaBase64 = null;
+
+// Función para comprimir imagen de característica
+function comprimirImagenCaracteristica(base64, callback) {
+    const img = new Image();
+    img.src = base64;
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 100;
+        const maxHeight = 100;
+        let width = img.width;
+        let height = img.height;
+
+        // Calcular nuevas dimensiones manteniendo proporción
+        if (width > height) {
+            if (width > maxWidth) {
+                height = (height * maxWidth) / width;
+                width = maxWidth;
+            }
+        } else {
+            if (height > maxHeight) {
+                width = (width * maxHeight) / height;
+                height = maxHeight;
+            }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        const base64Comprimido = canvas.toDataURL('image/jpeg', 0.8);
+        callback(base64Comprimido);
+    };
+}
+
+// Función para manejar la carga de imagen de nueva característica
+function manejarCargaImagenCaracteristica(evento) {
+    const file = evento.target.files[0];
+    if (!file) {
+        imagenCaracteristicaBase64 = null;
+        document.getElementById('previewCaracteristicaNueva').style.display = 'none';
+        return;
+    }
+
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64Original = e.target.result;
+            
+            // Comprimir la imagen
+            comprimirImagenCaracteristica(base64Original, (base64Comprimido) => {
+                imagenCaracteristicaBase64 = base64Comprimido;
+                
+                // Mostrar preview
+                const previewImg = document.getElementById('previewImgNueva');
+                previewImg.src = base64Comprimido;
+                document.getElementById('previewCaracteristicaNueva').style.display = 'block';
+            });
+        };
+        reader.readAsDataURL(file);
+    } else {
+        mostrarNotificacion('Por favor selecciona un archivo de imagen válido', 'error');
+        evento.target.value = '';
+    }
+}
+
 // ==================== FUNCIONES PARA CARACTERÍSTICAS ====================
 
 function cargarCaracteristicas() {
@@ -74,10 +142,8 @@ function cargarCaracteristicas() {
 // Función para agregar una nueva característica
 function agregarNuevaCaracteristica() {
     const nombreInput = document.getElementById('nuevaCaracteristicaNombre');
-    const iconoInput = document.getElementById('nuevaCaracteristicaIcono');
     
     const nombre = nombreInput.value.trim();
-    const icono = iconoInput.value.trim();
     
     // Validar inputs
     if (!nombre) {
@@ -85,19 +151,8 @@ function agregarNuevaCaracteristica() {
         return;
     }
     
-    if (!icono) {
-        mostrarNotificacion('Por favor ingresa una URL de imagen para el icono', 'error');
-        return;
-    }
-    
-    // Validar que el icono sea una imagen (URL o data:image)
-    const esImagenValida = icono.startsWith('data:image') || 
-                           icono.startsWith('http://') || 
-                           icono.startsWith('https://') || 
-                           icono.match(/\.(png|jpe?g|gif|svg|webp)$/i);
-    
-    if (!esImagenValida) {
-        mostrarNotificacion('El icono debe ser una URL de imagen válida (PNG, JPG, GIF, SVG, WEBP)', 'error');
+    if (!imagenCaracteristicaBase64) {
+        mostrarNotificacion('Por favor carga una imagen para la característica', 'error');
         return;
     }
     
@@ -114,7 +169,7 @@ function agregarNuevaCaracteristica() {
     const nuevaCaracteristica = {
         id: 'caracteristica_' + Date.now(),
         nombre: nombre,
-        icono: icono
+        icono: imagenCaracteristicaBase64
     };
     
     // Guardar en localStorage
@@ -123,7 +178,9 @@ function agregarNuevaCaracteristica() {
     
     // Limpiar inputs
     nombreInput.value = '';
-    iconoInput.value = '';
+    document.getElementById('nuevaCaracteristicaImagen').value = '';
+    imagenCaracteristicaBase64 = null;
+    document.getElementById('previewCaracteristicaNueva').style.display = 'none';
     
     // Recargar características para mostrar la nueva
     cargarCaracteristicas();
@@ -165,6 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnAgregarCaracteristica = document.getElementById('btnAgregarCaracteristica');
     if (btnAgregarCaracteristica) {
         btnAgregarCaracteristica.addEventListener('click', agregarNuevaCaracteristica);
+    }
+
+    // INPUT DE IMAGEN PARA NUEVA CARACTERÍSTICA
+    const inputImagenCaracteristica = document.getElementById('nuevaCaracteristicaImagen');
+    if (inputImagenCaracteristica) {
+        inputImagenCaracteristica.addEventListener('change', manejarCargaImagenCaracteristica);
     }
 
     // VALIDACIÓN PRECIO EN TIEMPO REAL
