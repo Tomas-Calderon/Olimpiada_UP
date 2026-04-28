@@ -310,43 +310,58 @@
     overflow-y: auto;
 }
 
-.caracteristica-checkbox {
+.caracteristica-boton {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.25rem;
     cursor: pointer;
     padding: 0.3rem 0.4rem;
     background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 3px;
     transition: all 0.2s ease;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.caracteristica-checkbox:hover {
-    background-color: rgba(255, 193, 7, 0.1);
-}
-
-.caracteristica-checkbox input[type="checkbox"] {
-    cursor: pointer;
-    width: 12px;
-    height: 12px;
-    accent-color: #ffc107;
-    flex-shrink: 0;
-    margin: 0;
-}
-
-.checkbox-label {
+    flex-wrap: wrap;
     color: white;
+    font-family: inherit;
     font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.caracteristica-boton:hover {
+    background-color: rgba(255, 193, 7, 0.15);
+    border-color: rgba(255, 193, 7, 0.3);
+}
+
+.caracteristica-boton.seleccionada {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #111;
+    font-weight: bold;
+}
+
+.caracteristica-boton.seleccionada:hover {
+    background-color: #ffb300;
+    border-color: #ffb300;
+}
+
+.caracteristica-contenido {
     display: flex;
     align-items: center;
     gap: 0.15rem;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex: 0 1 auto;
+}
+
+.caracteristica-icono {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 .checkbox-icono {

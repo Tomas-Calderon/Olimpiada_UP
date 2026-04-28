@@ -107,18 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 caracteristicasEditarContainer.innerHTML = '<p class="sin-caracteristicas">No hay características disponibles.</p>';
             } else {
                 caracteristicasEditarContainer.innerHTML = caracteristicasDisponibles.map(caracteristica => {
-                    const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'checked' : '';
-                    const iconHtml = caracteristica.icono && caracteristica.icono.startsWith('data:image')
-                        ? `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0;">`
-                        : '';
+                    const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'seleccionada' : '';
+                    const iconHtml = caracteristica.icono && (caracteristica.icono.startsWith('data:image') || caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))
+                        ? `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono">`
+                        : caracteristica.icono
+                            ? `<span>${caracteristica.icono}</span>`
+                            : '';
                     return `
-                        <label class="checkbox-caracteristica">
-                            <input type="checkbox" name="caracteristicaEditar" value="${caracteristica.id}" data-nombre="${caracteristica.nombre}" data-icono="${caracteristica.icono}" ${seleccionado}>
-                            ${iconHtml}
-                            <span>${caracteristica.nombre}</span>
-                        </label>
+                        <button type="button" class="caracteristica-boton-editar ${seleccionado}" data-id="${caracteristica.id}" data-nombre="${caracteristica.nombre}">
+                            <span class="caracteristica-contenido-editar">
+                                ${iconHtml}
+                                <span>${caracteristica.nombre}</span>
+                            </span>
+                        </button>
                     `;
                 }).join('');
+
+                caracteristicasEditarContainer.querySelectorAll('.caracteristica-boton-editar').forEach(boton => {
+                    boton.addEventListener('click', () => {
+                        boton.classList.toggle('seleccionada');
+                    });
+                });
             }
         }
 
@@ -175,6 +184,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const nuevaDescripcion = document.getElementById('editDescripcion').value.trim();
             const nuevoStock = document.getElementById('editStock').value.trim();
             const nuevoDescuento = document.getElementById('editDescuento').value.trim();
+            const caracteristicasSeleccionadasEditar = Array.from(document.querySelectorAll('.caracteristica-boton-editar.seleccionada')).map(boton => ({
+                id: boton.dataset.id,
+                nombre: boton.dataset.nombre
+            }));
 
             // Validaciones simples
             if (!nuevoNombre) {
@@ -192,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             producto.descripcion = nuevaDescripcion;
             producto.stock = parseInt(nuevoStock);
             producto.descuento = parseInt(nuevoDescuento) || 0;
+            producto.caracteristicas = caracteristicasSeleccionadasEditar;
 
             localStorage.setItem('productos', JSON.stringify(productos));
             document.body.removeChild(modal);

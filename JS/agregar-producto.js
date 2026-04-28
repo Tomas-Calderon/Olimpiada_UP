@@ -29,41 +29,51 @@ function cargarCaracteristicas() {
     }
 
     caracteristicas.forEach(caracteristica => {
-        const checkbox = document.createElement('label');
-        checkbox.className = 'caracteristica-checkbox';
+        const boton = document.createElement('button');
+        boton.type = 'button';
+        boton.className = 'caracteristica-boton';
+        boton.dataset.id = caracteristica.id;
+        boton.dataset.nombre = caracteristica.nombre;
 
-        const input = document.createElement('input');
-        input.type = 'checkbox';
-        input.name = 'caracteristica';
-        input.value = caracteristica.id;
-        input.dataset.nombre = caracteristica.nombre;
-
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'checkbox-label';
+        // Crear el contenido del botón con icono y nombre
+        const contenido = document.createElement('span');
+        contenido.className = 'caracteristica-contenido';
 
         if (caracteristica.icono && caracteristica.icono.startsWith('data:image')) {
             const iconImg = document.createElement('img');
             iconImg.src = caracteristica.icono;
             iconImg.alt = caracteristica.nombre;
-            iconImg.className = 'checkbox-icono';
-            labelSpan.appendChild(iconImg);
-            labelSpan.appendChild(document.createTextNode(caracteristica.nombre));
+            iconImg.className = 'caracteristica-icono';
+            contenido.appendChild(iconImg);
+            
+            const texto = document.createElement('span');
+            texto.textContent = caracteristica.nombre;
+            contenido.appendChild(texto);
         } else if (caracteristica.icono && (caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))) {
             const iconImg = document.createElement('img');
             iconImg.src = caracteristica.icono;
             iconImg.alt = caracteristica.nombre;
-            iconImg.className = 'checkbox-icono';
-            labelSpan.appendChild(iconImg);
-            labelSpan.appendChild(document.createTextNode(caracteristica.nombre));
+            iconImg.className = 'caracteristica-icono';
+            contenido.appendChild(iconImg);
+            
+            const texto = document.createElement('span');
+            texto.textContent = caracteristica.nombre;
+            contenido.appendChild(texto);
         } else if (caracteristica.icono) {
-            labelSpan.textContent = caracteristica.icono + ' ' + caracteristica.nombre;
+            contenido.textContent = caracteristica.icono + ' ' + caracteristica.nombre;
         } else {
-            labelSpan.textContent = caracteristica.nombre;
+            contenido.textContent = caracteristica.nombre;
         }
 
-        checkbox.appendChild(input);
-        checkbox.appendChild(labelSpan);
-        container.appendChild(checkbox);
+        boton.appendChild(contenido);
+
+        // Agregar evento de click
+        boton.addEventListener('click', (e) => {
+            e.preventDefault();
+            boton.classList.toggle('seleccionada');
+        });
+
+        container.appendChild(boton);
     });
 }
 
@@ -358,10 +368,10 @@ function guardarProducto(evento) {
     const precioConDescuento = descuento > 0 ? precio * (1 - descuento / 100) : precio;
 
     // Obtener características seleccionadas
-    const checkboxes = document.querySelectorAll('input[name="caracteristica"]:checked');
-    const caracteristicasSeleccionadas = Array.from(checkboxes).map(cb => ({
-        id: cb.value,
-        nombre: cb.getAttribute('data-nombre')
+    const botonesSeleccionados = document.querySelectorAll('.caracteristica-boton.seleccionada');
+    const caracteristicasSeleccionadas = Array.from(botonesSeleccionados).map(btn => ({
+        id: btn.dataset.id,
+        nombre: btn.dataset.nombre
     }));
 
     // Crear producto
@@ -400,6 +410,11 @@ function guardarProducto(evento) {
     document.getElementById('imagenesCount').textContent = '';
     document.getElementById('imagenes').classList.remove('completo');
     imagenCargadaBase64 = null; // Limpiar imagen
+    
+    // Limpiar características seleccionadas
+    document.querySelectorAll('.caracteristica-boton.seleccionada').forEach(btn => {
+        btn.classList.remove('seleccionada');
+    });
 
     // Redirigir después de 1.5 segundos
     setTimeout(() => {
