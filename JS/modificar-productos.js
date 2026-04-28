@@ -92,6 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <label>Características:</label>
                     <div class="caracteristicas-editar" id="caracteristicasEditarContainer"></div>
                     
+                    <div class="crear-caracteristica-section-modal">
+                        <h4>Agregar Nueva Característica</h4>
+                        <div class="crear-caracteristica-form-modal">
+                            <input type="text" id="nuevaCaracteristicaNombreModal" placeholder="Nombre" maxlength="30">
+                            <input type="text" id="nuevaCaracteristicaIconoModal" placeholder="Emoji (ej: 🔥)" maxlength="5">
+                            <button type="button" id="btnAgregarCaracteristicaModal" class="btn-agregar-caracteristica-modal">Agregar</button>
+                        </div>
+                    </div>
+                    
                     <button type="submit">Guardar Cambios</button>
                     <button type="button" id="cancelarEditar">Cancelar</button>
                 </form>
@@ -102,33 +111,112 @@ document.addEventListener('DOMContentLoaded', () => {
         const caracteristicasDisponibles = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
         const caracteristicasSeleccionadas = (producto.caracteristicas || []).map(c => typeof c === 'string' ? c : c.id);
         const caracteristicasEditarContainer = document.getElementById('caracteristicasEditarContainer');
-        if (caracteristicasEditarContainer) {
-            if (caracteristicasDisponibles.length === 0) {
-                caracteristicasEditarContainer.innerHTML = '<p class="sin-caracteristicas">No hay características disponibles.</p>';
-            } else {
-                caracteristicasEditarContainer.innerHTML = caracteristicasDisponibles.map(caracteristica => {
-                    const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'seleccionada' : '';
-                    const iconHtml = caracteristica.icono && (caracteristica.icono.startsWith('data:image') || caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))
-                        ? `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono">`
-                        : caracteristica.icono
-                            ? `<span>${caracteristica.icono}</span>`
-                            : '';
-                    return `
-                        <button type="button" class="caracteristica-boton-editar ${seleccionado}" data-id="${caracteristica.id}" data-nombre="${caracteristica.nombre}">
-                            <span class="caracteristica-contenido-editar">
-                                ${iconHtml}
-                                <span>${caracteristica.nombre}</span>
-                            </span>
-                        </button>
-                    `;
-                }).join('');
+        
+        // Función local para recargar características en el modal
+        const recargarCaracteristicasModal = () => {
+            const caracteristicasActualizadas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+            if (caracteristicasEditarContainer) {
+                if (caracteristicasActualizadas.length === 0) {
+                    caracteristicasEditarContainer.innerHTML = '<p class="sin-caracteristicas">No hay características disponibles.</p>';
+                } else {
+                    caracteristicasEditarContainer.innerHTML = caracteristicasActualizadas.map(caracteristica => {
+                        const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'seleccionada' : '';
+                        const esImagen = caracteristica.icono && (caracteristica.icono.startsWith('data:image') || caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i));
+                        const iconHtml = esImagen
+                            ? `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono">`
+                            : caracteristica.icono
+                                ? `<span>${caracteristica.icono}</span>`
+                                : '';
+                        const nombreHtml = esImagen ? '' : `<span>${caracteristica.nombre}</span>`;
+                        
+                        return `
+                            <button type="button" class="caracteristica-boton-editar ${seleccionado}" data-id="${caracteristica.id}" data-nombre="${caracteristica.nombre}">
+                                <span class="caracteristica-contenido-editar">
+                                    ${iconHtml}
+                                    ${nombreHtml}
+                                </span>
+                            </button>
+                        `;
+                    }).join('');
 
-                caracteristicasEditarContainer.querySelectorAll('.caracteristica-boton-editar').forEach(boton => {
-                    boton.addEventListener('click', () => {
-                        boton.classList.toggle('seleccionada');
+                    caracteristicasEditarContainer.querySelectorAll('.caracteristica-boton-editar').forEach(boton => {
+                        boton.addEventListener('click', () => {
+                            boton.classList.toggle('seleccionada');
+                        });
                     });
-                });
+                }
             }
+        };
+        
+        // Cargar características inicialmente
+        recargarCaracteristicasModal();
+
+        // Evento para agregar nueva característica en el modal
+        const btnAgregarCaracteristicaModal = document.getElementById('btnAgregarCaracteristicaModal');
+        if (btnAgregarCaracteristicaModal) {
+            btnAgregarCaracteristicaModal.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nombreInput = document.getElementById('nuevaCaracteristicaNombreModal');
+                const iconoInput = document.getElementById('nuevaCaracteristicaIconoModal');
+                
+                const nombre = nombreInput.value.trim();
+                const icono = iconoInput.value.trim();
+                
+                if (!nombre) {
+                    alert('Por favor ingresa un nombre para la característica');
+                    return;
+                }
+                
+                if (!icono) {
+                    alert('Por favor ingresa una URL de imagen para el icono');
+                    return;
+                }
+                
+                // Validar que el icono sea una imagen (URL o data:image)
+                const esImagenValida = icono.startsWith('data:image') || 
+                                       icono.startsWith('http://') || 
+                                       icono.startsWith('https://') || 
+                                       icono.match(/\.(png|jpe?g|gif|svg|webp)$/i);
+                
+                if (!esImagenValida) {
+                    alert('El icono debe ser una URL de imagen válida (PNG, JPG, GIF, SVG, WEBP)');
+                    return;
+                }
+                
+                let caracteristicas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+                
+                if (caracteristicas.some(c => c.nombre.toLowerCase() === nombre.toLowerCase())) {
+                    alert('Esta característica ya existe');
+                    return;
+                }
+                
+                const nuevaCaracteristica = {
+                    id: 'caracteristica_' + Date.now(),
+                    nombre: nombre,
+                    icono: icono
+                };
+                
+                caracteristicas.push(nuevaCaracteristica);
+                localStorage.setItem('caracteristicas', JSON.stringify(caracteristicas));
+                
+                nombreInput.value = '';
+                iconoInput.value = '';
+                
+                // Recargar características en el modal
+                recargarCaracteristicasModal();
+                
+                // Seleccionar automáticamente la nueva característica
+                setTimeout(() => {
+                    const nuevoBoton = document.querySelector(`[data-id="${nuevaCaracteristica.id}"]`);
+                    if (nuevoBoton) {
+                        nuevoBoton.classList.add('seleccionada');
+                        // Actualizar array de seleccionadas
+                        caracteristicasSeleccionadas.push(nuevaCaracteristica.id);
+                    }
+                }, 50);
+                
+                alert('✓ Característica agregada exitosamente');
+            });
         }
 
         const editPrecio = document.getElementById('editPrecio');

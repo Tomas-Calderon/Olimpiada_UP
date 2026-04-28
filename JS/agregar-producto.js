@@ -39,27 +39,21 @@ function cargarCaracteristicas() {
         const contenido = document.createElement('span');
         contenido.className = 'caracteristica-contenido';
 
+        // Si es imagen, mostrar solo la imagen
         if (caracteristica.icono && caracteristica.icono.startsWith('data:image')) {
             const iconImg = document.createElement('img');
             iconImg.src = caracteristica.icono;
             iconImg.alt = caracteristica.nombre;
             iconImg.className = 'caracteristica-icono';
             contenido.appendChild(iconImg);
-            
-            const texto = document.createElement('span');
-            texto.textContent = caracteristica.nombre;
-            contenido.appendChild(texto);
         } else if (caracteristica.icono && (caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))) {
             const iconImg = document.createElement('img');
             iconImg.src = caracteristica.icono;
             iconImg.alt = caracteristica.nombre;
             iconImg.className = 'caracteristica-icono';
             contenido.appendChild(iconImg);
-            
-            const texto = document.createElement('span');
-            texto.textContent = caracteristica.nombre;
-            contenido.appendChild(texto);
         } else if (caracteristica.icono) {
+            // Si es emoji, mostrar emoji + nombre
             contenido.textContent = caracteristica.icono + ' ' + caracteristica.nombre;
         } else {
             contenido.textContent = caracteristica.nombre;
@@ -75,6 +69,74 @@ function cargarCaracteristicas() {
 
         container.appendChild(boton);
     });
+}
+
+// Función para agregar una nueva característica
+function agregarNuevaCaracteristica() {
+    const nombreInput = document.getElementById('nuevaCaracteristicaNombre');
+    const iconoInput = document.getElementById('nuevaCaracteristicaIcono');
+    
+    const nombre = nombreInput.value.trim();
+    const icono = iconoInput.value.trim();
+    
+    // Validar inputs
+    if (!nombre) {
+        mostrarNotificacion('Por favor ingresa un nombre para la característica', 'error');
+        return;
+    }
+    
+    if (!icono) {
+        mostrarNotificacion('Por favor ingresa una URL de imagen para el icono', 'error');
+        return;
+    }
+    
+    // Validar que el icono sea una imagen (URL o data:image)
+    const esImagenValida = icono.startsWith('data:image') || 
+                           icono.startsWith('http://') || 
+                           icono.startsWith('https://') || 
+                           icono.match(/\.(png|jpe?g|gif|svg|webp)$/i);
+    
+    if (!esImagenValida) {
+        mostrarNotificacion('El icono debe ser una URL de imagen válida (PNG, JPG, GIF, SVG, WEBP)', 'error');
+        return;
+    }
+    
+    // Obtener características existentes
+    let caracteristicas = JSON.parse(localStorage.getItem('caracteristicas') || '[]');
+    
+    // Validar nombre único
+    if (caracteristicas.some(c => c.nombre.toLowerCase() === nombre.toLowerCase())) {
+        mostrarNotificacion('Esta característica ya existe', 'error');
+        return;
+    }
+    
+    // Crear nueva característica
+    const nuevaCaracteristica = {
+        id: 'caracteristica_' + Date.now(),
+        nombre: nombre,
+        icono: icono
+    };
+    
+    // Guardar en localStorage
+    caracteristicas.push(nuevaCaracteristica);
+    localStorage.setItem('caracteristicas', JSON.stringify(caracteristicas));
+    
+    // Limpiar inputs
+    nombreInput.value = '';
+    iconoInput.value = '';
+    
+    // Recargar características para mostrar la nueva
+    cargarCaracteristicas();
+    
+    // Seleccionar automáticamente la nueva característica
+    setTimeout(() => {
+        const nuevoBoton = document.querySelector(`[data-id="${nuevaCaracteristica.id}"]`);
+        if (nuevoBoton) {
+            nuevoBoton.classList.add('seleccionada');
+        }
+    }, 100);
+    
+    mostrarNotificacion('✓ Característica agregada exitosamente', 'success');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -98,6 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagenesInput = document.getElementById('imagenes');
     const imagenesPreview = document.getElementById('imagenesPreview');
     const btnAgregar = document.querySelector('.btn-agregar');
+
+    // BOTÓN AGREGAR CARACTERÍSTICA
+    const btnAgregarCaracteristica = document.getElementById('btnAgregarCaracteristica');
+    if (btnAgregarCaracteristica) {
+        btnAgregarCaracteristica.addEventListener('click', agregarNuevaCaracteristica);
+    }
 
     // VALIDACIÓN PRECIO EN TIEMPO REAL
     precioInput.addEventListener('input', function() {

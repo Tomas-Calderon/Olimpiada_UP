@@ -371,3 +371,67 @@
     border-radius: 1px;
     flex-shrink: 0;
 }
+
+/* ==================== CREAR CARACTERÍSTICA ==================== */
+.crear-caracteristica-section {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-radius: 5px;
+}
+
+.crear-caracteristica-section h4 {
+    margin: 0 0 1rem 0;
+    color: #ffc107;
+    font-size: 0.95rem;
+}
+
+.crear-caracteristica-form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.crear-caracteristica-form input {
+    flex: 1;
+    min-width: 150px;
+    padding: 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 0.9rem;
+}
+
+.crear-caracteristica-form input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.crear-caracteristica-form input:focus {
+    outline: none;
+    border-color: #ffc107;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.btn-agregar-caracteristica {
+    padding: 0.6rem 1.2rem;
+    background-color: #ffc107;
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-agregar-caracteristica:hover {
+    background-color: #ffb300;
+    transform: scale(1.05);
+}
+
+.btn-agregar-caracteristica:active {
+    transform: scale(0.95);
+}

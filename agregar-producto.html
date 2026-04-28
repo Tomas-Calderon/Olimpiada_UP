@@ -22,6 +22,11 @@ Ar<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- BARRA DE BÚSQUEDA -->
+      <div class="barra-busqueda">
+        <input type="text" class="busqueda-input" placeholder="Buscar productos..." disabled>
+      </div>
+
       <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
       <button class="menu-toggle" id="menuToggle">
         <span></span>
@@ -105,6 +110,16 @@ Ar<!DOCTYPE html>
           <label>Características del Producto:</label>
           <div id="caracteristicasContainer" class="caracteristicas-selector">
             <!-- Se cargará dinámicamente con JavaScript -->
+          </div>
+          
+          <!-- CREAR NUEVA CARACTERÍSTICA -->
+          <div class="crear-caracteristica-section">
+            <h4>Agregar Nueva Característica</h4>
+            <div class="crear-caracteristica-form">
+              <input type="text" id="nuevaCaracteristicaNombre" placeholder="Nombre de la característica" maxlength="30">
+              <input type="text" id="nuevaCaracteristicaIcono" placeholder="Emoji o símbolo (ej: 🔥)" maxlength="5">
+              <button type="button" id="btnAgregarCaracteristica" class="btn-agregar-caracteristica">Agregar</button>
+            </div>
           </div>
         </div>
 

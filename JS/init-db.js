@@ -44,30 +44,8 @@ function inicializarBaseDatos() {
     // Inicializar características (etiquetas) si no existen
     const caracteristicas = localStorage.getItem('caracteristicas');
     if (!caracteristicas) {
-        const caracteristicasDefault = [
-            {
-                id: 'caracteristica_1',
-                nombre: 'Resistente',
-                icono: '🛡️'
-            },
-            {
-                id: 'caracteristica_2',
-                nombre: 'Ligero',
-                icono: '⚡'
-            },
-            {
-                id: 'caracteristica_3',
-                nombre: 'Impermeable',
-                icono: '💧'
-            },
-            {
-                id: 'caracteristica_4',
-                nombre: 'Ergonómico',
-                icono: '✋'
-            }
-        ];
-        localStorage.setItem('caracteristicas', JSON.stringify(caracteristicasDefault));
-        console.log('✓ Características (etiquetas) creadas exitosamente');
+        localStorage.setItem('caracteristicas', JSON.stringify([]));
+        console.log('✓ Array de características (etiquetas) inicializado vacío');
     }
 }
 

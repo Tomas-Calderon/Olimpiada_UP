@@ -61,7 +61,15 @@ function cargarProducto() {
             if (caracteristica) {
                 const tag = document.createElement('span');
                 tag.className = 'caracteristica-tag';
-                tag.innerHTML = `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono-img" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;"> ${caracteristica.nombre}`;
+                
+                // Si el icono es una URL de imagen, mostrar solo la imagen
+                if (caracteristica.icono && (caracteristica.icono.startsWith('data:image') || caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))) {
+                    tag.innerHTML = `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono-img" style="width: 20px; height: 20px; vertical-align: middle; border-radius: 3px;" title="${caracteristica.nombre}">`;
+                } else {
+                    // Si es emoji, mostrar emoji + nombre
+                    tag.innerHTML = `<span style="font-size: 1.1em; margin-right: 5px; vertical-align: middle;">${caracteristica.icono}</span>${caracteristica.nombre}`;
+                }
+                
                 listaCaracteristicas.appendChild(tag);
             }
         });
