@@ -108,10 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 caracteristicasEditarContainer.innerHTML = caracteristicasDisponibles.map(caracteristica => {
                     const seleccionado = caracteristicasSeleccionadas.includes(caracteristica.id) ? 'checked' : '';
+                    const iconHtml = caracteristica.icono && caracteristica.icono.startsWith('data:image')
+                        ? `<img src="${caracteristica.icono}" alt="${caracteristica.nombre}" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0;">`
+                        : '';
                     return `
                         <label class="checkbox-caracteristica">
                             <input type="checkbox" name="caracteristicaEditar" value="${caracteristica.id}" data-nombre="${caracteristica.nombre}" data-icono="${caracteristica.icono}" ${seleccionado}>
-                            <img src="${caracteristica.icono}" alt="${caracteristica.nombre}" class="caracteristica-icono-img" style="width: 20px; height: 20px; margin-right: 5px; vertical-align: middle;"> ${caracteristica.nombre}
+                            ${iconHtml}
+                            <span>${caracteristica.nombre}</span>
                         </label>
                     `;
                 }).join('');
