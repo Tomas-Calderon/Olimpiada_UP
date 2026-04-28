@@ -31,10 +31,38 @@ function cargarCaracteristicas() {
     caracteristicas.forEach(caracteristica => {
         const checkbox = document.createElement('label');
         checkbox.className = 'caracteristica-checkbox';
-        checkbox.innerHTML = `
-            <input type="checkbox" name="caracteristica" value="${caracteristica.id}" data-nombre="${caracteristica.nombre}">
-            <span class="checkbox-label">${caracteristica.icono} ${caracteristica.nombre}</span>
-        `;
+
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.name = 'caracteristica';
+        input.value = caracteristica.id;
+        input.dataset.nombre = caracteristica.nombre;
+
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'checkbox-label';
+
+        if (caracteristica.icono && caracteristica.icono.startsWith('data:image')) {
+            const iconImg = document.createElement('img');
+            iconImg.src = caracteristica.icono;
+            iconImg.alt = caracteristica.nombre;
+            iconImg.className = 'checkbox-icono';
+            labelSpan.appendChild(iconImg);
+            labelSpan.appendChild(document.createTextNode(caracteristica.nombre));
+        } else if (caracteristica.icono && (caracteristica.icono.startsWith('http') || caracteristica.icono.match(/\.(png|jpe?g|gif|svg)$/i))) {
+            const iconImg = document.createElement('img');
+            iconImg.src = caracteristica.icono;
+            iconImg.alt = caracteristica.nombre;
+            iconImg.className = 'checkbox-icono';
+            labelSpan.appendChild(iconImg);
+            labelSpan.appendChild(document.createTextNode(caracteristica.nombre));
+        } else if (caracteristica.icono) {
+            labelSpan.textContent = caracteristica.icono + ' ' + caracteristica.nombre;
+        } else {
+            labelSpan.textContent = caracteristica.nombre;
+        }
+
+        checkbox.appendChild(input);
+        checkbox.appendChild(labelSpan);
         container.appendChild(checkbox);
     });
 }
