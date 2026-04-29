@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../CSS/main.css">
+  <link rel="stylesheet" href="../CSS/producto.css">
+  <title>Ofertas - Sport Port</title>
+</head>
+
+<body>
+
+  <header class="header">
+    <div class="header-container">
+      <!-- IZQUIERDA / LOGO -->
+      <div class="logo" onclick="location.href='index.html'">
+        <img src="../CSS/imagenes/Logo.png" class="logo-img">
+
+        <div class="texto-logo">
+          <div class="logo-nombre">Sport Port</div>
+          <div class="logo-slogan">Tu rendimiento empieza acá</div>
+        </div>
+      </div>
+
+      <!-- CATEGORÍAS -->
+      <div class="categorias">
+        <span class="categorias-label">Categorías</span>
+        <div class="categorias-dropdown">
+          <a href="recomendados.html" class="categoria-item">Recomendados</a>
+          <a href="ofertas.html" class="categoria-item">Ofertas</a>
+          <a href="novedades.html" class="categoria-item">Novedades</a>
+        </div>
+      </div>
+
+      <!-- BARRA DE BÚSQUEDA -->
+      <div class="barra-busqueda">
+        <input type="text" class="busqueda-input" placeholder="Buscar productos..." disabled>
+      </div>
+
+      <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
+      <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- DERECHA / BOTONES -->
+      <nav class="botones" id="headerNav">
+        <!-- BOTÓN CARRITO (solo visible si está autenticado) -->
+        <button class="btn-carrito" id="btnCarrito" title="Ver carrito" style="display: none;">
+          Carrito
+        </button>
+
+        <!-- VISTA SIN AUTENTICAR -->
+        <div id="botones-no-autenticado" class="botones-grupo">
+          <button class="btn-cuenta" id="btnCrearCuenta">Crear cuenta</button>
+          <button class="btn-sesion" id="btnIniciarSesion">Iniciar sesión</button>
+        </div>
+
+        <!-- VISTA AUTENTICADA -->
+        <div id="usuario-autenticado" class="usuario-autenticado" style="display: none;">
+          <div class="usuario-info">
+            <span class="usuario-nombre" id="usuarioNombre"></span>
+          </div>
+          <button class="avatar-btn" id="btnAvatar">
+            <div class="avatar" id="avatarCirculo">
+              <span id="avatarIniciales"></span>
+            </div>
+          </button>
+          
+          <!-- MENÚ DESPLEGABLE -->
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="mi-perfil.html" class="dropdown-item" id="miPerfil">Mi Perfil</a>
+            <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  <script src="../JS/main.js"></script>
+  </header>
+
+  <!-- MODAL DE SELECCIÓN DE USUARIO -->
+  <div id="userModal" class="user-modal">
+    <div class="modal-content">
+      <h3>Seleccionar tipo de usuario</h3>
+      <button id="btnAdmin" class="modal-btn admin-btn">Administrador</button>
+      <button id="btnUser" class="modal-btn user-btn">Usuario</button>
+    </div>
+  </div>
+
+  <!-- BOTÓN ADMINISTRADOR FIJO -->
+  <button id="adminBtn" class="admin-fixed-btn" style="display: none;">
+    <span>+</span>
+  </button>
+
+  <!-- HEADER DE LA CATEGORÍA -->
+  <section class="producto-header">
+    <h1 id="categoriaTitulo" class="header-titulo">Ofertas</h1>
+    <button class="header-boton-atras" onclick="window.location.href='index.html'">← Volver</button>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="producto-detail">
+    <div class="productos-todos-container">
+      <div class="productos-grid" id="productosGrid">
+        <!-- Los productos se cargarán dinámicamente -->
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <!-- IZQUIERDA / TEXTO -->
+      <div class="footer-izq">
+        <p class="footer-texto">© 2026 Sport Port. Todos los derechos reservados.</p>
+      </div>
+
+      <!-- DERECHA / BOTONES IMAGEN -->
+      <div class="footer-der">
+        <button class="footer-btn">
+          <img src="../CSS/imagenes/boton_facebook.png" alt="Botón 1" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="../CSS/imagenes/boton_instagram.png" alt="Botón 2" class="footer-img">
+        </button>
+        <button class="footer-btn">
+          <img src="../CSS/imagenes/boton_twtter_(X).png" alt="Botón 3" class="footer-img">
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ==================== CARGAR PRODUCTOS ====================
+    let todosLosProductos = [];
+
+    function cargarProductos() {
+      const productos = JSON.parse(localStorage.getItem('productos')) || [];
+      // Obtener los 10 productos con oferta aleatorios igual que en index.html
+      const productosConOferta = productos.filter(p => p.descuento > 0);
+      if (productosConOferta.length > 0) {
+        todosLosProductos = obtenerProductosAleatorios(productosConOferta, 10);
+      }
+      renderizarProductos();
+    }
+
+    // Función para obtener productos aleatorios sin repetir
+    function obtenerProductosAleatorios(productos, cantidad = 10) {
+      if (productos.length <= cantidad) {
+        return productos.sort(() => Math.random() - 0.5);
+      }
+      const productosDisponibles = [...productos];
+      const productosSeleccionados = [];
+      for (let i = 0; i < cantidad; i++) {
+        const indiceAleatorio = Math.floor(Math.random() * productosDisponibles.length);
+        productosSeleccionados.push(productosDisponibles[indiceAleatorio]);
+        productosDisponibles.splice(indiceAleatorio, 1);
+      }
+      return productosSeleccionados;
+    }
+
+    function renderizarProductos() {
+      const grid = document.getElementById('productosGrid');
+
+      if (todosLosProductos.length === 0) {
+        grid.innerHTML = '<p class="no-productos">No hay ofertas disponibles en este momento.</p>';
+        return;
+      }
+
+      grid.innerHTML = todosLosProductos.map(producto => {
+        let precioMostrado = producto.precio;
+        let precioOriginal = '';
+        
+        if (producto.descuento > 0) {
+          precioMostrado = producto.precioConDescuento || (producto.precio * (1 - producto.descuento / 100));
+          precioOriginal = `<p class="precio-anterior">$${producto.precio.toFixed(2).replace('.', ',')}</p>`;
+        }
+
+        return `
+          <div class="producto-card" onclick="window.location.href='producto.html?id=${producto.id}'">
+            <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-card-img">
+            <div class="producto-card-info">
+              <h3 class="producto-card-nombre">${producto.nombre}</h3>
+              <div class="producto-card-precio">
+                ${precioOriginal}
+                <span class="precio-actual">$${precioMostrado.toFixed(2).replace('.', ',')}</span>
+              </div>
+              ${producto.descuento > 0 ? `<span class="descuento-badge">-${producto.descuento}%</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Cargar al iniciar
+    document.addEventListener('DOMContentLoaded', cargarProductos);
+  </script>
+
+  <style>
+    .productos-todos-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .productos-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .producto-card {
+      display: flex;
+      background: #1a1a1a;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .producto-card:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 25px rgba(255, 193, 7, 0.2);
+    }
+
+    .producto-card-img {
+      width: 200px;
+      height: 180px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .producto-card-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .producto-card-nombre {
+      font-size: 1.2rem;
+      margin: 0 0 0.5rem 0;
+      color: #fff;
+    }
+
+    .producto-card-precio {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .precio-anterior {
+      text-decoration: line-through;
+      color: #888;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .precio-actual {
+      color: #ffc107;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .descuento-badge {
+      background: #e74c3c;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .no-productos {
+      text-align: center;
+      color: #888;
+      font-size: 1.2rem;
+      padding: 3rem;
+    }
+
+    .paginacion {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem 0;
+    }
+
+    .paginacion button {
+      background: #ffc107;
+      color: #111;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .paginacion button:hover:not(:disabled) {
+      background: #e6ac00;
+    }
+
+    .paginacion button:disabled {
+      background: #444;
+      cursor: not-allowed;
+    }
+
+    .pagina-info {
+      color: #ccc;
+      font-size: 1rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .producto-card {
+        flex-direction: column;
+      }
+
+      .producto-card-img {
+        width: 100%;
+        height: 200px;
+      }
+
+      .producto-card-info {
+        padding: 1rem;
+      }
+    }
+  </style>
+</body>
+</html>
