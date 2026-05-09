@@ -1326,3 +1326,122 @@ main {
 .user-btn:hover {
     background-color: #ffb300;
 }
+
+/* ==================== BARRA DE BÚSQUEDA FUNCIONAL CON DROPDOWN ====================*/
+
+.barra-busqueda {
+    display: flex;
+    align-items: center;
+    margin: 0 1rem 0 3rem;
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+}
+
+.busqueda-input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: #333;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.busqueda-input:hover {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.busqueda-input:focus {
+    box-shadow: 0 2px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* DROPDOWN DE SUGERENCIAS */
+.busqueda-dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 0;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ITEM DE SUGERENCIA */
+.busqueda-sugerencia {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.busqueda-sugerencia:hover {
+    background-color: #f9f9f9;
+}
+
+.busqueda-sugerencia:last-child {
+    border-bottom: none;
+}
+
+.busqueda-sugerencia-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.busqueda-sugerencia-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.busqueda-sugerencia-nombre {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.busqueda-sugerencia-precio {
+    font-size: 0.85rem;
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.busqueda-sin-resultados {
+    padding: 1rem;
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+}

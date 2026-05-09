@@ -33,8 +33,28 @@
       </div>
 
       <!-- BARRA DE BÚSQUEDA -->
-      <div class="barra-busqueda">
-        <input type="text" class="busqueda-input" placeholder="Buscar productos..." disabled>
+      <div class="barra-busqueda" id="barraBusquedaContainer">
+        <input
+          type="text"
+          class="busqueda-input"
+          id="inputBusqueda"
+          placeholder="Buscar productos..."
+          autocomplete="off"
+        >
+        <!-- Dropdown de sugerencias -->
+        <div class="busqueda-dropdown-list" id="busquedaDropdownList"></div>
+
+        <!-- Calendario doble -->
+        <div class="busqueda-calendario-container">
+          <div class="busqueda-fecha-grupo">
+            <label for="fechaInicio">Desde:</label>
+            <input type="date" id="fechaInicio" class="busqueda-fecha-input">
+          </div>
+          <div class="busqueda-fecha-grupo">
+            <label for="fechaFin">Hasta:</label>
+            <input type="date" id="fechaFin" class="busqueda-fecha-input">
+          </div>
+        </div>
       </div>
 
       <!-- BOTÓN MENÚ HAMBURGUESA (móvil) -->
@@ -152,6 +172,8 @@
       </div>
     </div>
   </footer>
+
+  <script src="../JS/busqueda.js"></script>
 
 </body>
 </html>
