@@ -41,18 +41,26 @@
           placeholder="Buscar productos..."
           autocomplete="off"
         >
-        <!-- Dropdown de sugerencias -->
-        <div class="busqueda-dropdown-list" id="busquedaDropdownList"></div>
-
-        <!-- Calendario doble -->
-        <div class="busqueda-calendario-container">
-          <div class="busqueda-fecha-grupo">
-            <label for="fechaInicio">Desde:</label>
-            <input type="date" id="fechaInicio" class="busqueda-fecha-input">
+        <!-- Dropdown de búsqueda completo -->
+        <div class="busqueda-dropdown-container" id="busquedaDropdownContainer">
+          <!-- Sección de búsqueda (header) -->
+          <div class="busqueda-dropdown-header">Búsqueda</div>
+          
+          <!-- Sección de resultados -->
+          <div class="busqueda-resultados-container">
+            <div class="busqueda-dropdown-list" id="busquedaDropdownList"></div>
           </div>
-          <div class="busqueda-fecha-grupo">
-            <label for="fechaFin">Hasta:</label>
-            <input type="date" id="fechaFin" class="busqueda-fecha-input">
+
+          <!-- Sección de calendarios -->
+          <div class="busqueda-calendarios-section">
+            <div class="busqueda-calendario-item">
+              <label for="fechaInicio">Desde:</label>
+              <input type="date" id="fechaInicio" class="busqueda-fecha-input">
+            </div>
+            <div class="busqueda-calendario-item">
+              <label for="fechaFin">Hasta:</label>
+              <input type="date" id="fechaFin" class="busqueda-fecha-input">
+            </div>
           </div>
         </div>
       </div>

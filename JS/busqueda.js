@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const inputBusqueda = document.getElementById('inputBusqueda');
   const dropdownList = document.getElementById('busquedaDropdownList');
+  const dropdownContainer = document.getElementById('busquedaDropdownContainer');
 
   if (!inputBusqueda) return;
 
@@ -13,17 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (texto.length > 0) {
       const sugerencias = obtenerSugerencias(texto);
       mostrarSugerencias(sugerencias, dropdownList);
+      dropdownContainer.style.display = 'block';
     } else {
       dropdownList.innerHTML = '';
-      dropdownList.style.display = 'none';
+      dropdownContainer.style.display = 'none';
     }
   });
 
   // Cerrar dropdown al hacer click fuera
   document.addEventListener('click', function(e) {
-    if (!inputBusqueda.contains(e.target) && !dropdownList.contains(e.target)) {
+    if (!inputBusqueda.contains(e.target) && !dropdownContainer.contains(e.target)) {
       dropdownList.innerHTML = '';
-      dropdownList.style.display = 'none';
+      dropdownContainer.style.display = 'none';
     }
   });
 
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   inputBusqueda.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       dropdownList.innerHTML = '';
-      dropdownList.style.display = 'none';
+      dropdownContainer.style.display = 'none';
     }
 
     // Enter para buscar
@@ -46,6 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (inputBusqueda.value.trim().length > 0) {
       const sugerencias = obtenerSugerencias(inputBusqueda.value.trim());
       mostrarSugerencias(sugerencias, dropdownList);
+      dropdownContainer.style.display = 'block';
+    } else {
+      // Si no hay texto, mostrar solo calendarios
+      dropdownContainer.style.display = 'block';
+      dropdownList.innerHTML = '';
     }
   });
 });

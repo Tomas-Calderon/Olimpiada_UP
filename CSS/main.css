@@ -1445,3 +1445,153 @@ main {
     color: #999;
     font-size: 0.9rem;
 }
+
+/* ==================== DROPDOWN CONTAINER CON CALENDARIO ====================*/
+
+.busqueda-dropdown-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    display: none;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 0;
+    max-width: 600px;
+    overflow: hidden;
+}
+
+.busqueda-dropdown-header {
+    padding: 0.8rem 1rem;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.95rem;
+}
+
+.busqueda-resultados-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.busqueda-dropdown-list {
+    position: static;
+    top: auto;
+    left: auto;
+    right: auto;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    z-index: auto;
+    box-shadow: none;
+    margin-top: 0;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.busqueda-dropdown-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* RESULTADO ITEM */
+.busqueda-sugerencia {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-bottom: none;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    border: 1px solid #f0f0f0;
+}
+
+.busqueda-sugerencia:hover {
+    background-color: #f0f0f0;
+}
+
+.busqueda-sugerencia:last-child {
+    border-bottom: none;
+}
+
+/* CALENDARIOS SECTION */
+.busqueda-calendarios-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+}
+
+.busqueda-calendario-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.busqueda-calendario-item label {
+    font-weight: bold;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+.busqueda-fecha-input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    color: #333;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* RESPONSIVE DROPDOWN */
+@media screen and (max-width: 768px) {
+    .busqueda-dropdown-container {
+        max-width: 95vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .busqueda-calendarios-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .busqueda-dropdown-container {
+        max-width: 90vw;
+    }
+    
+    .busqueda-resultados-container {
+        padding: 0.3rem;
+    }
+    
+    .busqueda-sugerencia {
+        padding: 0.6rem 0.8rem;
+    }
+}
