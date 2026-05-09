@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Favoritos - Sport Port</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link rel="stylesheet" href="../CSS/mis-favoritos.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container-header">
+            <nav class="navbar">
+                <div class="navbar-logo">
+                    <a href="index.html" class="logo-link">Sport Port</a>
+                </div>
+                <button class="btn-hamburguesa" id="btnHamburguesa">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html" class="nav-link">Inicio</a></li>
+                    <li><a href="#" class="nav-link">Categorías</a></li>
+                    <li><a href="#" class="nav-link">Contacto</a></li>
+                </ul>
+                <div class="navbar-right">
+                    <button class="btn-carrito" id="btnCarrito">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="cantidad-carrito" id="cantidadCarrito">0</span>
+                    </button>
+                    <button class="btn-avatar" id="btnAvatar">
+                        <span id="avatarIniciales"></span>
+                    </button>
+                    
+                    <!-- MENÚ DESPLEGABLE -->
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="#" class="dropdown-item" id="miPerfil">Mi Perfil</a>
+                        <a href="#" class="dropdown-item" id="misCompras">Mis Compras</a>
+                        <a href="mis-favoritos.html" class="dropdown-item" id="misFavoritos">Mis Favoritos</a>
+                        <a href="#" class="dropdown-item" id="gestionarUsuarios" style="display: none; color: #ffc107; font-weight: bold;">👥 Gestionar Usuarios</a>
+                        <a href="#" class="dropdown-item" id="agregarProductoBtn" style="display: none; color: #27ae60; font-weight: bold;">➕ Agregar Producto</a>
+                        <hr class="dropdown-divider">
+                        <button class="dropdown-item btn-logout" id="btnCerrarSesion">Cerrar Sesión</button>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="contenedor-favoritos">
+        <section class="favoritos-section">
+            <h2 class="seccion-titulo">Mis Favoritos</h2>
+            
+            <div id="contenedor-favoritos" class="favoritos-lista">
+                <!-- Se llena con JavaScript -->
+            </div>
+
+            <div id="sin-favoritos" class="sin-favoritos" style="display: none;">
+                <p>Aún no tienes productos favoritos.</p>
+                <a href="index.html" class="btn-volver">Explorar Productos</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-izq">
+                <p class="footer-texto">© 2026 Sport Port. Todos los derechos reservados.</p>
+            </div>
+            <div class="footer-der"></div>
+        </div>
+    </footer>
+
+    <script src="../JS/favoritos.js"></script>
+    <script src="../JS/main.js"></script>
+    <script src="../JS/mis-favoritos.js"></script>
+</body>
+</html>

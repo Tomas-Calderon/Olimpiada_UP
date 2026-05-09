@@ -376,14 +376,24 @@ function renderProductos(seccion, pagina) {
             </div>
         ` : '';
 
+        // Crear botón de favorito (no mostrar a admins)
+        const sesionActual = JSON.parse(localStorage.getItem('usuario_autenticado') || '{}');
+        const esAdmin = sesionActual.role === 'admin';
+        const botonFavorito = !esAdmin ? crearBotonFavorito(producto.id, esAdmin) : '';
+
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
             <h3 class="producto-nombre">${producto.nombre}</h3>
             <p class="producto-precio">$${precioMostrado.toFixed(2).replace('.', ',')}</p>
             ${precioOriginalMostrado}
             ${caracteristicasHtml}
+            ${botonFavorito}
         `;
-        productoDiv.addEventListener('click', () => {
+        productoDiv.addEventListener('click', (e) => {
+            // No redirigir si se hace click en el botón de favorito
+            if (e.target.classList.contains('btn-favorito')) {
+                return;
+            }
             window.location.href = `producto.html?id=${producto.id}`;
         });
         lista.appendChild(productoDiv);
@@ -401,6 +411,8 @@ function renderProductos(seccion, pagina) {
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
+    // Inicializar botones de favorito
+    inicializarBotonesFavorito();
 });
 
 function cargarProductos() {
@@ -482,4 +494,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
