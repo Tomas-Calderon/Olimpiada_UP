@@ -1,6 +1,20 @@
 // Datos de productos (cargados desde localStorage)
 let productosData = {};
 
+// ==================== OBTENER RUTAS CORRECTAS ====================
+function obtenerRutaIndex() {
+    const currentPath = window.location.pathname;
+    return currentPath.includes('/html/') ? '../index.html' : 'index.html';
+}
+
+function obtenerRutaCarrito() {
+    return 'carrito.html'; // Siempre está en la misma carpeta (html/)
+}
+
+function obtenerRutaProducto(id) {
+    return `producto.html?id=${id}`;
+}
+
 function cargarProductosDesdeStorage() {
     productosData = {};
     const productos = JSON.parse(localStorage.getItem('productos')) || [];
@@ -34,7 +48,7 @@ function cargarProducto() {
     
     if (!productoId || !productosData[productoId]) {
         // Si no hay producto válido, redirigir a inicio
-        window.location.href = 'index.html';
+        window.location.href = obtenerRutaIndex();
         return;
     }
 
@@ -108,6 +122,14 @@ function cargarProducto() {
     // Agregar eventos a botones de compra
     document.querySelector('.btn-agregar-carrito').addEventListener('click', agregarAlCarrito);
     document.querySelector('.btn-comprar-ahora').addEventListener('click', comprarAhora);
+    
+    // Agregar evento al botón de favoritos
+    const btnAgregarFavoritos = document.getElementById('btnAgregarFavoritos');
+    if (btnAgregarFavoritos) {
+        btnAgregarFavoritos.addEventListener('click', () => toggleFavorito(productoId));
+        // Actualizar estado visual del botón
+        actualizarEstadoBotonFavorito(productoId);
+    }
 
     // Agregar evento al botón eliminar
     document.getElementById('eliminarProductoBtn').addEventListener('click', eliminarProducto);
@@ -144,7 +166,7 @@ function cargarProductosRelacionados(productoId) {
         `;
 
         productoDiv.addEventListener('click', () => {
-            window.location.href = `producto.html?id=${id}`;
+            window.location.href = obtenerRutaProducto(id);
         });
 
         relacionadosLista.appendChild(productoDiv);
@@ -237,7 +259,7 @@ function eliminarProducto() {
         localStorage.setItem('productos', JSON.stringify(productos));
         
         // Redirigir a index.html
-        window.location.href = 'index.html';
+        window.location.href = obtenerRutaIndex();
     }
 }
 
@@ -246,8 +268,90 @@ function configurarBotonesAdicionales() {
     const btnCarrito = document.getElementById('btnCarrito');
     if (btnCarrito) {
         btnCarrito.addEventListener('click', () => {
-            window.location.href = 'carrito.html';
+            window.location.href = obtenerRutaCarrito();
         });
+    }
+}
+
+// ==================== GESTIÓN DE FAVORITOS ====================
+
+/**
+ * Obtiene los favoritos del usuario actual desde localStorage
+ */
+function obtenerFavoritosUsuario() {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    if (!sesionActual) {
+        return [];
+    }
+    
+    const claveFavoritos = `favoritos_${sesionActual.usuarioId}`;
+    return JSON.parse(localStorage.getItem(claveFavoritos) || '[]');
+}
+
+/**
+ * Guarda los favoritos del usuario en localStorage
+ */
+function guardarFavoritosUsuario(favoritos) {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    if (!sesionActual) {
+        return;
+    }
+    
+    const claveFavoritos = `favoritos_${sesionActual.usuarioId}`;
+    localStorage.setItem(claveFavoritos, JSON.stringify(favoritos));
+}
+
+/**
+ * Alterna el estado de favorito de un producto
+ */
+function toggleFavorito(productoId) {
+    const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
+    if (!sesionActual) {
+        alert('Debes iniciar sesión para agregar a favoritos');
+        return;
+    }
+    
+    let favoritos = obtenerFavoritosUsuario();
+    const indice = favoritos.findIndex(f => f.id === productoId);
+    
+    if (indice !== -1) {
+        // Ya está en favoritos, lo removemos
+        favoritos.splice(indice, 1);
+        alert('Producto removido de favoritos');
+    } else {
+        // No está en favoritos, lo agregamos
+        const producto = productosData[productoId];
+        favoritos.push({
+            id: productoId,
+            nombre: producto.nombre,
+            precio: producto.precio,
+            descuento: producto.descuento,
+            imagen: producto.imagen,
+            fechaAgregado: new Date().toISOString()
+        });
+        alert('Producto agregado a favoritos');
+    }
+    
+    guardarFavoritosUsuario(favoritos);
+    actualizarEstadoBotonFavorito(productoId);
+}
+
+/**
+ * Actualiza el estado visual del botón de favoritos
+ */
+function actualizarEstadoBotonFavorito(productoId) {
+    const btnFavorito = document.getElementById('btnAgregarFavoritos');
+    if (!btnFavorito) return;
+    
+    const favoritos = obtenerFavoritosUsuario();
+    const esFavorito = favoritos.some(f => f.id === productoId);
+    
+    if (esFavorito) {
+        btnFavorito.classList.add('favorito-activo');
+        btnFavorito.textContent = '♥ Quitar de Favoritos';
+    } else {
+        btnFavorito.classList.remove('favorito-activo');
+        btnFavorito.textContent = '♥ Agregar a Favoritos';
     }
 }
 

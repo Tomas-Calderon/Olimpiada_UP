@@ -394,7 +394,10 @@ function renderProductos(seccion, pagina) {
             if (e.target.classList.contains('btn-favorito')) {
                 return;
             }
-            window.location.href = `producto.html?id=${producto.id}`;
+            // Determinar la ruta correcta según la ubicación actual
+            const currentPath = window.location.pathname;
+            const rutaProducto = currentPath.includes('/html/') ? 'producto.html' : 'html/producto.html';
+            window.location.href = `${rutaProducto}?id=${producto.id}`;
         });
         lista.appendChild(productoDiv);
     });

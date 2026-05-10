@@ -94,7 +94,16 @@ function mostrarSugerencias(sugerencias, dropdownList) {
 
 // ==================== SELECCIONAR PRODUCTO ====================
 function seleccionarProducto(productoId) {
-  window.location.href = `html/producto.html?id=${productoId}`;
+  // Determinar la ruta correcta según la ubicación actual
+  const currentPath = window.location.pathname;
+  let rutaProducto = 'producto.html';
+  
+  // Si no estamos en la carpeta html, agregar el prefijo
+  if (!currentPath.includes('/html/')) {
+    rutaProducto = 'html/producto.html';
+  }
+  
+  window.location.href = `${rutaProducto}?id=${productoId}`;
 }
 
 // ==================== REALIZAR BÚSQUEDA ====================
@@ -115,6 +124,10 @@ function realizarBusqueda(texto) {
 
 // ==================== MOSTRAR RESULTADOS EN PÁGINA ====================
 function mostrarResultadosBusqueda(productos, texto) {
+  // Determinar la ruta correcta según la ubicación actual
+  const currentPath = window.location.pathname;
+  const rutaProducto = currentPath.includes('/html/') ? 'producto.html' : 'html/producto.html';
+
   // Obtener o crear sección de resultados
   let seccionResultados = document.getElementById('seccion-resultados-busqueda');
 
@@ -153,7 +166,7 @@ function mostrarResultadosBusqueda(productos, texto) {
       }
 
       html += `
-        <div class="producto" onclick="window.location.href='html/producto.html?id=${producto.id}'">
+        <div class="producto" onclick="window.location.href='${rutaProducto}?id=${producto.id}'">
           <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
           <h3 class="producto-nombre">${producto.nombre}</h3>
           <div style="display: flex; align-items: center; gap: 0.5rem;">

@@ -987,37 +987,16 @@ main {
     padding-bottom: 0.5rem;
 }
 
-/* LISTA DE PRODUCTOS (HORIZONTAL) */
+/* LISTA DE PRODUCTOS (GRID - 4 COLUMNAS) */
 .productos-lista {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
-    overflow-x: auto;
     padding-bottom: 1rem;
-    scrollbar-width: thin;
-    scrollbar-color: #666 #333;
-}
-
-.productos-lista::-webkit-scrollbar {
-    height: 8px;
-}
-
-.productos-lista::-webkit-scrollbar-track {
-    background: #333;
-    border-radius: 4px;
-}
-
-.productos-lista::-webkit-scrollbar-thumb {
-    background: #666;
-    border-radius: 4px;
-}
-
-.productos-lista::-webkit-scrollbar-thumb:hover {
-    background: #888;
 }
 
 /* PRODUCTO INDIVIDUAL */
 .producto {
-    flex: 0 0 250px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 1rem;
@@ -1079,11 +1058,11 @@ main {
     }
 
     .productos-lista {
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
 
     .producto {
-        flex: 0 0 200px;
         padding: 0.8rem;
     }
 
@@ -1098,6 +1077,13 @@ main {
     .producto-precio {
         font-size: 0.9rem;
     }
+}
+
+@media screen and (max-width: 480px) {
+    .productos-lista {
+        grid-template-columns: 1fr;
+    }
+}
 }
 
 @media screen and (max-width: 480px) {

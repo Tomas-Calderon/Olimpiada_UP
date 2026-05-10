@@ -368,6 +368,36 @@
     color: black;
 }
 
+.btn-agregar-favoritos {
+    padding: 1rem;
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 2px solid #ffc107;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-agregar-favoritos:hover {
+    background-color: #ffc107;
+    color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-agregar-favoritos.favorito-activo {
+    background-color: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+}
+
+.btn-agregar-favoritos.favorito-activo:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+}
+
 /* INFORMACIÓN DE ENVÍO */
 .producto-envio {
     background-color: rgba(255, 193, 7, 0.1);
