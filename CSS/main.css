@@ -822,68 +822,58 @@ body {
 
     .header-container {
         padding: 1rem 1.5rem;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .categorias {
+        width: 100%;
+        justify-content: flex-start;
+        order: 2;
+    }
+
+    .categorias-dropdown {
+        left: 0;
+        right: 0;
+        width: 100%;
+        min-width: auto;
+    }
+
+    .barra-busqueda {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        order: 3;
+    }
+
+    .botones {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        order: 4;
+    }
+
+    .botones-grupo {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .botones button,
+    .btn-carrito {
+        width: 100%;
     }
 
     .menu-toggle {
         display: flex;
+        color: white;
     }
 
-    .usuario-autenticado {
-        gap: 0.5rem;
-    }
-
-    .usuario-info {
-        display: none;
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
-    }
-
-    .dropdown-menu {
-        right: -10px;
-    }
-
-    .botones {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .botones-grupo {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .botones button {
-        width: 100%;
-    }
-
-    .header-der {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: #222;
-        flex-direction: column;
-        gap: 0;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        padding: 0;
-        border-top: 1px solid #444;
-    }
-
-    .header-der.active {
-        max-height: 300px;
-        padding: 1rem;
-    }
-
-    .header-der button {
-        width: 100%;
-        padding: 1rem;
-        margin: 0.5rem 0;
+    .menu-toggle span {
+        background-color: white;
     }
 
     .logo-img {
@@ -899,22 +889,53 @@ body {
         font-size: 0.65rem;
     }
 
-    /* Ocultar panel de usuario en móviles */
     .panel-usuario {
         display: none;
     }
 
-    /* Animación del menú hamburguesa */
-    .menu-toggle.active span:nth-child(1) {
-        transform: rotate(45deg) translate(10px, 10px);
+    .dropdown-menu {
+        right: 0;
+        min-width: 100%;
     }
 
-    .menu-toggle.active span:nth-child(2) {
-        opacity: 0;
+    .busqueda-dropdown-list {
+        width: 100%;
     }
 
-    .menu-toggle.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -7px);
+    main {
+        padding: 1rem;
+        margin-top: 90px;
+        margin-bottom: 100px;
+    }
+
+    .productos-section {
+        margin-bottom: 2rem;
+    }
+
+    .seccion-titulo {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .productos-lista {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .producto {
+        padding: 0.8rem;
+    }
+
+    .producto-img {
+        height: 120px;
+    }
+
+    .producto-nombre {
+        font-size: 1rem;
+    }
+
+    .producto-precio {
+        font-size: 0.9rem;
     }
 }
 
@@ -934,10 +955,27 @@ body {
 
     .header-container {
         padding: 0.8rem 1rem;
+        justify-content: space-between;
     }
 
-    .header-izq {
-        gap: 0.75rem;
+    .categorias,
+    .barra-busqueda,
+    .botones {
+        width: 100%;
+    }
+
+    .categorias {
+        order: 2;
+        margin-top: 0.5rem;
+    }
+
+    .barra-busqueda {
+        order: 3;
+    }
+
+    .botones {
+        order: 4;
+        gap: 0.5rem;
     }
 
     .logo-img {
@@ -958,9 +996,38 @@ body {
         height: 2.5px;
     }
 
-    .header-der button {
+    .botones button,
+    .btn-carrito {
         padding: 0.8rem;
         font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .productos-lista {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .producto {
+        padding: 0.7rem;
+    }
+
+    .producto-img {
+        height: 100px;
+    }
+
+    .producto-nombre {
+        font-size: 0.95rem;
+    }
+
+    .producto-precio {
+        font-size: 0.85rem;
+    }
+
+    main {
+        padding: 0.75rem;
+        margin-top: 80px;
+        margin-bottom: 80px;
     }
 }
 
@@ -1083,7 +1150,6 @@ main {
     .productos-lista {
         grid-template-columns: 1fr;
     }
-}
 }
 
 @media screen and (max-width: 480px) {
@@ -1430,4 +1496,83 @@ main {
     text-align: center;
     color: #999;
     font-size: 0.9rem;
+}
+
+.busqueda-fechas-dropdown {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #fafafa;
+}
+
+.busqueda-fecha-grupo-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1 1 150px;
+}
+
+.busqueda-fecha-grupo-dropdown label {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.busqueda-fecha-input {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.busqueda-boton-aplicar {
+    padding: 0.6rem 0.85rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #27ae60;
+    color: white;
+    cursor: pointer;
+    align-self: flex-end;
+    height: fit-content;
+    transition: background-color 0.2s ease;
+}
+
+.busqueda-boton-aplicar:hover {
+    background-color: #219150;
+}
+
+.producto {
+    position: relative;
+}
+
+.btn-favorito {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+}
+
+.btn-favorito.favorito-inactivo {
+    color: #555;
+}
+
+.btn-favorito.favorito-activo {
+    color: #e74c3c;
+}
+
+.btn-favorito:hover {
+    transform: translateY(-1px);
 }

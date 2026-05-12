@@ -95,6 +95,22 @@
       <div class="producto-imagen-container">
         <img id="productoImagen" src="" alt="Imagen del Producto" class="producto-imagen">
         <div id="imagenesAdicionales" class="imagenes-adicionales"></div>
+        
+        <!-- DISPONIBILIDAD DEBAJO DE IMÁGENES -->
+        <div class="producto-disponibilidad">
+          <h3>Disponibilidad</h3>
+          <p id="productoDisponibilidadTexto" class="producto-disponibilidad-texto">Siempre disponible</p>
+          <p id="productoDisponibilidadRango" class="producto-disponibilidad-rango" style="display: none;"></p>
+          <div id="disponibilidadCalendarios" class="disponibilidad-calendarios"></div>
+          <div class="disponibilidad-leyenda">
+            <div><span class="leyenda-disponible"></span> Disponible</div>
+            <div><span class="leyenda-ocupado"></span> Reservado</div>
+          </div>
+          <div id="errorDisponibilidad" class="error-disponibilidad" style="display: none;">
+            <p>No se puede obtener la información de disponibilidad en este momento.</p>
+            <button id="btnReintentarDisponibilidad" class="btn-reintentar">Reintentar</button>
+          </div>
+        </div>
       </div>
 
       <!-- DERECHA: INFORMACIÓN -->
@@ -115,6 +131,7 @@
         <div class="producto-precio-section">
           <p id="productoPrecio" class="precio-actual">$0.00</p>
           <p id="productoPrecioAnterior" class="precio-anterior" style="display: none;">$0.00</p>
+          <p id="productoStockTexto" class="producto-stock-texto">Stock disponible: 0</p>
         </div>
 
         <!-- CONTENEDOR CON SCROLL PARA DESCRIPCIÓN Y ESPECIFICACIONES -->
@@ -143,6 +160,7 @@
           </div>
           <button class="btn-agregar-carrito">Agregar al carrito</button>
           <button class="btn-comprar-ahora">Comprar ahora</button>
+          <button class="btn-reservar" id="btnReservar">Reservar</button>
           <button class="btn-agregar-favoritos" id="btnAgregarFavoritos">♥ Agregar a Favoritos</button>
         </div>
 
@@ -155,6 +173,19 @@
         <!-- BOTÓN ELIMINAR PRODUCTO (solo para admin) -->
         <button id="eliminarProductoBtn" class="btn-eliminar-producto" style="display: none;">Eliminar Producto</button>
       </div>
+    </div>
+
+    <!-- CONTENEDOR RESERVA (debajo del producto-container) -->
+    <div id="contenedorReservaProducto" class="contenedor-reserva" style="display: none;">
+      <div class="reserva-inputs">
+        <label>
+          <span>Fecha de reserva</span>
+          <input type="date" id="fechaReserva">
+        </label>
+        <p id="reservaInfo" class="reserva-info">Selecciona una fecha dentro de la disponibilidad del producto.</p>
+        <p id="reservaError" class="fecha-error" style="display: none;">La fecha elegida no está disponible.</p>
+      </div>
+      <button id="btnConfirmarReserva" class="btn-reserva-confirmar">Confirmar reserva</button>
     </div>
 
     <!-- PRODUCTOS RELACIONADOS -->

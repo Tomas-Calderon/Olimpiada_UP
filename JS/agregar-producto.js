@@ -466,6 +466,8 @@ function guardarProducto(evento) {
         ? parseInt(document.getElementById('descuento').value) 
         : 0;
     const stock = parseInt(document.getElementById('stock').value);
+    const fechaInicioDisponibilidad = document.getElementById('fechaInicioDisponibilidad').value;
+    const fechaFinDisponibilidad = document.getElementById('fechaFinDisponibilidad').value;
 
     // Validación
     if (!nombre || !descripcion || !precio || !stock) {
@@ -489,6 +491,18 @@ function guardarProducto(evento) {
     if (descuento > 100) {
         mostrarNotificacion('El descuento no puede ser mayor a 100%', 'error');
         return;
+    }
+
+    // Validar disponibilidad
+    if (fechaInicioDisponibilidad && fechaFinDisponibilidad) {
+        const inicioDate = new Date(fechaInicioDisponibilidad);
+        const finDate = new Date(fechaFinDisponibilidad);
+        if (inicioDate > finDate) {
+            document.getElementById('disponibilidadError').style.display = 'block';
+            return;
+        }
+    } else {
+        document.getElementById('disponibilidadError').style.display = 'none';
     }
 
     // Obtener ID del creador desde la sesión actual
@@ -520,7 +534,11 @@ function guardarProducto(evento) {
         tipo: 'Novedad',
         fechaCreacion: new Date().toISOString(),
         creadorId: creadorId,
-        caracteristicas: caracteristicasSeleccionadas
+        caracteristicas: caracteristicasSeleccionadas,
+        disponibilidad: {
+            inicio: fechaInicioDisponibilidad || null,
+            fin: fechaFinDisponibilidad || null
+        }
     };
 
     // Guardar en localStorage

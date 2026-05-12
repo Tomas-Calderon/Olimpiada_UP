@@ -368,6 +368,23 @@
     color: black;
 }
 
+.btn-reservar {
+    padding: 1rem;
+    background-color: rgba(46, 204, 113, 0.15);
+    color: #ecf0f1;
+    border: 2px solid rgba(46, 204, 113, 0.6);
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-reservar:hover {
+    background-color: rgba(46, 204, 113, 0.25);
+    color: white;
+}
+
 .btn-agregar-favoritos {
     padding: 1rem;
     background-color: rgba(255, 193, 7, 0.2);
@@ -385,6 +402,155 @@
     color: black;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+}
+
+.btn-fechas-disponibles {
+    padding: 0.9rem 1rem;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-fechas-disponibles:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.contenedor-fechas-disponibles {
+    margin-top: 1rem;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.descripcion-fechas {
+    color: #ddd;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.fechas-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.fechas-inputs label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: #ddd;
+    font-size: 0.95rem;
+}
+
+.fechas-inputs input {
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background-color: rgba(255, 255, 255, 0.06);
+    color: white;
+}
+
+.fecha-error {
+    color: #ff6b6b;
+    margin-bottom: 0.75rem;
+}
+
+.intervalo-resumen {
+    color: #eee;
+    font-weight: 600;
+    margin: 0;
+}
+
+.disponibilidad-calendarios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+    max-height: 340px;
+    overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+    .fechas-inputs {
+        grid-template-columns: 1fr;
+    }
+    .disponibilidad-calendarios {
+        grid-template-columns: 1fr;
+    }
+}
+
+.producto-stock-texto {
+    color: #ddd;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+.contenedor-reserva {
+    margin-top: 1rem;
+    background-color: rgba(46, 204, 113, 0.06);
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.reserva-inputs {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.reserva-inputs label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    color: #ddd;
+    font-size: 0.95rem;
+}
+
+.reserva-inputs input {
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background-color: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.reserva-info {
+    color: #d1f2eb;
+    font-size: 0.95rem;
+}
+
+.btn-reserva-confirmar {
+    padding: 0.95rem 1rem;
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-reserva-confirmar:hover {
+    background-color: #27ae60;
+}
+
+.fecha-error {
+    color: #ff6b6b;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+@media screen and (max-width: 768px) {
+    .producto-stock-texto {
+        font-size: 0.9rem;
+    }
 }
 
 .btn-agregar-favoritos.favorito-activo {
@@ -432,12 +598,176 @@
     box-shadow: 0 4px 15px rgba(255, 68, 68, 0.4);
 }
 
-/* PRODUCTOS RELACIONADOS */
-.productos-relacionados {
-    margin-top: 4rem;
+.producto-disponibilidad {
+    margin-top: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.productos-relacionados .seccion-titulo {
+.producto-disponibilidad h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #ffc107;
+    font-size: 1.3rem;
+}
+
+.producto-disponibilidad-texto {
+    margin: 0 0 1rem 0;
+    color: #ddd;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.disponibilidad-calendarios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.calendario-mes {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.calendario-titulo {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+}
+
+.calendario-semana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+    color: #bbb;
+    font-size: 0.85rem;
+}
+
+.calendario-semana span {
+    text-align: center;
+}
+
+.calendario-dias {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+}
+
+.calendario-dia {
+    width: 100%;
+    padding: 0.65rem 0.4rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    text-align: center;
+    font-size: 0.9rem;
+    cursor: default;
+}
+
+.calendario-dia:hover {
+    transform: translateY(-1px);
+}
+
+.calendario-dia.calendario-disponible {
+    background-color: rgba(46, 204, 113, 0.15);
+    border-color: rgba(46, 204, 113, 0.4);
+    color: #ecf0f1;
+}
+
+.calendario-dia.calendario-ocupado {
+    background-color: rgba(231, 76, 60, 0.15);
+    border-color: rgba(231, 76, 60, 0.4);
+    color: #ecf0f1;
+}
+
+.calendario-dia.calendario-fuera-rango {
+    background-color: rgba(149, 165, 166, 0.15);
+    border-color: rgba(149, 165, 166, 0.4);
+    color: #bdc3c7;
+    opacity: 0.75;
+}
+
+.calendario-dia.calendario-dia-vacio {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.disponibilidad-leyenda {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: #ddd;
+}
+
+.disponibilidad-leyenda div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.leyenda-disponible,
+.leyenda-ocupado {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.leyenda-disponible {
+    background-color: rgba(46, 204, 113, 0.65);
+    border: 1px solid rgba(46, 204, 113, 0.9);
+}
+
+.leyenda-ocupado {
+    background-color: rgba(231, 76, 60, 0.65);
+    border: 1px solid rgba(231, 76, 60, 0.9);
+}
+
+.error-disponibilidad {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(231, 76, 60, 0.12);
+    border: 1px solid rgba(231, 76, 60, 0.35);
+    border-radius: 8px;
+    color: #f5c6cb;
+}
+
+.error-disponibilidad p {
+    margin: 0 0 1rem 0;
+    color: #f5c6cb;
+}
+
+.btn-reintentar {
+    padding: 0.75rem 1rem;
+    background-color: #ffc107;
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-reintentar:hover {
+    background-color: #ffb300;
+}
+
+@media screen and (max-width: 768px) {
+    .disponibilidad-calendarios {
+        grid-template-columns: 1fr;
+    }
+}
+
     color: white;
 }
 

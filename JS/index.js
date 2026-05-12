@@ -91,8 +91,12 @@ function renderizarCategoria(categoria) {
         productosPagina.forEach(producto => {
             const div = document.createElement('div');
             div.className = 'producto';
+            div.style.position = 'relative';
             const rutaProducto = obtenerRutaProducto();
-            div.onclick = () => window.location.href = `${rutaProducto}?id=${producto.id}`;
+            div.onclick = (e) => {
+                if (e.target.classList.contains('btn-favorito')) return;
+                window.location.href = `${rutaProducto}?id=${producto.id}`;
+            };
             
             // Calcular precio con descuento
             let precioMostrado = producto.precio;
@@ -102,9 +106,15 @@ function renderizarCategoria(categoria) {
                 precioMostrado = producto.precio * (1 - producto.descuento / 100);
                 precioOriginal = `<p class="precio-anterior">$${producto.precio.toFixed(2).replace('.', ',')}</p>`;
             }
+
+            const sesionActual = JSON.parse(localStorage.getItem('usuario_autenticado') || '{}');
+            const esAdmin = sesionActual.role === 'admin';
+            const estaAutenticado = !!(sesionActual.id || sesionActual.email);
+            const botonFavorito = estaAutenticado ? crearBotonFavorito(producto.id, esAdmin) : '';
             
             div.innerHTML = `
                 <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">
+                ${botonFavorito}
                 <h3 class="producto-nombre">${producto.nombre}</h3>
                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                     ${precioOriginal}
@@ -169,7 +179,13 @@ function actualizarPaginacion(categoria, totalProductos) {
 // ==================== INICIALIZACIÓN ====================
 
 document.addEventListener('DOMContentLoaded', function() {
+    if (typeof gestorFavoritos !== 'undefined' && gestorFavoritos) {
+        gestorFavoritos.inicializar();
+    }
     cargarYCategorizarProductos();
+    if (typeof inicializarBotonesFavorito === 'function') {
+        inicializarBotonesFavorito();
+    }
     
     // Observar cambios en localStorage para recargar cuando se agreguen productos
     window.addEventListener('storage', function(e) {

@@ -95,6 +95,17 @@
         </div>
 
         <div class="form-group">
+          <label>Disponibilidad opcional</label>
+          <div class="fechas-disponibilidad">
+            <label for="fechaInicioDisponibilidad">Fecha inicio</label>
+            <input type="date" id="fechaInicioDisponibilidad" name="fechaInicioDisponibilidad">
+            <label for="fechaFinDisponibilidad">Fecha fin</label>
+            <input type="date" id="fechaFinDisponibilidad" name="fechaFinDisponibilidad">
+            <p id="disponibilidadError" class="fecha-error" style="display: none;">La fecha inicial no puede ser mayor que la fecha final.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
           <label for="descuento">Descuento (%):</label>
           <input type="text" id="descuento" name="descuento" maxlength="3" value="0">
         </div>

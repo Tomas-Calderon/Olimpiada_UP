@@ -1,5 +1,6 @@
 // Datos de productos (cargados desde localStorage)
 let productosData = {};
+let productoStockMax = 99;
 
 // ==================== OBTENER RUTAS CORRECTAS ====================
 function obtenerRutaIndex() {
@@ -29,7 +30,8 @@ function cargarProductosDesdeStorage() {
             stock: producto.stock,
             descuento: producto.descuento || 0,
             tipo: producto.tipo,
-            caracteristicas: producto.caracteristicas || []
+            caracteristicas: producto.caracteristicas || [],
+            disponibilidad: producto.disponibilidad || { inicio: null, fin: null }
         };
     });
 }
@@ -117,7 +119,10 @@ function cargarProducto() {
     // Agregar eventos a los botones de cantidad
     document.getElementById('incrementBtn').addEventListener('click', incrementarCantidad);
     document.getElementById('decrementBtn').addEventListener('click', decrementarCantidad);
-    document.getElementById('cantidad').addEventListener('change', validarCantidad);
+    const cantidadInput = document.getElementById('cantidad');
+    cantidadInput.addEventListener('change', validarCantidad);
+    cantidadInput.setAttribute('max', producto.stock || 99);
+    productoStockMax = producto.stock || 0;
 
     // Agregar eventos a botones de compra
     document.querySelector('.btn-agregar-carrito').addEventListener('click', agregarAlCarrito);
@@ -131,11 +136,35 @@ function cargarProducto() {
         actualizarEstadoBotonFavorito(productoId);
     }
 
+    const btnReservar = document.getElementById('btnReservar');
+    if (btnReservar) {
+        btnReservar.addEventListener('click', () => {
+            const contenedorReserva = document.getElementById('contenedorReservaProducto');
+            if (!contenedorReserva) return;
+            const abierto = contenedorReserva.style.display === 'block';
+            contenedorReserva.style.display = abierto ? 'none' : 'block';
+            btnReservar.textContent = abierto ? 'Reservar' : 'Ocultar reserva';
+        });
+    }
+
+    configurarReserva(producto);
+
     // Agregar evento al botón eliminar
     document.getElementById('eliminarProductoBtn').addEventListener('click', eliminarProducto);
 
     // Cargar productos relacionados
     cargarProductosRelacionados(productoId);
+
+    // Cargar disponibilidad de fechas
+    cargarDisponibilidad(productoId);
+    const disponibilidadTexto = document.getElementById('productoDisponibilidadTexto');
+    if (disponibilidadTexto) {
+        disponibilidadTexto.textContent = obtenerTextoDisponibilidad(producto);
+    }
+    const stockTexto = document.getElementById('productoStockTexto');
+    if (stockTexto) {
+        stockTexto.textContent = `Stock disponible: ${producto.stock}`;
+    }
 
     // Mostrar botón eliminar si es admin
     const sesionActual = JSON.parse(localStorage.getItem('sesionActual') || 'null');
@@ -145,6 +174,182 @@ function cargarProducto() {
         document.getElementById('eliminarProductoBtn').style.display = 'none';
     }
 }
+
+function obtenerReservasProducto(productoId) {
+    try {
+        const reservasStorage = JSON.parse(localStorage.getItem('reservas') || '{}');
+        return reservasStorage[productoId] || [];
+    } catch (error) {
+        throw new Error('Error al leer las reservas del almacenamiento');
+    }
+}
+
+function cargarDisponibilidad(productoId) {
+    const errorContenedor = document.getElementById('errorDisponibilidad');
+    const calendarios = document.getElementById('disponibilidadCalendarios');
+    if (!calendarios || !errorContenedor) return;
+
+    try {
+        const producto = productosData[productoId];
+        const reservas = obtenerReservasProducto(productoId);
+        renderizarDisponibilidadCalendarios(reservas, producto);
+        errorContenedor.style.display = 'none';
+        calendarios.style.display = 'grid';
+    } catch (error) {
+        console.error(error);
+        calendarios.style.display = 'none';
+        errorContenedor.style.display = 'block';
+    }
+}
+
+function renderizarDisponibilidadCalendarios(reservas, producto) {
+    const container = document.getElementById('disponibilidadCalendarios');
+    const rangoTexto = document.getElementById('productoDisponibilidadRango');
+    if (!container) return;
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    let mesInicio = new Date(hoy);
+    let mesFin = new Date(hoy);
+    mesFin.setMonth(mesFin.getMonth() + 1);
+
+    if (producto && producto.disponibilidad) {
+        const disponibilidad = producto.disponibilidad;
+        if (disponibilidad.inicio) {
+            const fechaInicio = new Date(disponibilidad.inicio);
+            fechaInicio.setHours(0, 0, 0, 0);
+            if (fechaInicio > hoy) {
+                mesInicio = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), 1);
+            } else {
+                mesInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            }
+        }
+        if (disponibilidad.fin) {
+            const fechaFin = new Date(disponibilidad.fin);
+            fechaFin.setHours(0, 0, 0, 0);
+            mesFin = new Date(fechaFin.getFullYear(), fechaFin.getMonth() + 1, 1);
+        }
+    }
+
+    const meses = [];
+    let mesActual = new Date(mesInicio);
+    while (mesActual < mesFin && meses.length < 3) {
+        meses.push(new Date(mesActual));
+        mesActual.setMonth(mesActual.getMonth() + 1);
+    }
+
+    if (meses.length === 0) {
+        container.innerHTML = '<p style="color: #ddd;">Sin disponibilidad.</p>';
+        if (rangoTexto) rangoTexto.style.display = 'none';
+        return;
+    }
+
+    const fechasReservadas = reservas.map(item => {
+        const fecha = typeof item === 'string' ? item : item.fecha;
+        const d = new Date(fecha);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+    });
+
+    let mostrarRangoCompleto = false;
+    if (producto && producto.disponibilidad && producto.disponibilidad.fin) {
+        const disponibilidadInicio = producto.disponibilidad.inicio ? new Date(producto.disponibilidad.inicio) : new Date(hoy);
+        const disponibilidadFin = new Date(producto.disponibilidad.fin);
+        disponibilidadInicio.setHours(0, 0, 0, 0);
+        disponibilidadFin.setHours(0, 0, 0, 0);
+
+        let mesesTotales = 0;
+        const mesContador = new Date(disponibilidadInicio.getFullYear(), disponibilidadInicio.getMonth(), 1);
+        const mesLimite = new Date(disponibilidadFin.getFullYear(), disponibilidadFin.getMonth() + 1, 1);
+        while (mesContador < mesLimite) {
+            mesesTotales += 1;
+            mesContador.setMonth(mesContador.getMonth() + 1);
+        }
+
+        mostrarRangoCompleto = mesesTotales > 3;
+
+        if (mostrarRangoCompleto && rangoTexto) {
+            rangoTexto.textContent = `Rango completo: ${formatDate(disponibilidadInicio.toISOString().split('T')[0])} a ${formatDate(producto.disponibilidad.fin)}`;
+            rangoTexto.style.display = 'block';
+        }
+    }
+
+    if (!mostrarRangoCompleto && rangoTexto) {
+        rangoTexto.style.display = 'none';
+    }
+
+    container.innerHTML = meses.map(mes => crearCalendarioMes(mes, fechasReservadas, producto)).join('');
+}
+
+function crearCalendarioMes(mes, fechasReservadas, producto) {
+    const nombreMes = mes.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+    const diasSemana = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+    const primerDiaSemana = (new Date(mes.getFullYear(), mes.getMonth(), 1).getDay() + 6) % 7; // Ajuste para lunes como primer día
+    const diasDelMes = new Date(mes.getFullYear(), mes.getMonth() + 1, 0).getDate();
+
+    const disponibilidadInicio = producto?.disponibilidad?.inicio ? new Date(producto.disponibilidad.inicio) : null;
+    const disponibilidadFin = producto?.disponibilidad?.fin ? new Date(producto.disponibilidad.fin) : null;
+    if (disponibilidadInicio) disponibilidadInicio.setHours(0, 0, 0, 0);
+    if (disponibilidadFin) disponibilidadFin.setHours(0, 0, 0, 0);
+
+    let diasHtml = '';
+    for (let i = 0; i < primerDiaSemana; i++) {
+        diasHtml += '<div class="calendario-dia calendario-dia-vacio"></div>';
+    }
+
+    for (let dia = 1; dia <= diasDelMes; dia++) {
+        const fecha = new Date(mes.getFullYear(), mes.getMonth(), dia);
+        fecha.setHours(0, 0, 0, 0);
+        const timestamp = fecha.getTime();
+        const reservado = fechasReservadas.includes(timestamp);
+
+        let clase = 'calendario-disponible';
+        let etiqueta = 'Disponible';
+
+        if (reservado) {
+            clase = 'calendario-ocupado';
+            etiqueta = 'Reservado';
+        } else if (disponibilidadInicio || disponibilidadFin) {
+            const dentroRango = (!disponibilidadInicio || fecha >= disponibilidadInicio) && (!disponibilidadFin || fecha <= disponibilidadFin);
+            if (!dentroRango) {
+                clase = 'calendario-fuera-rango';
+                etiqueta = 'Fuera de rango';
+            }
+        }
+
+        diasHtml += `
+            <button type="button" class="calendario-dia ${clase}" title="${etiqueta}">
+                ${dia}
+            </button>
+        `;
+    }
+
+    return `
+        <div class="calendario-mes">
+            <div class="calendario-titulo">${nombreMes}</div>
+            <div class="calendario-semana">${diasSemana.map(d => `<span>${d}</span>`).join('')}</div>
+            <div class="calendario-dias">${diasHtml}</div>
+        </div>
+    `;
+}
+
+function inicializarDisponibilidad() {
+    const btnReintentar = document.getElementById('btnReintentarDisponibilidad');
+    if (!btnReintentar) return;
+
+    btnReintentar.addEventListener('click', () => {
+        const productoId = obtenerProductoDelURL();
+        cargarDisponibilidad(productoId);
+    });
+}
+
+// Cargar el producto cuando la página esté lista
+document.addEventListener('DOMContentLoaded', () => {
+    cargarProducto();
+    configurarBotonesAdicionales();
+    inicializarDisponibilidad();
+});
 
 // Cargar productos relacionados
 function cargarProductosRelacionados(productoId) {
@@ -177,7 +382,8 @@ function cargarProductosRelacionados(productoId) {
 function incrementarCantidad() {
     const input = document.getElementById('cantidad');
     let valor = parseInt(input.value) || 1;
-    if (valor < 99) {
+    const max = parseInt(input.getAttribute('max')) || 99;
+    if (valor < max) {
         input.value = valor + 1;
     }
 }
@@ -193,12 +399,75 @@ function decrementarCantidad() {
 function validarCantidad() {
     const input = document.getElementById('cantidad');
     let valor = parseInt(input.value) || 1;
+    const max = parseInt(input.getAttribute('max')) || 99;
     
     if (valor < 1) {
         input.value = 1;
-    } else if (valor > 99) {
-        input.value = 99;
+    } else if (valor > max) {
+        input.value = max;
     }
+}
+
+function configurarReserva(producto) {
+    const fechaReservaInput = document.getElementById('fechaReserva');
+    const btnConfirmarReserva = document.getElementById('btnConfirmarReserva');
+    const reservaInfo = document.getElementById('reservaInfo');
+    const reservaError = document.getElementById('reservaError');
+    const productoId = obtenerProductoDelURL();
+
+    if (!fechaReservaInput || !btnConfirmarReserva || !reservaInfo) return;
+
+    const hoy = new Date();
+    const hoyIso = hoy.toISOString().split('T')[0];
+    let minFecha = hoyIso;
+    let maxFecha = null;
+
+    if (producto.disponibilidad?.inicio) {
+        minFecha = producto.disponibilidad.inicio > hoyIso ? producto.disponibilidad.inicio : hoyIso;
+    }
+    if (producto.disponibilidad?.fin) {
+        maxFecha = producto.disponibilidad.fin;
+    }
+
+    fechaReservaInput.min = minFecha;
+    fechaReservaInput.max = maxFecha || '';
+    reservaInfo.textContent = obtenerTextoDisponibilidad(producto);
+
+    if (maxFecha && minFecha > maxFecha) {
+        fechaReservaInput.disabled = true;
+        reservaInfo.textContent = 'No hay fechas disponibles para reservar en este producto.';
+    }
+
+    fechaReservaInput.addEventListener('change', () => {
+        reservaError.style.display = 'none';
+    });
+
+    btnConfirmarReserva.addEventListener('click', () => reservarProducto(productoId, producto));
+}
+
+function formatDate(dateString) {
+    if (!dateString) return '';
+    const fecha = new Date(dateString);
+    return fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function obtenerTextoDisponibilidad(producto) {
+    const inicio = producto.disponibilidad?.inicio;
+    const fin = producto.disponibilidad?.fin;
+
+    if (!inicio && !fin) {
+        return 'Siempre disponible';
+    }
+
+    if (inicio && fin) {
+        return `Disponible desde ${formatDate(inicio)} hasta ${formatDate(fin)}`;
+    }
+
+    if (inicio) {
+        return `Disponible desde ${formatDate(inicio)}`;
+    }
+
+    return `Disponible hasta ${formatDate(fin)}`;
 }
 
 // Funciones de compra
@@ -212,12 +481,10 @@ function agregarAlCarrito() {
     
     // Buscar si el producto ya existe en el carrito
     const indiceProducto = carrito.findIndex(item => item.id === productoId);
-    
+
     if (indiceProducto !== -1) {
-        // El producto ya existe, aumentar cantidad
         carrito[indiceProducto].cantidad += cantidad;
     } else {
-        // Nuevo producto
         carrito.push({
             id: productoId,
             nombre: producto.nombre,
@@ -229,9 +496,7 @@ function agregarAlCarrito() {
         });
     }
     
-    // Guardar carrito actualizado
     localStorage.setItem('carrito', JSON.stringify(carrito));
-    
     alert(`${cantidad} unidad(es) de "${producto.nombre}" agregada(s) al carrito`);
 }
 
@@ -239,9 +504,99 @@ function comprarAhora() {
     const cantidad = document.getElementById('cantidad').value;
     const productoId = obtenerProductoDelURL();
     const producto = productosData[productoId];
-    
+
     alert(`Iniciando compra de ${cantidad} unidad(es) de "${producto.nombre}"`);
     // Aquí se podría redirigir al checkout
+}
+
+function validarFechaReserva(productoId) {
+    const fechaReservaInput = document.getElementById('fechaReserva');
+    const reservaError = document.getElementById('reservaError');
+    if (!fechaReservaInput || !reservaError) return false;
+
+    const fechaSeleccionada = fechaReservaInput.value;
+    if (!fechaSeleccionada) {
+        reservaError.textContent = 'Selecciona una fecha para reservar.';
+        reservaError.style.display = 'block';
+        return false;
+    }
+
+    const reservas = obtenerReservasProducto(productoId);
+    const fechaYaReservada = reservas.some(item => {
+        const fecha = typeof item === 'string' ? item : item.fecha;
+        return fecha === fechaSeleccionada;
+    });
+
+    if (fechaYaReservada) {
+        reservaError.textContent = 'Esa fecha ya está reservada.';
+        reservaError.style.display = 'block';
+        return false;
+    }
+
+    const fechaActual = new Date();
+    fechaActual.setHours(0, 0, 0, 0);
+    const seleccion = new Date(fechaSeleccionada);
+    seleccion.setHours(0, 0, 0, 0);
+
+    if (seleccion < fechaActual) {
+        reservaError.textContent = 'No puedes reservar una fecha pasada.';
+        reservaError.style.display = 'block';
+        return false;
+    }
+
+    const producto = productosData[productoId];
+    if (producto && producto.disponibilidad) {
+        const inicio = producto.disponibilidad.inicio ? new Date(producto.disponibilidad.inicio) : null;
+        const fin = producto.disponibilidad.fin ? new Date(producto.disponibilidad.fin) : null;
+        if (inicio) {
+            inicio.setHours(0, 0, 0, 0);
+            if (seleccion < inicio) {
+                reservaError.textContent = 'La fecha debe estar dentro del periodo de disponibilidad del producto.';
+                reservaError.style.display = 'block';
+                return false;
+            }
+        }
+        if (fin) {
+            fin.setHours(0, 0, 0, 0);
+            if (seleccion > fin) {
+                reservaError.textContent = 'La fecha debe estar dentro del periodo de disponibilidad del producto.';
+                reservaError.style.display = 'block';
+                return false;
+            }
+        }
+    }
+
+    reservaError.style.display = 'none';
+    return true;
+}
+
+function reservarProducto(productoId, producto) {
+    const fechaReservaInput = document.getElementById('fechaReserva');
+    const reservaError = document.getElementById('reservaError');
+    if (!fechaReservaInput || !reservaError) return;
+
+    if (!validarFechaReserva(productoId)) {
+        return;
+    }
+
+    const fechaSeleccionada = fechaReservaInput.value;
+    const cantidad = parseInt(document.getElementById('cantidad').value) || 1;
+    const max = producto.stock || 0;
+    if (cantidad < 1 || cantidad > max) {
+        reservaError.textContent = `La cantidad debe ser entre 1 y ${max}.`;
+        reservaError.style.display = 'block';
+        return;
+    }
+
+    let reservas = JSON.parse(localStorage.getItem('reservas') || '{}');
+    reservas[productoId] = reservas[productoId] || [];
+    reservas[productoId].push({ fecha: fechaSeleccionada, cantidad });
+    localStorage.setItem('reservas', JSON.stringify(reservas));
+
+    alert(`Reserva registrada para ${cantidad} unidad(es) el ${fechaSeleccionada}.`);
+    fechaReservaInput.value = '';
+    reservaError.style.display = 'none';
+    cargarDisponibilidad(productoId);
 }
 
 // Función para eliminar producto
@@ -355,8 +710,3 @@ function actualizarEstadoBotonFavorito(productoId) {
     }
 }
 
-// Cargar el producto cuando la página esté lista
-document.addEventListener('DOMContentLoaded', () => {
-    cargarProducto();
-    configurarBotonesAdicionales();
-});

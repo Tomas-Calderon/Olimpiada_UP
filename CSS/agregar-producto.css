@@ -50,6 +50,35 @@
     border-color: #ffc107;
 }
 
+.fechas-disponibilidad {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.fechas-disponibilidad label {
+    display: block;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.fechas-disponibilidad input {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 1rem;
+}
+
+.fecha-error {
+    color: #ff6b6b;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
 #imagenes.completo {
     border-color: #51CF66;
     background-color: rgba(81, 207, 102, 0.1);

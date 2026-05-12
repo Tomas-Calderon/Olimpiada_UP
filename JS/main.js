@@ -376,10 +376,11 @@ function renderProductos(seccion, pagina) {
             </div>
         ` : '';
 
-        // Crear botón de favorito (no mostrar a admins)
+        // Crear botón de favorito
         const sesionActual = JSON.parse(localStorage.getItem('usuario_autenticado') || '{}');
         const esAdmin = sesionActual.role === 'admin';
-        const botonFavorito = !esAdmin ? crearBotonFavorito(producto.id, esAdmin) : '';
+        const estaAutenticado = !!(sesionActual.id || sesionActual.email);
+        const botonFavorito = estaAutenticado ? crearBotonFavorito(producto.id, esAdmin) : '';
 
         productoDiv.innerHTML = `
             <img src="${producto.imagen}" alt="${producto.nombre}" class="producto-img">

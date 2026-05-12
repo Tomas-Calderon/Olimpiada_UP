@@ -77,13 +77,12 @@ const gestorFavoritos = new GestorFavoritos();
 
 // Función para renderizar botón de favorito
 function crearBotonFavorito(productoId, esAdmin = false) {
-    if (esAdmin) return ''; // No mostrar favorito a admins
-
+    // Ya se verifica arriba si está autenticado y no es admin
     const esFavorito = gestorFavoritos.esFavorito(productoId);
     const claseEstado = esFavorito ? 'favorito-activo' : 'favorito-inactivo';
     
     return `<button class="btn-favorito ${claseEstado}" data-producto-id="${productoId}" title="${esFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos'}">
-        Favorito
+        ${esFavorito ? '♥' : '♡'}
     </button>`;
 }
 
@@ -94,14 +93,16 @@ function inicializarBotonesFavorito() {
             const productoId = e.target.dataset.productoId;
             
             // Verificar si el usuario está autenticado
-            if (!gestorFavoritos.usuarioId) {
+            const sesionActual = JSON.parse(localStorage.getItem('usuario_autenticado') || '{}');
+            if (!sesionActual.id && !sesionActual.email) {
                 alert('Debes iniciar sesión para usar favoritos');
                 return;
             }
-
+            
             const ahora = gestorFavoritos.toggleFavorito(productoId);
             e.target.classList.toggle('favorito-activo');
             e.target.classList.toggle('favorito-inactivo');
+            e.target.textContent = ahora ? '♥' : '♡';
             e.target.title = ahora ? 'Quitar de favoritos' : 'Añadir a favoritos';
         }
     });
