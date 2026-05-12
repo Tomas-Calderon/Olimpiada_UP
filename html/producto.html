@@ -95,22 +95,6 @@
       <div class="producto-imagen-container">
         <img id="productoImagen" src="" alt="Imagen del Producto" class="producto-imagen">
         <div id="imagenesAdicionales" class="imagenes-adicionales"></div>
-        
-        <!-- DISPONIBILIDAD DEBAJO DE IMÁGENES -->
-        <div class="producto-disponibilidad">
-          <h3>Disponibilidad</h3>
-          <p id="productoDisponibilidadTexto" class="producto-disponibilidad-texto">Siempre disponible</p>
-          <p id="productoDisponibilidadRango" class="producto-disponibilidad-rango" style="display: none;"></p>
-          <div id="disponibilidadCalendarios" class="disponibilidad-calendarios"></div>
-          <div class="disponibilidad-leyenda">
-            <div><span class="leyenda-disponible"></span> Disponible</div>
-            <div><span class="leyenda-ocupado"></span> Reservado</div>
-          </div>
-          <div id="errorDisponibilidad" class="error-disponibilidad" style="display: none;">
-            <p>No se puede obtener la información de disponibilidad en este momento.</p>
-            <button id="btnReintentarDisponibilidad" class="btn-reintentar">Reintentar</button>
-          </div>
-        </div>
       </div>
 
       <!-- DERECHA: INFORMACIÓN -->
@@ -186,6 +170,22 @@
         <p id="reservaError" class="fecha-error" style="display: none;">La fecha elegida no está disponible.</p>
       </div>
       <button id="btnConfirmarReserva" class="btn-reserva-confirmar">Confirmar reserva</button>
+    </div>
+
+    <!-- DISPONIBILIDAD / CALENDARIO -->
+    <div class="producto-disponibilidad">
+      <h3>Disponibilidad</h3>
+      <p id="productoDisponibilidadTexto" class="producto-disponibilidad-texto">Siempre disponible</p>
+      <p id="productoDisponibilidadRango" class="producto-disponibilidad-rango" style="display: none;"></p>
+      <div id="disponibilidadCalendarios" class="disponibilidad-calendarios"></div>
+      <div class="disponibilidad-leyenda">
+        <div><span class="leyenda-disponible"></span> Disponible</div>
+        <div><span class="leyenda-ocupado"></span> Reservado</div>
+      </div>
+      <div id="errorDisponibilidad" class="error-disponibilidad" style="display: none;">
+        <p>No se puede obtener la información de disponibilidad en este momento.</p>
+        <button id="btnReintentarDisponibilidad" class="btn-reintentar">Reintentar</button>
+      </div>
     </div>
 
     <!-- PRODUCTOS RELACIONADOS -->

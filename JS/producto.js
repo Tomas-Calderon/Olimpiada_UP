@@ -207,6 +207,13 @@ function renderizarDisponibilidadCalendarios(reservas, producto) {
     const rangoTexto = document.getElementById('productoDisponibilidadRango');
     if (!container) return;
 
+    // Si el producto está siempre disponible (sin fechas), no mostrar el calendario
+    if (producto && producto.disponibilidad && !producto.disponibilidad.inicio && !producto.disponibilidad.fin) {
+        container.innerHTML = '';
+        if (rangoTexto) rangoTexto.style.display = 'none';
+        return;
+    }
+
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
 
@@ -247,8 +254,8 @@ function renderizarDisponibilidadCalendarios(reservas, producto) {
 
     const fechasReservadas = reservas.map(item => {
         const fecha = typeof item === 'string' ? item : item.fecha;
-        const d = new Date(fecha);
-        d.setHours(0, 0, 0, 0);
+        const [year, month, day] = fecha.split('-');
+        const d = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), 0, 0, 0, 0);
         return d.getTime();
     });
 
@@ -267,16 +274,12 @@ function renderizarDisponibilidadCalendarios(reservas, producto) {
             mesContador.setMonth(mesContador.getMonth() + 1);
         }
 
-        mostrarRangoCompleto = mesesTotales > 3;
-
-        if (mostrarRangoCompleto && rangoTexto) {
-            rangoTexto.textContent = `Rango completo: ${formatDate(disponibilidadInicio.toISOString().split('T')[0])} a ${formatDate(producto.disponibilidad.fin)}`;
-            rangoTexto.style.display = 'block';
-        }
+        mostrarRangoCompleto = false;
     }
 
-    if (!mostrarRangoCompleto && rangoTexto) {
-        rangoTexto.style.display = 'none';
+    if (rangoTexto) {
+        rangoTexto.textContent = 'Fechas cercanas:';
+        rangoTexto.style.display = 'block';
     }
 
     container.innerHTML = meses.map(mes => crearCalendarioMes(mes, fechasReservadas, producto)).join('');

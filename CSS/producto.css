@@ -599,11 +599,15 @@
 }
 
 .producto-disponibilidad {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
-    padding: 1.5rem;
+    padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .producto-disponibilidad h3 {
@@ -622,16 +626,16 @@
 
 .disponibilidad-calendarios {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .calendario-mes {
     background-color: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem 1rem;
 }
 
 .calendario-titulo {
@@ -669,6 +673,10 @@
     text-align: center;
     font-size: 0.9rem;
     cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
 }
 
 .calendario-dia:hover {
